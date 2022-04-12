@@ -34,7 +34,7 @@ const toDetailPage = (itemId: number) => {
       <div>{{ item.description }}</div>
       <div>{{ item.priceM }}円</div>
       <div>{{ item.priceL }}円</div>
-      <!-- <img :src="item.imagePath" /> -->
+      <img :src="item.imagePath" />
     </el-col>
   </el-row>
 </template>
@@ -51,5 +51,10 @@ const toDetailPage = (itemId: number) => {
   border-radius: 4px;
   min-height: 36px;
   height: 20vh;
+}
+img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
 }
 </style>
