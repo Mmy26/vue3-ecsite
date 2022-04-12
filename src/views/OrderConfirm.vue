@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { getDate, getHours, getMonth, getYear } from "date-fns";
 import { orderProviderKey } from "@/providers/useOrderProvider";
+import { useUserProviderKey } from "@/providers/useUserProvider";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -23,15 +24,25 @@ const checkError = ref(true);
 
 const router = useRouter();
 const orderStore = inject(orderProviderKey);
+const userStore = inject(useUserProviderKey);
+
+if (!userStore) {
+  throw new Error("");
+}
 
 if (!orderStore) {
   throw new Error("");
 }
 
+
+onMounted(() => {
+  userStore.currentUser;
+});
+
 /**
  * 注文する.
  */
-const order = async () => {
+const order = () => {
   // エラー処理
   if (name.value === "") {
     nameError.value = "名前が入力されていません";
