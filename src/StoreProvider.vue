@@ -1,7 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { provide } from "vue";
+import { itemListKey, useItemList } from "@/providers/useItemListProvider";
+
+provide(itemListKey, useItemList());
+</script>
 
 <template>
-  <div></div>
+  <div><slot /></div>
 </template>
 
 <style scoped></style>
