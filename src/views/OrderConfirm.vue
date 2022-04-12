@@ -110,12 +110,14 @@ const deliveryDateError = ref("");
             <input id="name" type="text" v-model="name" />
             <label for="name">お名前</label>
           </div>
+          <div>{{ nameError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
             <input id="email" type="email" v-model="mailAddress" />
             <label for="email">メールアドレス</label>
           </div>
+          <div>{{ mailAddressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
@@ -125,18 +127,21 @@ const deliveryDateError = ref("");
               <span>住所検索</span>
             </button>
           </div>
+          <div>{{ zipCodeError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
             <input id="address" type="text" v-model="address" />
             <label for="address">住所</label>
           </div>
+          <div>{{ addressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
             <input id="tel" type="tel" v-model="telephone" />
             <label for="tel">電話番号</label>
           </div>
+          <div>{{ telephoneError }}</div>
         </div>
         <div class="row order-confirm-delivery-datetime">
           <div class="input-field">
@@ -224,6 +229,7 @@ const deliveryDateError = ref("");
             />
             <span>18時</span>
           </label>
+          <div>{{ deliveryDateError }}</div>
         </div>
       </div>
 
