@@ -1,4 +1,14 @@
 <script setup lang="ts">
+import { ref } from "vue";
+
+const name = ref("");
+const mailAddress = ref("");
+const zipCode = ref("");
+const address = ref("");
+const telephone = ref("");
+const deliveryTime = ref(new Date());
+const paymentMethod = ref("代金引換");
+
 
 </script>
 
@@ -8,7 +18,7 @@
       <h1 class="page-title">注文内容確認</h1>
       <!-- table -->
       <div class="row">
-        <table class="striped" border=1>
+        <table class="striped" border="1">
           <thead>
             <tr>
               <th class="cart-table-th">商品名</th>
