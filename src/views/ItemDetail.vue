@@ -1,21 +1,54 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import { Item } from "@/types/Item";
+import type { Topping } from "@/types/Topping";
+console.log("created");
+// 選択した商品サイズの情報
+const selectItemSize = ref<string>("");
+// 選択したトッピング情報
+const selectToppingList = ref([]);
+// 選択した商品の数量
+const selectItemQuantity = ref<number>(1);
+// 選択商品情報(トッピング情報も入る)
+const selectedItem = ref(
+  new Item(0, "", "", "", 200, 300, "", false, new Array<Topping>())
+);
+
+// APIから取得したトッピング情報(表示の際に使用)
+const ToppingData = ref([]);
+
+console.log(selectItemSize.value);
+
+// 注文メソッド
+const addItem = () => {
+  console.log(selectItemSize.value);
+  console.log(selectToppingList.value);
+  console.log(selectItemQuantity.value);
+  console.log(selectedItem.value);
+};
 </script>
 <template>
   <form action="">
     <div>
       <span>M</span>
-      <input type="radio" value="M" name="size" />
+      <input
+        type="radio"
+        value="M"
+        name="size"
+        v-model="selectItemSize"
+        selected
+      />
       <span>L</span>
-      <input type="radio" value="L" name="size" />
+      <input type="radio" value="L" name="size" v-model="selectItemSize" />
     </div>
+
     <div>
       <span>Topping</span>
-      <input type="checkbox" value="1" />
+      <input type="checkbox" value="1" v-model="selectToppingList" />
     </div>
     <div>
       <span>Quantity</span>
-      <select name="" id="">
+      <select name="" id="" v-model="selectItemQuantity">
         <option value="" disabled>選択して下さい</option>
         <option value="1" selected>1</option>
         <option value="2">2</option>
@@ -30,7 +63,7 @@ import { ref } from "vue";
         <option value="11">11</option>
         <option value="12">12</option>
       </select>
-      <div><button type="button">Order</button></div>
+      <div><button @click="addItem()" type="button">Order</button></div>
     </div>
   </form>
 </template>
