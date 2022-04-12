@@ -9,7 +9,8 @@ import Footer from "./components/Footer.vue";
   <!-- ここにStoreProvider.vueを挿入 -->
   <RouterView />
   <!--  -->
-  <Footer />
+  <!-- いったん消しておきます。 -->
+  <!-- <Footer /> -->
 </template>
 
 <style></style>
