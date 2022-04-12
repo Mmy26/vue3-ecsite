@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -16,6 +17,68 @@ const zipCodeError = ref("");
 const addressError = ref("");
 const telephoneError = ref("");
 const deliveryDateError = ref("");
+const checkError = ref(true);
+const router = useRouter();
+
+/**
+ * 注文する.
+ */
+const order = () => {
+  // エラー処理
+  if (name.value === "") {
+    nameError.value = "名前が入力されていません";
+    checkError.value = false;
+  } else {
+    nameError.value = "";
+    checkError.value = true;
+  }
+
+  if (mailAddress.value === "") {
+    mailAddressError.value = "メールアドレスが入力されていません";
+    checkError.value = false;
+  } else {
+    mailAddressError.value = "";
+    checkError.value = true;
+  }
+
+  if (zipCode.value === "") {
+    zipCodeError.value = "郵便番号が入力されていません";
+    checkError.value = false;
+  } else {
+    zipCodeError.value = "";
+    checkError.value = true;
+  }
+
+  if (address.value === "") {
+    addressError.value = "住所が入力されていません";
+    checkError.value = false;
+  } else {
+    addressError.value = "";
+    checkError.value = true;
+  }
+
+  if (telephone.value === "") {
+    telephoneError.value = "電話番号が入力されていません";
+    checkError.value = false;
+  } else {
+    telephoneError.value = "";
+    checkError.value = true;
+  }
+
+  if (deliveryDate.value === "") {
+    deliveryDateError.value = "適切な日時が設定されていません";
+    checkError.value = false;
+  } else {
+    deliveryDateError.value = "";
+    checkError.value = true;
+  }
+
+  if (checkError.value === false) {
+    return;
+  }
+
+  router.push("/orderFinished");
+};
 </script>
 
 <template>
@@ -257,11 +320,7 @@ const deliveryDateError = ref("");
         </span>
       </div>
       <div class="row order-confirm-btn">
-        <button
-          class="btn"
-          type="button"
-          onclick="location.href='order_finished.html'"
-        >
+        <button class="btn" type="button" @click="order">
           <span>この内容で注文する</span>
         </button>
       </div>
