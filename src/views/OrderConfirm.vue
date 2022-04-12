@@ -223,46 +223,51 @@ const order = () => {
       <div class="order-confirm-delivery-info">
         <div class="row">
           <div class="input-field">
-            <input id="name" type="text" v-model="name" />
             <label for="name">お名前</label>
+            <input id="name" type="text" v-model="name" />
+            <div>例：山田太郎</div>
           </div>
           <div>{{ nameError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="email" type="email" v-model="mailAddress" />
             <label for="email">メールアドレス</label>
+            <input id="email" type="email" v-model="mailAddress" />
+            <div>例：taro@gmail.com</div>
           </div>
           <div>{{ mailAddressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
             <label for="zipcode">郵便番号(ハイフンなし)</label>
+            <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
             <button class="btn" type="button">
               <span>住所検索</span>
             </button>
+            <div>例：1600022</div>
           </div>
           <div>{{ zipCodeError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="address" type="text" v-model="address" />
             <label for="address">住所</label>
+            <input id="address" type="text" v-model="address" />
+            <div>例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F</div>
           </div>
           <div>{{ addressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="tel" type="tel" v-model="telephone" />
             <label for="tel">電話番号</label>
+            <input id="tel" type="tel" v-model="telephone" />
+            <div>例：03-6675-3638</div>
           </div>
           <div>{{ telephoneError }}</div>
         </div>
         <div class="row order-confirm-delivery-datetime">
           <div class="input-field">
-            <input id="deliveryDate" type="date" v-model="deliveryDate" />
             <label for="address">配達日時</label>
+            <input id="deliveryDate" type="date" v-model="deliveryDate" />
           </div>
           <label class="order-confirm-delivery-time">
             <input
@@ -345,6 +350,7 @@ const order = () => {
             />
             <span>18時</span>
           </label>
+          <div>例：2022年/01月/01日 13時</div>
           <div>{{ deliveryDateError }}</div>
         </div>
       </div>
