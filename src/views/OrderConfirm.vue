@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { inject, ref } from "vue";
 import { useRouter } from "vue-router";
 import { getDate, getHours, getMonth, getYear } from "date-fns";
+import { orderProviderKey } from "@/providers/useOrderProvider";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -19,7 +20,13 @@ const addressError = ref("");
 const telephoneError = ref("");
 const deliveryDateError = ref("");
 const checkError = ref(true);
+
 const router = useRouter();
+const orderStore = inject(orderProviderKey);
+
+if (!orderStore) {
+  throw new Error("");
+}
 
 /**
  * 注文する.
