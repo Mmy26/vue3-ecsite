@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { getDate, getHours, getMonth, getYear } from "date-fns";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -33,8 +34,15 @@ const order = () => {
     checkError.value = true;
   }
 
+  const includeOrNot = (str: string): boolean => {
+    return mailAddress.value.includes(str);
+  };
+
   if (mailAddress.value === "") {
     mailAddressError.value = "メールアドレスが入力されていません";
+    checkError.value = false;
+  } else if (!includeOrNot("@")) {
+    mailAddressError.value = "メールアドレスの形式が正しくありません";
     checkError.value = false;
   } else {
     mailAddressError.value = "";
@@ -57,6 +65,28 @@ const order = () => {
     checkError.value = true;
   }
 
+  const telCheck = (): boolean => {
+    let telError = true;
+    let targetArray = new Array<string>();
+    if (includeOrNot("-")) {
+      telError = false;
+    }
+    // split...（）に入っている文字列で配列を区切る.
+    targetArray = telephone.value.split("-");
+    if (targetArray[0].length !== 3) {
+      telError = false;
+    } else if (targetArray[1].length !== 4) {
+      telError = false;
+    } else if (targetArray[2].length !== 4) {
+      telError = false;
+    }
+    return telError;
+  };
+
+  if (telCheck()) {
+    telephoneError.value = "電話番号はXXX-XXXX-XXXXの形式で入力してください";
+  }
+
   if (telephone.value === "") {
     telephoneError.value = "電話番号が入力されていません";
     checkError.value = false;
@@ -65,8 +95,30 @@ const order = () => {
     checkError.value = true;
   }
 
-  if (deliveryDate.value === "") {
-    deliveryDateError.value = "適切な日時が設定されていません";
+  const hoursCheck = (): boolean => {
+    let currentDate = new Date();
+    let splitedArray = deliveryDate.value.split("-");
+    let year = Number(splitedArray[0]);
+    let month = Number(splitedArray[1]);
+    let day = Number(splitedArray[2]);
+    let targetDate = new Date(year, month - 1, day);
+
+    return (
+      targetDate <=
+      new Date(
+        getYear(currentDate),
+        getMonth(currentDate),
+        getDate(currentDate),
+        getHours(currentDate) + 3
+      )
+    );
+  };
+
+  if (hoursCheck()) {
+    deliveryDateError.value = "今から3時間後の日時をご入力ください";
+    checkError.value = false;
+  } else if (deliveryDate.value === "") {
+    deliveryDateError.value = "配達日時を選択してください";
     checkError.value = false;
   } else {
     deliveryDateError.value = "";
@@ -77,6 +129,7 @@ const order = () => {
     return;
   }
 
+  // 注文完了ページに遷移
   router.push("/orderFinished");
 };
 </script>
