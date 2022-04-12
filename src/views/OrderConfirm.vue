@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { getDate, getHours, getMonth, getYear } from "date-fns";
 
@@ -24,7 +24,7 @@ const router = useRouter();
 /**
  * 注文する.
  */
-const order = () => {
+const order = async () => {
   // エラー処理
   if (name.value === "") {
     nameError.value = "名前が入力されていません";
@@ -128,6 +128,10 @@ const order = () => {
   if (checkError.value === false) {
     return;
   }
+
+  // 注文内容を送信する
+  // const response= await axios.post("http://153.127.48.168:8080/ecsite-api/order",{
+  // })
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
