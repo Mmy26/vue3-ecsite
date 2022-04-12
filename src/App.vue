@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "@/components/HelloWorld.vue";
 import { ElButton } from "element-plus";
+import StoreProvider from "./StoreProvider.vue";
 </script>
 
 <template>
@@ -21,11 +22,13 @@ import { ElButton } from "element-plus";
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/cartlist">カート</RouterLink>
       </nav>
     </div>
   </header>
-
-  <RouterView />
+  <StoreProvider>
+    <RouterView />
+  </StoreProvider>
 </template>
 
 <style>
