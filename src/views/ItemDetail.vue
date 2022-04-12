@@ -1,29 +1,40 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
 import axios from "axios";
+import { useRoute } from "vue-router";
 console.log("created");
 // 選択した商品サイズの情報
-const selectItemSize = ref<string>("");
+const selectItemSize = ref<string>("M");
 // 選択したトッピング情報
 const selectToppingList = ref([]);
 // 選択した商品の数量
 const selectItemQuantity = ref<number>(1);
 // 選択商品情報(トッピング情報も入る)
 const selectedItem = ref(
-  new Item(0, "", "", "", 200, 300, "", false, new Array<Topping>())
+  new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
 );
-const itemId = ref<number>(1);
 
-// APIから取得したトッピング情報(表示の際に使用)
-const toppingData = ref([]);
+// URLからidを取得
+const route = useRoute();
+const itemId = route.params.id;
+
+// APIから書品情報を取得し事前に設置した空のオブジェクトに入れる
 const getToppingData = async (): Promise<void> => {
+  console.log("メソッド起動");
+  console.log(itemId);
+
   const response = await axios.get(
     `http://153.127.48.168:8080/ecsite-api/item/${itemId}`
   );
-  console.dir(JSON.stringify(response));
+  console.dir(JSON.stringify(response.data));
+  selectedItem.value = response.data.item;
+  console.dir(JSON.stringify(selectedItem.value));
 };
+
+// 非同期で上記のメソッドを実行
+onMounted(getToppingData);
 
 console.log(selectItemSize.value);
 
@@ -36,6 +47,8 @@ const addItem = () => {
 };
 </script>
 <template>
+  {{ "name:" + selectedItem.name }}<br />
+  {{ "description:" + selectedItem.description }}
   <form action="">
     <div>
       <span>M</span>
@@ -52,7 +65,16 @@ const addItem = () => {
 
     <div>
       <span>Topping</span>
-      <input type="checkbox" value="1" v-model="selectToppingList" />
+      <div>
+        <span v-for="topping of selectedItem.toppingList" :key="topping.id">
+          {{ topping.name
+          }}<input
+            type="checkbox"
+            :value="topping.id"
+            v-model="selectToppingList"
+          />
+        </span>
+      </div>
     </div>
     <div>
       <span>Quantity</span>
