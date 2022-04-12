@@ -21,6 +21,7 @@ import { ElButton } from "element-plus";
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/itemDetail">itemDetail</RouterLink>
       </nav>
     </div>
   </header>
