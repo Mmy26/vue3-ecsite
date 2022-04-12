@@ -1,6 +1,6 @@
 import { Order } from "@/types/Order";
 import { User } from "@/types/User";
-import { reactive } from "vue";
+import { reactive, toRefs, type InjectionKey } from "vue";
 
 type state = {
   order: Order;
@@ -8,8 +8,8 @@ type state = {
 
 export const useOrderStore = () => {
   // state
-  const globalState = reactive(
-    new Order(
+  const globalState = reactive<state>({
+    order: new Order(
       0,
       0,
       0,
@@ -24,14 +24,16 @@ export const useOrderStore = () => {
       0,
       new User(0, "", "", "", "", "", ""),
       []
-    )
-  );
+    ),
+  });
 
   // actions
-  /**
-   * 注文者情報を更新する.
-   */
-  const updateOrder= ()=>{
 
-  }
+  return { ...toRefs(globalState.order) };
 };
+
+// キーを作るためのuseOrderStoreの型
+type orderStateType= ReturnType<typeof useOrderStore>;
+
+// キーの生成
+export const orderProviderKey:InjectionKey<orderStateType>=Symbol("order");
