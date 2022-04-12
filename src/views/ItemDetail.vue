@@ -2,6 +2,7 @@
 import { reactive, ref } from "vue";
 import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
+import axios from "axios";
 console.log("created");
 // 選択した商品サイズの情報
 const selectItemSize = ref<string>("");
@@ -13,9 +14,16 @@ const selectItemQuantity = ref<number>(1);
 const selectedItem = ref(
   new Item(0, "", "", "", 200, 300, "", false, new Array<Topping>())
 );
+const itemId = ref<number>(1);
 
 // APIから取得したトッピング情報(表示の際に使用)
-const ToppingData = ref([]);
+const toppingData = ref([]);
+const getToppingData = async (): Promise<void> => {
+  const response = await axios.get(
+    `http://153.127.48.168:8080/ecsite-api/item/${itemId}`
+  );
+  console.dir(JSON.stringify(response));
+};
 
 console.log(selectItemSize.value);
 
