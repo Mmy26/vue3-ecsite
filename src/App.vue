@@ -3,12 +3,15 @@ import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "@/components/HelloWorld.vue";
 import { ElButton } from "element-plus";
 import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
 </script>
 
 <template>
   <Header />
   <!-- ここにStoreProvider.vueを挿入 -->
   <RouterView />
+  <!--  -->
+  <Footer />
 </template>
 
 <style></style>
