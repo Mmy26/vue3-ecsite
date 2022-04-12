@@ -6,10 +6,9 @@ const mailAddress = ref("");
 const zipCode = ref("");
 const address = ref("");
 const telephone = ref("");
-const deliveryTime = ref(new Date());
-const paymentMethod = ref("代金引換");
-
-
+const deliveryDate = ref("");
+const deliveryTime = ref("10時");
+const paymentMethod = ref(1);
 </script>
 
 <template>
@@ -101,19 +100,19 @@ const paymentMethod = ref("代金引換");
       <div class="order-confirm-delivery-info">
         <div class="row">
           <div class="input-field">
-            <input id="name" type="text" />
+            <input id="name" type="text" v-model="name" />
             <label for="name">お名前</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="email" type="email" />
+            <input id="email" type="email" v-model="mailAddress" />
             <label for="email">メールアドレス</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="zipcode" type="text" maxlength="7" />
+            <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <button class="btn" type="button">
               <span>住所検索</span>
@@ -122,19 +121,19 @@ const paymentMethod = ref("代金引換");
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="address" type="text" />
+            <input id="address" type="text" v-model="address" />
             <label for="address">住所</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field">
-            <input id="tel" type="tel" />
+            <input id="tel" type="tel" v-model="telephone" />
             <label for="tel">電話番号</label>
           </div>
         </div>
         <div class="row order-confirm-delivery-datetime">
           <div class="input-field">
-            <input id="deliveryDate" type="date" />
+            <input id="deliveryDate" type="date" v-model="deliveryDate" />
             <label for="address">配達日時</label>
           </div>
           <label class="order-confirm-delivery-time">
@@ -142,40 +141,80 @@ const paymentMethod = ref("代金引換");
               name="deliveryTime"
               type="radio"
               value="10時"
-              checked="checked"
+              v-model="deliveryTime"
             />
             <span>10時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="11時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="11時"
+              v-model="deliveryTime"
+            />
             <span>11時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="12時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="12時"
+              v-model="deliveryTime"
+            />
             <span>12時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="13時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="13時"
+              v-model="deliveryTime"
+            />
             <span>13時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="14時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="14時"
+              v-model="deliveryTime"
+            />
             <span>14時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="15時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="15時"
+              v-model="deliveryTime"
+            />
             <span>15時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="16時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="16時"
+              v-model="deliveryTime"
+            />
             <span>16時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="17時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="17時"
+              v-model="deliveryTime"
+            />
             <span>17時</span>
           </label>
           <label class="order-confirm-delivery-time">
-            <input name="deliveryTime" type="radio" value="18時" />
+            <input
+              name="deliveryTime"
+              type="radio"
+              value="18時"
+              v-model="deliveryTime"
+            />
             <span>18時</span>
           </label>
         </div>
@@ -189,12 +228,17 @@ const paymentMethod = ref("代金引換");
               name="paymentMethod"
               type="radio"
               value="1"
-              checked="checked"
+              v-model="paymentMethod"
             />
             <span>代金引換</span>
           </label>
           <label class="order-confirm-payment-method-radio">
-            <input name="paymentMethod" type="radio" value="2" />
+            <input
+              name="paymentMethod"
+              type="radio"
+              value="2"
+              v-model="paymentMethod"
+            />
             <span>クレジットカード</span>
           </label>
         </span>
