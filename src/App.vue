@@ -7,6 +7,7 @@ import Footer from "./components/Footer.vue";
 </script>
 
 <template>
+
   <!-- <header>
     <el-button>I am ElButton</el-button>
     <img
@@ -33,6 +34,7 @@ import Footer from "./components/Footer.vue";
     <RouterView />
     <!-- <Footer /> -->
   </StoreProvider>
+
 </template>
 
 <style></style>
