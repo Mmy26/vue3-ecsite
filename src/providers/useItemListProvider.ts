@@ -5,6 +5,7 @@ import { reactive, toRefs, type InjectionKey } from "vue";
 type State = {
   itemList: Array<Item>;
   searchItemName: string;
+  totalItemCount: number;
 };
 
 export const useItemList = () => {
@@ -12,6 +13,7 @@ export const useItemList = () => {
   const globalState = reactive<State>({
     itemList: [],
     searchItemName: "",
+    totalItemCount: 0,
   });
 
   //actions
