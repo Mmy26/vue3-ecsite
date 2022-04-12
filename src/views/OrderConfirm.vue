@@ -9,6 +9,13 @@ const telephone = ref("");
 const deliveryDate = ref("");
 const deliveryTime = ref("10時");
 const paymentMethod = ref(1);
+
+const nameError = ref("");
+const mailAddressError = ref("");
+const zipCodeError = ref("");
+const addressError = ref("");
+const telephoneError = ref("");
+const deliveryDateError = ref("");
 </script>
 
 <template>
