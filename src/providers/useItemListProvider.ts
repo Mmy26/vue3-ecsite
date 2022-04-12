@@ -1,4 +1,4 @@
-import type { Item } from "@/types/Item";
+import { Item } from "@/types/Item";
 import axios from "axios";
 import { reactive, toRefs, type InjectionKey } from "vue";
 
@@ -18,7 +18,24 @@ export const useItemList = () => {
 
   //actions
   const setItemList = async (): Promise<void> => {
-    const response = await axios.get<Array<Item>>("urlを入れる");
+    const response = await axios.get(
+      "http://153.127.48.168:8080/ecsite-api/item/items/noodle"
+    );
+    for (const item of response.data.items) {
+      globalState.itemList.push(
+        new Item(
+          item.id,
+          item.type,
+          item.name,
+          item.description,
+          item.priceM,
+          item.priceL,
+          item.imagePath,
+          item.deleted,
+          item.toppingList
+        )
+      );
+    }
   };
   const searchItemList = () => {
     return (name: string) => {

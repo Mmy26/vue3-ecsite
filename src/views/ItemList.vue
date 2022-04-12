@@ -1,7 +1,55 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { itemListKey } from "@/providers/useItemListProvider";
+import { inject, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const store = inject(itemListKey);
+const router = useRouter();
+if (!store) {
+  throw new Error("");
+}
+
+//メソッド
+onMounted(() => {
+  store.setItemList();
+});
+
+const toDetailPage = (itemId: number) => {
+  router.push("/itemDetail" + itemId);
+};
+</script>
 
 <template>
-  <div></div>
+  <h3 class="title">商品一覧</h3>
+  <!-- gutterは間隔の幅を表す -->
+  <el-row :gutter="10">
+    <!-- spanはgrid数を表す(大きさは24まで) -->
+    <el-col
+      class="bg-purple"
+      :span="8"
+      v-for="item of store.itemList.value"
+      :key="item.id"
+    >
+      <div>{{ item.name }}</div>
+      <div>{{ item.description }}</div>
+      <div>{{ item.priceM }}円</div>
+      <div>{{ item.priceL }}円</div>
+      <!-- <img :src="item.imagePath" /> -->
+    </el-col>
+  </el-row>
 </template>
 
-<style scoped></style>
+<style scoped>
+.title {
+  text-align: center;
+}
+.bg-purple {
+  background: #d3dce6;
+  border: solid black 1px;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+  height: 20vh;
+}
+</style>
