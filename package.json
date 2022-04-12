@@ -8,7 +8,11 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+<<<<<<< HEAD
     "date-fns": "^2.28.0",
+=======
+    "axios": "^0.26.1",
+>>>>>>> develop
     "element-plus": "^2.1.9",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14"
