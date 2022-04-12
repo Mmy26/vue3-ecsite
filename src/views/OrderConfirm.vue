@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getDate, getHours, getMonth, getYear } from "date-fns";
+import { format, getDate, getHours, getMonth, getYear } from "date-fns";
 import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
+import axios from "axios";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -33,7 +34,6 @@ if (!userStore) {
 if (!orderStore) {
   throw new Error("");
 }
-
 
 onMounted(() => {
   userStore.currentUser;
@@ -147,9 +147,27 @@ const order = () => {
     return;
   }
 
+  let currentUser = userStore.currentUser;
+  let currentOrder = orderStore;
+
   // 注文内容を送信する
-  // const response= await axios.post("http://153.127.48.168:8080/ecsite-api/order",{
-  // })
+  // const response = await axios.post(
+  //   "http://153.127.48.168:8080/ecsite-api/order",
+  //   {
+  //     userId: currentUser.value.id,
+  //     status: currentOrder.status,
+  //     destinationName: name.value,
+  //     destinationEmail: mailAddress.value,
+  //     destinationZipcode: zipCode.value.replace(
+  //       "-",
+  //       ""
+  //     ),
+  //     destinationAddress: address.value,
+  //     destinationTel: address.value,
+  //     deliveryTime: deliveryDate.value.replaceAll("-","/")+ " " + deliveryTime.value + format(new Date(),":mm/ss"),
+
+  //   }
+  // );
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
