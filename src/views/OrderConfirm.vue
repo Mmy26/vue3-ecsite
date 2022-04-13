@@ -6,6 +6,8 @@ import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
 import OrderItemFormList from "@/components/OrderItemFormList.vue";
+import { Order } from "@/types/Order";
+import { User } from "@/types/User";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -13,9 +15,10 @@ const zipCode = ref("");
 const address = ref("");
 const telephone = ref("");
 const deliveryDate = ref("");
-const deliveryTime = ref("10時");
+const deliveryTime = ref("10");
 const paymentMethod = ref(1);
 
+const errorMessage = ref("");
 const nameError = ref("");
 const mailAddressError = ref("");
 const zipCodeError = ref("");
@@ -152,7 +155,7 @@ const orderConfirm = async () => {
   }
 
   let currentUser = userStore.currentUser;
-  let currentOrder = orderStore;
+  let currentOrder = orderStore.order.value;
 
   // 注文内容を送信する
   const response = await axios.post(
@@ -160,23 +163,51 @@ const orderConfirm = async () => {
     {
       userId: currentUser.value.id,
       status: currentOrder.status,
+      totalPrice: currentOrder.calcTotalPrice,
       destinationName: name.value,
       destinationEmail: mailAddress.value,
       destinationZipcode: zipCode.value.replace("-", ""),
       destinationAddress: address.value,
-      destinationTel: address.value,
+      destinationTel: telephone.value,
       deliveryTime:
         deliveryDate.value.split("-").join("/") +
         " " +
         deliveryTime.value +
-        format(new Date(), ":mm/ss"),
+        format(new Date(), ":mm:ss"),
       paymentMethod: paymentMethod.value,
-      orderItemFormList: [],
+      orderItemFormList: currentOrder.orderItemList,
     }
   );
 
+  console.log(JSON.stringify(response));
+
+  let {
+    distinationName,
+    distinationEmail,
+    distinationZipcode,
+    distinationAddress,
+    distinationTel,
+  } = orderStore.order.value;
+
+  console.log("ok");
+
+  if (response.data.status !== "success") {
+    // 失敗ならエラーメッセージを出す
+    errorMessage.value = "注文できませんでした";
+    return;
+  }
+
+  distinationName = name.value;
+  distinationEmail = mailAddress.value;
+  distinationZipcode = zipCode.value;
+  distinationAddress = address.value;
+  distinationTel = telephone.value;
+
+  console.log("ok2");
+
   // 注文完了ページに遷移
   router.push("/orderFinished");
+  console.log("注文されました");
 };
 </script>
 
@@ -240,7 +271,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="10時"
+              value="10"
               v-model="deliveryTime"
             />
             <span>10時</span>
@@ -249,7 +280,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="11時"
+              value="11"
               v-model="deliveryTime"
             />
             <span>11時</span>
@@ -258,7 +289,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="12時"
+              value="12"
               v-model="deliveryTime"
             />
             <span>12時</span>
@@ -267,7 +298,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="13時"
+              value="13"
               v-model="deliveryTime"
             />
             <span>13時</span>
@@ -276,7 +307,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="14時"
+              value="14"
               v-model="deliveryTime"
             />
             <span>14時</span>
@@ -285,7 +316,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="15時"
+              value="15"
               v-model="deliveryTime"
             />
             <span>15時</span>
@@ -294,7 +325,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="16時"
+              value="16"
               v-model="deliveryTime"
             />
             <span>16時</span>
@@ -303,7 +334,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="17時"
+              value="17"
               v-model="deliveryTime"
             />
             <span>17時</span>
@@ -312,7 +343,7 @@ const orderConfirm = async () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="18時"
+              value="18"
               v-model="deliveryTime"
             />
             <span>18時</span>
@@ -350,6 +381,7 @@ const orderConfirm = async () => {
           <span>この内容で注文する</span>
         </button>
       </div>
+      <div>{{ errorMessage }}</div>
     </div>
     <!-- end container -->
   </div>

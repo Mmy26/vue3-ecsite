@@ -13,9 +13,9 @@ export const useOrderStore = () => {
   // state
   const globalState = reactive<state>({
     order: new Order(
-      0,
-      0,
-      0,
+      1,
+      1,
+      1,
       0,
       new Date(),
       "",

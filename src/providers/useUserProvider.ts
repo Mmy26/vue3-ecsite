@@ -12,7 +12,7 @@ type UserState = {
 export const useUserProvider = () => {
   //state
   const userState = reactive<UserState>({
-    currentUser: new User(0, "", "", "", "", "", ""),
+    currentUser: new User(1, "", "", "", "", "", ""),
   });
 
   //actions
