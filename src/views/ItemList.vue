@@ -3,6 +3,7 @@ import { itemListKey } from "@/providers/useItemListProvider";
 import type { Item } from "@/types/Item";
 import { inject, onMounted, reactive, ref } from "vue";
 import { RouterLink } from "vue-router";
+import { Search } from "@element-plus/icons-vue";
 
 const store = inject(itemListKey);
 const searchItemName = ref("");
@@ -53,14 +54,18 @@ const sortByUser = () => {
 
 <template>
   <form method="post" class="search-form">
-    <input id="searchItem" class="search-name-input" v-model="searchItemName" />
-    <button
-      class="btn search-btn"
-      type="button"
-      @click="searchItems(searchItemName)"
-    >
-      <span>検&nbsp;&nbsp;索</span>
-    </button>
+    <el-row>
+      <el-col :span="24">
+        <el-input
+          class="w-100 m-2 input-bar"
+          size="large"
+          placeholder="キーワードを入力"
+          v-model="searchItemName" /><el-button
+          type="primary"
+          :icon="Search"
+          @click="searchItems(searchItemName)"
+      /></el-col>
+    </el-row>
   </form>
   <select
     style="display: block"
@@ -113,5 +118,9 @@ img {
   width: 300px;
   height: 300px;
   object-fit: cover;
+}
+.input-bar {
+  margin: 10px;
+  width: 300px;
 }
 </style>
