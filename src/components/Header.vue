@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import "element-plus/theme-chalk/display.css";
 import { RouterLink } from "vue-router";
+
 </script>
 
 <template>
