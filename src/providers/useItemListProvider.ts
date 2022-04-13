@@ -44,6 +44,20 @@ export const useItemList = () => {
         item.name.includes(searchItemName)
     );
   };
+  const sortByRecommendation = () => {
+    const recommendationItemId = [
+      70, 77, 67, 69, 74, 78, 71, 66, 76, 72, 68, 65, 75, 73, 64, 62, 61, 63,
+    ];
+    let recommendationItemList = Array<Item>();
+    for (let id of recommendationItemId) {
+      let item = globalState.itemList.find((item) => item.id === id);
+      if (item !== undefined) {
+        //「as 型」で強制的に型を指定する
+        recommendationItemList.push(item as Item);
+      }
+    }
+    return recommendationItemList;
+  };
   const sortByName = () => {
     globalState.itemList.sort((before, after) => {
       return before.name.localeCompare(after.name, "ja");
@@ -82,6 +96,7 @@ export const useItemList = () => {
     ...toRefs(globalState),
     setItemList,
     searchItemList,
+    sortByRecommendation,
     sortByName,
     sortByDescPrice,
     sortByAscPrice,

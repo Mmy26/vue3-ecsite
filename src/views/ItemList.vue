@@ -32,7 +32,12 @@ const searchItems = (searchItemName: string) => {
   }
 };
 const sortByUser = () => {
+  currentItemList.value = store.itemList.value;
   searchItemMessage.value = "";
+  //おすすめ順
+  if (sorting.value === "recommend") {
+    currentItemList.value = store.sortByRecommendation();
+  }
   //五十音順
   if (sorting.value === "name") {
     store.sortByName();
@@ -64,9 +69,10 @@ const sortByUser = () => {
     v-on:change="sortByUser"
   >
     <option value="sort">並び替える</option>
+    <option value="recommend">おすすめ順</option>
     <option value="name">五十音順</option>
-    <option value="descPrice" v-on:change="sortByUser">値段が安い順</option>
-    <option value="ascPrice" v-on:change="sortByUser">値段が高い順</option>
+    <option value="descPrice">値段が安い順</option>
+    <option value="ascPrice">値段が高い順</option>
   </select>
 
   <div>{{ searchItemMessage }}</div>
