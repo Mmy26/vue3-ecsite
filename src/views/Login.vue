@@ -3,6 +3,7 @@ import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
+import { RouterLink } from "vue-router"
 
 //email
 const email = ref("");
@@ -88,8 +89,9 @@ const loginUser = async (): Promise<void> => {
       </span>
     </el-form-item>
     <el-form-item>
-      <el-button plain type="primary" v-on:click="loginUser"
-        >Sign In</el-button
+      <el-button plain type="primary" v-on:click="loginUser">Sign In</el-button>&nbsp;&nbsp;
+      <RouterLink to="/registerUser"
+        ><el-link type="primary">ユーザー登録に戻る</el-link></RouterLink
       >
     </el-form-item>
   </el-form>
