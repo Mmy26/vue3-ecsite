@@ -42,7 +42,7 @@ onMounted(() => {
 /**
  * 注文する.
  */
-const orderConfirm = () => {
+const orderConfirm = async () => {
   // エラー処理
   if (name.value === "") {
     nameError.value = "名前が入力されていません";
@@ -52,6 +52,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // ある文字列を含むか
   const includeOrNot = (str: string): boolean => {
     return mailAddress.value.includes(str);
   };
@@ -83,6 +84,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // 電話番号の表記チェック
   const telCheck = (): boolean => {
     let telError = true;
     let targetArray = new Array<string>();
@@ -113,6 +115,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // 配達日時のチェック
   const hoursCheck = (): boolean => {
     let currentDate = new Date();
     let splitedArray = deliveryDate.value.split("-");
@@ -151,23 +154,25 @@ const orderConfirm = () => {
   let currentOrder = orderStore;
 
   // 注文内容を送信する
-  // const response = await axios.post(
-  //   "http://153.127.48.168:8080/ecsite-api/order",
-  //   {
-  //     userId: currentUser.value.id,
-  //     status: currentOrder.status,
-  //     destinationName: name.value,
-  //     destinationEmail: mailAddress.value,
-  //     destinationZipcode: zipCode.value.replace(
-  //       "-",
-  //       ""
-  //     ),
-  //     destinationAddress: address.value,
-  //     destinationTel: address.value,
-  //     deliveryTime: deliveryDate.value.replaceAll("-","/")+ " " + deliveryTime.value + format(new Date(),":mm/ss"),
-
-  //   }
-  // );
+  const response = await axios.post(
+    "http://153.127.48.168:8080/ecsite-api/order",
+    {
+      userId: currentUser.value.id,
+      status: currentOrder.status,
+      destinationName: name.value,
+      destinationEmail: mailAddress.value,
+      destinationZipcode: zipCode.value.replace("-", ""),
+      destinationAddress: address.value,
+      destinationTel: address.value,
+      deliveryTime:
+        deliveryDate.value.split("-").join("/") +
+        " " +
+        deliveryTime.value +
+        format(new Date(), ":mm/ss"),
+      paymentMethod: paymentMethod.value,
+      orderItemFormList: [],
+    }
+  );
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
