@@ -42,7 +42,7 @@ onMounted(() => {
 /**
  * 注文する.
  */
-const order = () => {
+const orderConfirm = () => {
   // エラー処理
   if (name.value === "") {
     nameError.value = "名前が入力されていません";
@@ -419,7 +419,7 @@ const order = () => {
         </span>
       </div>
       <div class="row order-confirm-btn">
-        <button class="btn" type="button" @click="order">
+        <button class="btn" type="button" @click="orderConfirm">
           <span>この内容で注文する</span>
         </button>
       </div>
