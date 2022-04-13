@@ -40,11 +40,11 @@ export const useOrderStore = () => {
             "人気メニューです",
             500,
             650,
-            "/img_noodle/1.png",
+            "img_noodle/1.jpg",
             false,
             [
-              new Topping(1,"noodle","メンマ",100,200),
-              new Topping(2,"noodle","コーン",80,160),
+              new Topping(1, "noodle", "メンマ", 100, 200),
+              new Topping(2, "noodle", "コーン", 80, 160),
             ]
           ),
           []
@@ -62,11 +62,11 @@ export const useOrderStore = () => {
             "人気メニューです",
             580,
             720,
-            "/img_noodle/2.png",
+            "img_noodle/2.jpg",
             false,
             [
-              new Topping(3,"noodle","キャベツ",200,400),
-              new Topping(4,"noodle","バター",110,220),
+              new Topping(3, "noodle", "キャベツ", 200, 400),
+              new Topping(4, "noodle", "バター", 110, 220),
             ]
           ),
           []
@@ -77,7 +77,7 @@ export const useOrderStore = () => {
 
   // actions
 
-  return { ...toRefs(globalState.order) };
+  return { ...toRefs(globalState) };
 };
 
 // キーを作るためのuseOrderStoreの型

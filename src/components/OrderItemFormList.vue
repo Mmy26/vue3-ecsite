@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { orderProviderKey } from "@/providers/useOrderProvider";
-import { inject, onMounted } from "vue";
+import type { OrderItem } from "@/types/OrderItem";
+import { inject, onMounted, ref } from "vue";
 
 const orderStore = inject(orderProviderKey);
 
+if (!orderStore) {
+  throw new Error("");
+}
+
+let currentOrderList = ref<OrderItem[]>([]);
+
 onMounted(() => {
-  orderStore;
+  currentOrderList.value = orderStore.order.value.orderItemList;
 });
 </script>
 
 <template>
   <div class="row">
+    <!-- {{ currentOrderList.orderItemList }} -->
     <table class="striped" border="1">
       <thead>
         <tr>
@@ -21,65 +29,36 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr v-for="orderItem of currentOrderList" v-bind:key="orderItem.id">
           <td class="cart-item-name">
             <div class="cart-item-icon">
-              <img src="img/1.jpg" />
+              <img v-bind:src="orderItem.item.imagePath" />
             </div>
-            <span>ハワイアンパラダイス</span>
+            <span>{{ orderItem.item.name }}</span>
           </td>
           <td>
-            <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-            &nbsp;&nbsp;1個
+            <span class="price">&nbsp;{{ orderItem.size }}</span
+            ><span v-if="orderItem.size === 'M'"
+              >&nbsp;&nbsp;{{ orderItem.item.priceM }}円</span
+            ><span v-else>&nbsp;&nbsp;{{ orderItem.item.priceL }}円</span>
+            &nbsp;&nbsp;{{ orderItem.quantity }}個
           </td>
           <td>
             <ul>
-              <li>ピーマン300円</li>
-              <li>オニオン300円</li>
-              <li>あらびきソーセージ300円</li>
+              <li v-for="topping of orderItem.item.toppingList">
+                {{ topping.name }}
+                <span v-if="orderItem.size === 'M'"
+                  >{{ topping.priceM }}円</span
+                >
+                <span v-else>{{ topping.priceL }}円</span>
+              </li>
             </ul>
           </td>
-          <td><div class="text-center">3,280円</div></td>
-        </tr>
-        <tr>
-          <td class="cart-item-name">
-            <div class="cart-item-icon">
-              <img src="img/1.jpg" />
+          <td>
+            <div class="text-center">
+              {{ orderItem.getCalcSubTotalPrice().toLocaleString() }}円
             </div>
-            <span>ハワイアンパラダイス</span>
           </td>
-          <td>
-            <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-            &nbsp;&nbsp;1個
-          </td>
-          <td>
-            <ul>
-              <li>ピーマン300円</li>
-              <li>オニオン300円</li>
-              <li>あらびきソーセージ300円</li>
-            </ul>
-          </td>
-          <td><div class="text-center">3,280円</div></td>
-        </tr>
-        <tr>
-          <td class="cart-item-name">
-            <div class="cart-item-icon">
-              <img src="img/1.jpg" />
-            </div>
-            <span>ハワイアンパラダイス</span>
-          </td>
-          <td>
-            <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-            &nbsp;&nbsp;1個
-          </td>
-          <td>
-            <ul>
-              <li>ピーマン300円</li>
-              <li>オニオン300円</li>
-              <li>あらびきソーセージ300円</li>
-            </ul>
-          </td>
-          <td><div class="text-center">3,280円</div></td>
         </tr>
       </tbody>
     </table>
