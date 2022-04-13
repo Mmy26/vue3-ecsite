@@ -6,8 +6,6 @@ import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
 import OrderItemFormList from "@/components/OrderItemFormList.vue";
-import { Order } from "@/types/Order";
-import { User } from "@/types/User";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -30,6 +28,7 @@ const checkError = ref(true);
 const router = useRouter();
 const orderStore = inject(orderProviderKey);
 const userStore = inject(useUserProviderKey);
+
 
 if (!userStore) {
   throw new Error("");
@@ -209,6 +208,20 @@ const orderConfirm = async () => {
   router.push("/orderFinished");
   console.log("注文されました");
 };
+
+/**
+ * APIで郵便番号から住所を取得する.
+ */
+const getAddress = async () => {
+  const axios = require("axios");
+  const response = await axios.get("https://zipcoda.net/api", {
+    adapter: require("axios-jsonp"),
+    params: {
+      zipcode: zipCode.value.replace("-", ""),
+    },
+  });
+  address.value = response.data.items[0].address;
+};
 </script>
 
 <template>
@@ -239,7 +252,7 @@ const orderConfirm = async () => {
           <div class="input-field">
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button">
+            <button class="btn" type="button" @click="getAddress">
               <span>住所検索</span>
             </button>
             <div>例：1600022</div>
