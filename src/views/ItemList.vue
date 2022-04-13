@@ -7,6 +7,7 @@ import { RouterLink } from "vue-router";
 const store = inject(itemListKey);
 const searchItemName = ref("");
 const searchItemMessage = ref("");
+const sorting = ref("sort");
 let currentItemList = ref<Item[]>([]);
 
 if (!store) {
@@ -15,8 +16,12 @@ if (!store) {
 
 //メソッド
 onMounted(() => {
-  store.setItemList();
-  currentItemList.value = store.itemList.value;
+  if (store.itemList.value.length === 0) {
+    store.setItemList();
+    currentItemList.value = store.itemList.value;
+  } else {
+    currentItemList.value = store.itemList.value;
+  }
 });
 const searchItems = (searchItemName: string) => {
   currentItemList.value = store.searchItemList(searchItemName);
@@ -24,6 +29,24 @@ const searchItems = (searchItemName: string) => {
   if (currentItemList.value.length === 0 || searchItemName === "") {
     currentItemList.value = store.itemList.value;
     searchItemMessage.value = "該当する商品がありません";
+  }
+};
+const sortByUser = () => {
+  currentItemList.value = store.itemList.value;
+  searchItemMessage.value = "";
+  //おすすめ順
+  if (sorting.value === "recommend") {
+    currentItemList.value = store.sortByRecommendation();
+  }
+  //五十音順
+  if (sorting.value === "name") {
+    store.sortByName();
+    //料金低い順
+  } else if (sorting.value === "descPrice") {
+    store.sortByDescPrice();
+    //料金高い順
+  } else if (sorting.value === "ascPrice") {
+    store.sortByAscPrice();
   }
 };
 </script>
@@ -39,6 +62,19 @@ const searchItems = (searchItemName: string) => {
       <span>検&nbsp;&nbsp;索</span>
     </button>
   </form>
+  <select
+    style="display: block"
+    name="order"
+    v-model="sorting"
+    v-on:change="sortByUser"
+  >
+    <option value="sort">並び替える</option>
+    <option value="recommend">おすすめ順</option>
+    <option value="name">五十音順</option>
+    <option value="descPrice">値段が安い順</option>
+    <option value="ascPrice">値段が高い順</option>
+  </select>
+
   <div>{{ searchItemMessage }}</div>
 
   <!-- gutterは間隔の幅を表す -->
