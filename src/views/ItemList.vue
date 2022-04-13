@@ -15,8 +15,12 @@ if (!store) {
 
 //メソッド
 onMounted(() => {
-  store.setItemList();
-  currentItemList.value = store.itemList.value;
+  if (store.itemList.value.length === 0) {
+    store.setItemList();
+    currentItemList.value = store.itemList.value;
+  } else {
+    currentItemList.value = store.itemList.value;
+  }
 });
 const searchItems = (searchItemName: string) => {
   currentItemList.value = store.searchItemList(searchItemName);
