@@ -22,7 +22,7 @@ const router = createRouter({
       component: () => import("../views/ItemList.vue"),
     },
     {
-      path: "/itemDetail:id",
+      path: "/itemDetail/:id",
       component: () => import("../views/ItemDetail.vue"),
     },
     {
