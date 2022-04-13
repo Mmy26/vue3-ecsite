@@ -42,7 +42,7 @@ onMounted(getToppingData);
 console.log(selectItemSize.value);
 
 /**
- 小計金額の計算.
+ 小計金額の計算（変更され都度反映される）.
  * @returns - 小計金額
  */
 const calcSubTotal = computed(() => {
