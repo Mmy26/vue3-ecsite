@@ -1,6 +1,24 @@
 <script setup lang="ts">
 import "element-plus/theme-chalk/display.css";
-import { RouterLink } from "vue-router";
+import { onMounted, watch, ref } from "vue"
+import { RouterLink, useRoute } from "vue-router";
+
+//ヘッダーページを表示するかどうかを表すフラグ
+const canShow = ref(true);
+
+//routeに関するオブジェクト
+const route = useRoute();
+
+// watch((変更を検知したい変数) , ( 検知した変数が引数として入れられる ) => { 処理 } )
+watch((route), (currentPage) => {
+  console.log("watchが呼ばれました!");
+  console.log("currentPageの値      ",currentPage.path)
+  canShow.value = true;
+  if( currentPage.path === "/login" || currentPage.path === "/registerUser"){
+    canShow.value = false;
+  }
+  console.log("canShowの値   ", canShow.value);
+});
 </script>
 
 <template>
