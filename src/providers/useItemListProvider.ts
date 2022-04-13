@@ -44,8 +44,48 @@ export const useItemList = () => {
         item.name.includes(searchItemName)
     );
   };
+  const sortByName = () => {
+    globalState.itemList.sort((before, after) => {
+      return before.name.localeCompare(after.name, "ja");
+    });
+  };
+  const sortByDescPrice = () => {
+    globalState.itemList.sort((before, after) => {
+      //ある順序の基準において a が b より小
+      if (after.priceM > before.priceM) {
+        return -1;
+      }
+      //その順序の基準において a が b より大
+      if (after.priceM < before.priceL) {
+        return 1;
+      }
+      // a と b が等しい場合
+      return 0;
+    });
+  };
+  const sortByAscPrice = () => {
+    globalState.itemList.sort((before, after) => {
+      //ある順序の基準において a が b より小
+      if (after.priceM < before.priceM) {
+        return -1;
+      }
+      //その順序の基準において a が b より大
+      if (after.priceM > before.priceL) {
+        return 1;
+      }
+      // a と b が等しい場合
+      return 0;
+    });
+  };
 
-  return { ...toRefs(globalState), setItemList, searchItemList };
+  return {
+    ...toRefs(globalState),
+    setItemList,
+    searchItemList,
+    sortByName,
+    sortByDescPrice,
+    sortByAscPrice,
+  };
 };
 
 type storeType = ReturnType<typeof useItemList>;
