@@ -4,6 +4,7 @@ import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
 import axios from "axios";
 import { useRoute } from "vue-router";
+import { computed } from "@vue/reactivity";
 console.log("created");
 // 選択した商品サイズの情報
 const selectItemSize = ref<string>("M");
@@ -20,7 +21,9 @@ const selectedItem = ref(
 const route = useRoute();
 const itemId = route.params.id;
 
-// APIから書品情報を取得し事前に設置した空のオブジェクトに入れる
+/**
+ * APIから商品情報を取得し事前に設置した空のオブジェクトに入れる
+ */
 const getToppingData = async (): Promise<void> => {
   console.log("メソッド起動");
   console.log(itemId);
@@ -37,6 +40,24 @@ const getToppingData = async (): Promise<void> => {
 onMounted(getToppingData);
 
 console.log(selectItemSize.value);
+
+/**
+ 小計金額の計算.
+ * @returns - 小計金額
+ */
+const calcSubTotal = computed(() => {
+  if (selectItemSize.value === "M") {
+    return (
+      (selectedItem.value.priceM + selectToppingList.value.length * 200) *
+      selectItemQuantity.value
+    );
+  } else {
+    return (
+      (selectedItem.value.priceL + selectToppingList.value.length * 300) *
+      selectItemQuantity.value
+    );
+  }
+});
 
 // 注文メソッド
 const addItem = () => {
@@ -96,5 +117,6 @@ const addItem = () => {
       <div><button @click="addItem()" type="button">Order</button></div>
     </div>
   </form>
+  {{ "税抜" + calcSubTotal + "円" }}
 </template>
 <style scoped></style>
