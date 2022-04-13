@@ -68,6 +68,7 @@ const addItem = () => {
 };
 </script>
 <template>
+  <img class="itemImage" :src="selectedItem.imagePath" /><br />
   {{ "name:" + selectedItem.name }}<br />
   {{ "description:" + selectedItem.description }}
   <form action="">
@@ -117,6 +118,11 @@ const addItem = () => {
       <div><button @click="addItem()" type="button">Order</button></div>
     </div>
   </form>
-  {{ "税抜" + calcSubTotal + "円" }}
+  {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}
 </template>
-<style scoped></style>
+<style scoped>
+.itemImage {
+  width: 200px;
+  height: 200px;
+}
+</style>
