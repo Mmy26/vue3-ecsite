@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { itemListKey } from "@/providers/useItemListProvider";
 import { inject, onMounted } from "vue";
-import { useRouter, RouterLink } from "vue-router";
+import { RouterLink } from "vue-router";
 
 const store = inject(itemListKey);
-const router = useRouter();
 if (!store) {
   throw new Error("");
 }
@@ -13,10 +12,6 @@ if (!store) {
 onMounted(() => {
   store.setItemList();
 });
-
-const toDetailPage = (itemId: number) => {
-  router.push("/itemDetail" + itemId);
-};
 </script>
 
 <template>
@@ -30,7 +25,9 @@ const toDetailPage = (itemId: number) => {
       v-for="item of store.itemList.value"
       :key="item.id"
     >
-      <div>{{ item.name }}</div>
+      <RouterLink :to="'/itemDetail/' + item.id">
+        <div>{{ item.name }}</div>
+      </RouterLink>
       <div>{{ item.description }}</div>
       <div>{{ item.priceM }}円</div>
       <div>{{ item.priceL }}円</div>
