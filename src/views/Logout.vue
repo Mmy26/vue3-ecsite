@@ -7,7 +7,7 @@ const fullscreenLoading = ref(false);
 const openFullScreen = () => {
   const loading = ElLoading.service({
     lock: true,
-    text: 'ログアウト中...   (本来ならログイン画面に遷移)',
+    text: 'ログアウト中...   ',
     background: 'rgba(0, 0, 0, 0.7)',
   })
   setTimeout(() => {
@@ -19,7 +19,7 @@ const router = useRouter();
 
 onMounted(() => {
   openFullScreen();
-  // router.push("/login")
+  router.push("/login")
 })
 </script>
 
