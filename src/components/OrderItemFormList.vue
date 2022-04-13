@@ -79,6 +79,11 @@ onMounted(() => {
               {{ orderItem.getCalcSubTotalPrice().toLocaleString() }}円
             </div>
           </td>
+          <td>
+            <button class="btn" type="button">
+              <span>削除</span>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
