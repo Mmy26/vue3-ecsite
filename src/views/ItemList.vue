@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { itemListKey } from "@/providers/useItemListProvider";
-import { inject, onMounted } from "vue";
+import type { Item } from "@/types/Item";
+import { inject, onMounted, reactive, ref } from "vue";
 import { RouterLink } from "vue-router";
 
 const store = inject(itemListKey);
+const searchItemName = ref("");
+const searchItemMessage = ref("");
+let currentItemList = ref<Item[]>([]);
+
 if (!store) {
   throw new Error("");
 }
@@ -11,18 +16,38 @@ if (!store) {
 //メソッド
 onMounted(() => {
   store.setItemList();
+  currentItemList.value = store.itemList.value;
 });
+const searchItems = (searchItemName: string) => {
+  currentItemList.value = store.searchItemList(searchItemName);
+  searchItemMessage.value = "";
+  if (currentItemList.value.length === 0 || searchItemName === "") {
+    currentItemList.value = store.itemList.value;
+    searchItemMessage.value = "該当する商品がありません";
+  }
+};
 </script>
 
 <template>
-  <h3 class="title">商品一覧</h3>
+  <form method="post" class="search-form">
+    <input id="searchItem" class="search-name-input" v-model="searchItemName" />
+    <button
+      class="btn search-btn"
+      type="button"
+      @click="searchItems(searchItemName)"
+    >
+      <span>検&nbsp;&nbsp;索</span>
+    </button>
+  </form>
+  <div>{{ searchItemMessage }}</div>
+
   <!-- gutterは間隔の幅を表す -->
   <el-row :gutter="10">
     <!-- spanはgrid数を表す(大きさは24まで) -->
     <el-col
       class="bg-purple"
       :span="8"
-      v-for="item of store.itemList.value"
+      v-for="item of currentItemList"
       :key="item.id"
     >
       <RouterLink :to="'/itemDetail/' + item.id">
@@ -39,9 +64,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.title {
-  text-align: center;
-}
 .bg-purple {
   background: #d3dce6;
   border: solid black 1px;
