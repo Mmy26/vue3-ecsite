@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { itemListKey } from "@/providers/useItemListProvider";
 import { inject, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, RouterLink } from "vue-router";
 
 const store = inject(itemListKey);
 const router = useRouter();
@@ -34,7 +34,9 @@ const toDetailPage = (itemId: number) => {
       <div>{{ item.description }}</div>
       <div>{{ item.priceM }}円</div>
       <div>{{ item.priceL }}円</div>
-      <img :src="item.imagePath" />
+      <RouterLink :to="'/itemDetail/' + item.id">
+        <img :src="item.imagePath" />
+      </RouterLink>
     </el-col>
   </el-row>
 </template>
