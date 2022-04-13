@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { orderProviderKey } from "@/providers/useOrderProvider";
+import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
+import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
 
 const orderStore = inject(orderProviderKey);
@@ -10,15 +12,33 @@ if (!orderStore) {
 }
 
 let currentOrderList = ref<OrderItem[]>([]);
+let currentOrder = ref<Order>(
+  new Order(
+    0,
+    0,
+    0,
+    0,
+    new Date(),
+    "",
+    "",
+    "",
+    "",
+    "",
+    new Date(),
+    0,
+    new User(0, "", "", "", "", "", ""),
+    []
+  )
+);
 
 onMounted(() => {
   currentOrderList.value = orderStore.order.value.orderItemList;
+  currentOrder.value = orderStore.order.value;
 });
 </script>
 
 <template>
   <div class="row">
-    <!-- {{ currentOrderList.orderItemList }} -->
     <table class="striped" border="1">
       <thead>
         <tr>
@@ -65,8 +85,11 @@ onMounted(() => {
   </div>
 
   <div class="row cart-total-price">
-    <div>消費税：8,000円</div>
-    <div>ご注文金額合計：38,000円 (税込)</div>
+    <div>消費税：{{ currentOrder.tax.toLocaleString() }}円</div>
+    <div>
+      ご注文金額合計：{{ currentOrder.calcTotalPrice.toLocaleString() }}円
+      (税込)
+    </div>
   </div>
 </template>
 
