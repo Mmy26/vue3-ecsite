@@ -37,13 +37,12 @@ export const useItemList = () => {
       );
     }
   };
-  const searchItemList = () => {
-    return (name: string) => {
-      return globalState.itemList.filter(
-        (item) =>
-          item.name.includes(name.toUpperCase()) || item.name.includes(name)
-      );
-    };
+  const searchItemList = (searchItemName: string) => {
+    return globalState.itemList.filter(
+      (item) =>
+        item.name.includes(searchItemName.toUpperCase()) ||
+        item.name.includes(searchItemName)
+    );
   };
 
   return { ...toRefs(globalState), setItemList, searchItemList };
