@@ -2,9 +2,10 @@
 import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { format, getDate, getHours, getMonth, getYear } from "date-fns";
-import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
+import { CartListKey } from "@/providers/useCartProvider";
+import OrderItemFormList from "@/components/OrderItemFormList.vue";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -25,7 +26,7 @@ const deliveryDateError = ref("");
 const checkError = ref(true);
 
 const router = useRouter();
-const orderStore = inject(orderProviderKey);
+const orderStore = inject(CartListKey);
 const userStore = inject(useUserProviderKey);
 
 const card_num = ref("");
@@ -50,7 +51,7 @@ if (!orderStore) {
 
 onMounted(() => {
   userStore.currentUser;
-  orderStore.order;
+  orderStore.userOrderInfo.value;
 });
 
 /**
@@ -162,7 +163,7 @@ const orderConfirm = async () => {
 
   // クレジットカードの決済処理
   let currentUser = userStore.currentUser;
-  let currentOrder = orderStore.order.value;
+  let currentOrder = orderStore.userOrderInfo.value;
 
   if (paymentMethod.value === "2") {
     // エラーチェック
@@ -298,7 +299,7 @@ const orderConfirm = async () => {
     distinationZipcode,
     distinationAddress,
     distinationTel,
-  } = orderStore.order.value;
+  } = orderStore.userOrderInfo.value;
 
   if (response.data.status !== "success") {
     // 失敗ならエラーメッセージを出す
@@ -329,14 +330,11 @@ const getAddress = async () => {
   zipCodeError.value = "";
   checkError.value = true;
 
-  const response = await axios.get(
-    "https://zipcloud.ibsnet.co.jp/api/search",
-    {
-      params: {
-        zipcode: zipCode.value,
-      },
-    }
-  );
+  const response = await axios.get("https://zipcloud.ibsnet.co.jp/api/search", {
+    params: {
+      zipcode: zipCode.value,
+    },
+  });
   const data = response.data.results[0];
   address.value = data.address1 + data.address2 + data.address3;
 };

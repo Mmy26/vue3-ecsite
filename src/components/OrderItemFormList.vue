@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { orderProviderKey } from "@/providers/useOrderProvider";
+import { CartListKey } from "@/providers/useCartProvider";
 import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
 
-const orderStore = inject(orderProviderKey);
+const orderStore = inject(CartListKey);
 
 if (!orderStore) {
   throw new Error("");
@@ -32,8 +32,8 @@ let currentOrder = ref<Order>(
 );
 
 onMounted(() => {
-  currentOrderList.value = orderStore.order.value.orderItemList;
-  currentOrder.value = orderStore.order.value;
+  currentOrderList.value = orderStore.userOrderInfo.value.orderItemList;
+  currentOrder.value = orderStore.userOrderInfo.value;
 });
 </script>
 
@@ -65,12 +65,12 @@ onMounted(() => {
           </td>
           <td>
             <ul>
-              <li v-for="topping of orderItem.item.toppingList">
-                {{ topping.name }}
+              <li v-for="topping of orderItem.orderToppingList">
+                {{ topping.topping.name }}
                 <span v-if="orderItem.size === 'M'"
-                  >{{ topping.priceM }}円</span
+                  >{{ topping.topping.priceM }}円</span
                 >
-                <span v-else>{{ topping.priceL }}円</span>
+                <span v-else>{{ topping.topping.priceL }}円</span>
               </li>
             </ul>
           </td>
