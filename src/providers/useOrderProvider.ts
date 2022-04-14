@@ -31,12 +31,9 @@ export const useOrderStore = () => {
   });
 
   // actions
-
   return { ...toRefs(globalState) };
 };
-
 // キーを作るためのuseOrderStoreの型
 type orderStateType = ReturnType<typeof useOrderStore>;
-
 // キーの生成
 export const orderProviderKey: InjectionKey<orderStateType> = Symbol("order");

@@ -4,6 +4,7 @@
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Cart: typeof import('./src/components/Cart.vue')['default']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElLink: typeof import('element-plus/es')['ElLink']
