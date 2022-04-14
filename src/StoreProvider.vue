@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { provide } from "vue";
 import { itemListKey, useItemList } from "@/providers/useItemListProvider";
-import { orderProviderKey, useOrderStore } from "./providers/useOrderProvider";
 import {
   useUserProvider,
   useUserProviderKey,
@@ -13,7 +12,6 @@ import { CartListKey, useOrderProvider } from "@/providers/useCartProvider";
 provide(CartListKey, useOrderProvider());
 provide(itemListKey, useItemList());
 provide(useUserProviderKey, useUserProvider());
-provide(orderProviderKey, useOrderStore());
 </script>
 
 <template>
