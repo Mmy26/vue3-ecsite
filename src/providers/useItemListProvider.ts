@@ -91,6 +91,15 @@ export const useItemList = () => {
       return 0;
     });
   };
+  const getItemListSortByCategory = (itemIdList: Array<number>) => {
+    const ItemListSortByCategory = new Array<Item>();
+    for (const id of itemIdList) {
+      ItemListSortByCategory.push(
+        globalState.itemList.filter((item) => item.id === id)[0]
+      );
+    }
+    return ItemListSortByCategory;
+  };
 
   return {
     ...toRefs(globalState),
@@ -100,6 +109,7 @@ export const useItemList = () => {
     sortByName,
     sortByDescPrice,
     sortByAscPrice,
+    getItemListSortByCategory,
   };
 };
 
