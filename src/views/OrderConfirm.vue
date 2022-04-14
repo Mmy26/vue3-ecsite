@@ -147,14 +147,16 @@ const orderConfirm = async () => {
     checkError.value = true;
   }
 
+  // クレジットカードの決済処理
+
   if (checkError.value === false) {
     return;
   }
 
+  // 注文内容を送信する
   let currentUser = userStore.currentUser;
   let currentOrder = orderStore.order.value;
 
-  // 注文内容を送信する
   const response = await axios.post(
     "http://153.127.48.168:8080/ecsite-api/order",
     {
@@ -186,8 +188,6 @@ const orderConfirm = async () => {
     distinationTel,
   } = orderStore.order.value;
 
-  console.log("ok");
-
   if (response.data.status !== "success") {
     // 失敗ならエラーメッセージを出す
     errorMessage.value = "注文できませんでした";
@@ -199,8 +199,6 @@ const orderConfirm = async () => {
   distinationZipcode = zipCode.value;
   distinationAddress = address.value;
   distinationTel = telephone.value;
-
-  console.log("ok2");
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
@@ -396,6 +394,95 @@ const getAddress = async () => {
           </label>
         </span>
       </div>
+
+      <div class="order-confirm-delivery-info">
+        <div v-if="paymentMethod === '2'">
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfCreditCardNumber }}
+            </div>
+            <div class="errorMessages">
+              {{ errorMessageOfCreditCardNumber2 }}
+            </div>
+            <div class="input-field">
+              <label for="creditCardNumber">クレジットカード番号</label>
+              <input
+                type="text"
+                v-model.number="card_number"
+                id="creditCardNumber"
+                maxlength="16"
+              />
+              <div>例：1234 1234 5678 5678</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfExpiry }}
+            </div>
+            <div class="col s10 expiry">
+              <span class="expiry2"> 有効期限： </span>
+              <select class="browser-default" v-model="card_exp_month">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option></select
+              >月
+              <select class="browser-default" v-model="card_exp_year">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+                <option value="2033">2033</option>
+                <option value="2034">2034</option>
+                <option value="2035">2035</option>
+                <option value="2036">2036</option>
+                <option value="2037">2037</option>
+                <option value="2038">2038</option></select
+              >年
+              <div>例：01月/2022年</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfCardName }}
+            </div>
+            <div class="input-field">
+              <label for="card_name">カード名義人</label>
+              <input type="text" v-model="card_name" id="card_name" />
+            </div>
+            <div>例：TARO YAMADA</div>
+          </div>
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfCardCvv }}
+            </div>
+            <div class="errorMessages">
+              {{ errorMessageOfNotNumber }}
+            </div>
+            <div class="input-field">
+              <label for="card_cvv">セキュリティーコード</label>
+              <input type="text" v-model="card_cvv" id="card_cvv" />
+            </div>
+            <div>例：123</div>
+          </div>
+        </div>
+      </div>
+
       <div class="row order-confirm-btn">
         <button class="btn" type="button" @click="orderConfirm">
           <span>この内容で注文する</span>
