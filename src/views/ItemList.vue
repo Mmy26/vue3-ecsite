@@ -11,6 +11,7 @@ const searchItemMessage = ref("");
 const sorting = ref("");
 const shouldShowSorting = ref(true);
 let currentItemList = ref<Item[]>([]);
+let searchItemList = ref<Item[]>([]);
 
 if (!store) {
   throw new Error("");
@@ -21,7 +22,7 @@ onMounted(() => {
   if (store.itemList.value.length === 0) {
     store.setItemList();
     currentItemList.value = store.itemList.value;
-    console.log(currentItemList.value);
+    searchItemList.value = store.itemList.value;
   } else {
     currentItemList.value = store.itemList.value;
   }
@@ -103,14 +104,23 @@ const getItemlistSortByCategory = (category: string): void => {
     <el-row>
       <el-col :span="24">
         <el-input
+          autocomplete="on"
+          list="searchItemList"
           class="w-100 m-2 input-bar"
           size="large"
           placeholder="キーワードを入力"
-          v-model="searchItemName" /><el-button
+          v-model="searchItemName"
+        /><el-button
           type="primary"
           :icon="Search"
           @click="searchItems(searchItemName)"
-      /></el-col>
+        />
+        <datalist id="searchItemList">
+          <div v-for="item of searchItemList" :key="item.name">
+            <option :value="item.name"></option>
+          </div>
+        </datalist>
+      </el-col>
     </el-row>
   </form>
   <select
