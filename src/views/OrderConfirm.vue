@@ -13,7 +13,7 @@ const address = ref("");
 const telephone = ref("");
 const deliveryDate = ref("");
 const deliveryTime = ref("10");
-const paymentMethod = ref(1);
+const paymentMethod = ref("1");
 
 const errorMessage = ref("");
 const nameError = ref("");
@@ -164,7 +164,30 @@ const orderConfirm = async () => {
   let currentUser = userStore.currentUser;
   let currentOrder = orderStore.order.value;
 
-  if (paymentMethod.value === 2) {
+  if (paymentMethod.value === "2") {
+    // エラーチェック
+    if (card_num.value === "") {
+      errorMessageOfCreditCardNumber.value =
+        "クレジットカード番号を入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCreditCardNumber.value = "";
+      checkError.value = true;
+    }
+
+    if (card_name.value === "") {
+      errorMessageOfCardName.value =
+        "クレジットカードの名義人を入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCardName.value = "";
+      checkError.value = true;
+    }
+
+    if (checkError.value === false) {
+      return;
+    }
+
     const response2 = await axios.post(
       "http://153.127.48.168:8080/sample-credit-card-web-api/credit-card/payment",
       {
@@ -180,7 +203,6 @@ const orderConfirm = async () => {
     );
     console.log(JSON.stringify(response2));
 
-    // エラーチェック
     if (typeof card_num.value !== "number") {
       errorMessageOfCreditCardNumber2.value =
         "クレジットカード番号は数字で入力してください";
@@ -196,15 +218,6 @@ const orderConfirm = async () => {
       checkError.value = false;
     } else {
       errorMessageOfCreditCardNumber.value = "";
-      checkError.value = true;
-    }
-
-    if (card_name.value === "") {
-      errorMessageOfCardName.value =
-        "クレジットカードの名義人を入力してください";
-      checkError.value = false;
-    } else {
-      errorMessageOfCardName.value = "";
       checkError.value = true;
     }
 
