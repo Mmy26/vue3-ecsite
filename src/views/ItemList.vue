@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { itemListKey } from "@/providers/useItemListProvider";
 import type { Item } from "@/types/Item";
-import { inject, onMounted, reactive, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 import { Search } from "@element-plus/icons-vue";
 
