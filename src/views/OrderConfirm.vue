@@ -5,6 +5,7 @@ import { format, getDate, getHours, getMonth, getYear } from "date-fns";
 import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
+import OrderItemFormList from "@/components/OrderItemFormList.vue";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -12,9 +13,10 @@ const zipCode = ref("");
 const address = ref("");
 const telephone = ref("");
 const deliveryDate = ref("");
-const deliveryTime = ref("10時");
+const deliveryTime = ref("10");
 const paymentMethod = ref(1);
 
+const errorMessage = ref("");
 const nameError = ref("");
 const mailAddressError = ref("");
 const zipCodeError = ref("");
@@ -26,6 +28,7 @@ const checkError = ref(true);
 const router = useRouter();
 const orderStore = inject(orderProviderKey);
 const userStore = inject(useUserProviderKey);
+
 
 if (!userStore) {
   throw new Error("");
@@ -42,7 +45,7 @@ onMounted(() => {
 /**
  * 注文する.
  */
-const orderConfirm = () => {
+const orderConfirm = async () => {
   // エラー処理
   if (name.value === "") {
     nameError.value = "名前が入力されていません";
@@ -52,6 +55,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // ある文字列を含むか
   const includeOrNot = (str: string): boolean => {
     return mailAddress.value.includes(str);
   };
@@ -83,6 +87,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // 電話番号の表記チェック
   const telCheck = (): boolean => {
     let telError = true;
     let targetArray = new Array<string>();
@@ -113,6 +118,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // 配達日時のチェック
   const hoursCheck = (): boolean => {
     let currentDate = new Date();
     let splitedArray = deliveryDate.value.split("-");
@@ -148,29 +154,73 @@ const orderConfirm = () => {
   }
 
   let currentUser = userStore.currentUser;
-  let currentOrder = orderStore;
+  let currentOrder = orderStore.order.value;
 
   // 注文内容を送信する
-  // const response = await axios.post(
-  //   "http://153.127.48.168:8080/ecsite-api/order",
-  //   {
-  //     userId: currentUser.value.id,
-  //     status: currentOrder.status,
-  //     destinationName: name.value,
-  //     destinationEmail: mailAddress.value,
-  //     destinationZipcode: zipCode.value.replace(
-  //       "-",
-  //       ""
-  //     ),
-  //     destinationAddress: address.value,
-  //     destinationTel: address.value,
-  //     deliveryTime: deliveryDate.value.replaceAll("-","/")+ " " + deliveryTime.value + format(new Date(),":mm/ss"),
+  const response = await axios.post(
+    "http://153.127.48.168:8080/ecsite-api/order",
+    {
+      userId: currentUser.value.id,
+      status: currentOrder.status,
+      totalPrice: currentOrder.calcTotalPrice,
+      destinationName: name.value,
+      destinationEmail: mailAddress.value,
+      destinationZipcode: zipCode.value.replace("-", ""),
+      destinationAddress: address.value,
+      destinationTel: telephone.value,
+      deliveryTime:
+        deliveryDate.value.split("-").join("/") +
+        " " +
+        deliveryTime.value +
+        format(new Date(), ":mm:ss"),
+      paymentMethod: paymentMethod.value,
+      orderItemFormList: currentOrder.orderItemList,
+    }
+  );
 
-  //   }
-  // );
+  console.log(JSON.stringify(response));
+
+  let {
+    distinationName,
+    distinationEmail,
+    distinationZipcode,
+    distinationAddress,
+    distinationTel,
+  } = orderStore.order.value;
+
+  console.log("ok");
+
+  if (response.data.status !== "success") {
+    // 失敗ならエラーメッセージを出す
+    errorMessage.value = "注文できませんでした";
+    return;
+  }
+
+  distinationName = name.value;
+  distinationEmail = mailAddress.value;
+  distinationZipcode = zipCode.value;
+  distinationAddress = address.value;
+  distinationTel = telephone.value;
+
+  console.log("ok2");
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
+  console.log("注文されました");
+};
+
+/**
+ * APIで郵便番号から住所を取得する.
+ */
+const getAddress = async () => {
+  const axios = require("axios");
+  const response = await axios.get("https://zipcoda.net/api", {
+    adapter: require("axios-jsonp"),
+    params: {
+      zipcode: zipCode.value.replace("-", ""),
+    },
+  });
+  address.value = response.data.items[0].address;
 };
 </script>
 
@@ -179,86 +229,7 @@ const orderConfirm = () => {
     <div class="container">
       <h1 class="page-title">注文内容確認</h1>
       <!-- table -->
-      <div class="row">
-        <table class="striped" border="1">
-          <thead>
-            <tr>
-              <th class="cart-table-th">商品名</th>
-              <th>サイズ、価格(税抜)、数量</th>
-              <th>トッピング、価格(税抜)</th>
-              <th>小計</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="cart-item-name">
-                <div class="cart-item-icon">
-                  <img src="img/1.jpg" />
-                </div>
-                <span>ハワイアンパラダイス</span>
-              </td>
-              <td>
-                <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-                &nbsp;&nbsp;1個
-              </td>
-              <td>
-                <ul>
-                  <li>ピーマン300円</li>
-                  <li>オニオン300円</li>
-                  <li>あらびきソーセージ300円</li>
-                </ul>
-              </td>
-              <td><div class="text-center">3,280円</div></td>
-            </tr>
-            <tr>
-              <td class="cart-item-name">
-                <div class="cart-item-icon">
-                  <img src="img/1.jpg" />
-                </div>
-                <span>ハワイアンパラダイス</span>
-              </td>
-              <td>
-                <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-                &nbsp;&nbsp;1個
-              </td>
-              <td>
-                <ul>
-                  <li>ピーマン300円</li>
-                  <li>オニオン300円</li>
-                  <li>あらびきソーセージ300円</li>
-                </ul>
-              </td>
-              <td><div class="text-center">3,280円</div></td>
-            </tr>
-            <tr>
-              <td class="cart-item-name">
-                <div class="cart-item-icon">
-                  <img src="img/1.jpg" />
-                </div>
-                <span>ハワイアンパラダイス</span>
-              </td>
-              <td>
-                <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-                &nbsp;&nbsp;1個
-              </td>
-              <td>
-                <ul>
-                  <li>ピーマン300円</li>
-                  <li>オニオン300円</li>
-                  <li>あらびきソーセージ300円</li>
-                </ul>
-              </td>
-              <td><div class="text-center">3,280円</div></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="row cart-total-price">
-        <div>消費税：8,000円</div>
-        <div>ご注文金額合計：38,000円 (税込)</div>
-      </div>
-
+      <OrderItemFormList></OrderItemFormList>
       <h2 class="page-title">お届け先情報</h2>
       <div class="order-confirm-delivery-info">
         <div class="row">
@@ -281,7 +252,7 @@ const orderConfirm = () => {
           <div class="input-field">
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button">
+            <button class="btn" type="button" @click="getAddress">
               <span>住所検索</span>
             </button>
             <div>例：1600022</div>
@@ -313,7 +284,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="10時"
+              value="10"
               v-model="deliveryTime"
             />
             <span>10時</span>
@@ -322,7 +293,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="11時"
+              value="11"
               v-model="deliveryTime"
             />
             <span>11時</span>
@@ -331,7 +302,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="12時"
+              value="12"
               v-model="deliveryTime"
             />
             <span>12時</span>
@@ -340,7 +311,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="13時"
+              value="13"
               v-model="deliveryTime"
             />
             <span>13時</span>
@@ -349,7 +320,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="14時"
+              value="14"
               v-model="deliveryTime"
             />
             <span>14時</span>
@@ -358,7 +329,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="15時"
+              value="15"
               v-model="deliveryTime"
             />
             <span>15時</span>
@@ -367,7 +338,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="16時"
+              value="16"
               v-model="deliveryTime"
             />
             <span>16時</span>
@@ -376,7 +347,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="17時"
+              value="17"
               v-model="deliveryTime"
             />
             <span>17時</span>
@@ -385,7 +356,7 @@ const orderConfirm = () => {
             <input
               name="deliveryTime"
               type="radio"
-              value="18時"
+              value="18"
               v-model="deliveryTime"
             />
             <span>18時</span>
@@ -423,6 +394,7 @@ const orderConfirm = () => {
           <span>この内容で注文する</span>
         </button>
       </div>
+      <div>{{ errorMessage }}</div>
     </div>
     <!-- end container -->
   </div>
