@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
-import { RouterLink } from "vue-router"
+import { RouterLink } from "vue-router";
+import { useUserProviderKey } from "@/providers/useUserProvider";
+import { User } from "@/types/User";
 
 //email
 const email = ref("");
@@ -15,6 +17,12 @@ const password = ref("");
 const passwordError = ref("");
 //ルーティング関係のオブジェクト
 const router = useRouter();
+//userProviderに関するオブジェクト
+const userStore = inject(useUserProviderKey);
+
+if (!userStore) {
+  throw new Error("");
+}
 
 /**
  * ログインをするメソッド.
@@ -60,6 +68,17 @@ const loginUser = async (): Promise<void> => {
         message: "ログイン成功！",
         type: "success",
       });
+      userStore.setCurrentUser(
+        new User(
+          response.data.responseMap.user.id,
+          response.data.responseMap.user.name,
+          response.data.responseMap.user.email,
+          response.data.responseMap.user.password,
+          response.data.responseMap.user.zipcode,
+          response.data.responseMap.user.address,
+          response.data.responseMap.user.telephone
+        )
+      );
       router.push("/itemList");
     } else {
       ElNotification({
@@ -89,7 +108,8 @@ const loginUser = async (): Promise<void> => {
       </span>
     </el-form-item>
     <el-form-item>
-      <el-button plain type="primary" v-on:click="loginUser">Sign In</el-button>&nbsp;&nbsp;
+      <el-button plain type="primary" v-on:click="loginUser">Sign In</el-button
+      >&nbsp;&nbsp;
       <RouterLink to="/registerUser"
         ><el-link type="primary">ユーザー登録に戻る</el-link></RouterLink
       >
