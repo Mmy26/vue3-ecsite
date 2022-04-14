@@ -121,7 +121,7 @@ export const useItemList = () => {
     const ItemListSortByCategory = new Array<Item>();
     for (const id of itemIdList) {
       ItemListSortByCategory.push(
-        globalState.itemList.filter((item) => item.id === id)[0]
+        globalState.itemList.filter((item) => item.id === id)[0] as Item
       );
     }
     return ItemListSortByCategory;
