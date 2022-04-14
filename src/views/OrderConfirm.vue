@@ -323,7 +323,7 @@ const getAddress = async () => {
             <input id="name" type="text" v-model="name" />
             <div class="ex">例：山田太郎</div>
           </div>
-          <div>{{ nameError }}</div>
+          <div class="errorMessages">{{ nameError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
@@ -331,7 +331,7 @@ const getAddress = async () => {
             <input id="email" type="email" v-model="mailAddress" />
             <div class="ex">例：taro@gmail.com</div>
           </div>
-          <div>{{ mailAddressError }}</div>
+          <div class="errorMessages">{{ mailAddressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
@@ -342,7 +342,7 @@ const getAddress = async () => {
             </button>
             <div class="ex">例：1600022</div>
           </div>
-          <div>{{ zipCodeError }}</div>
+          <div class="errorMessages">{{ zipCodeError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
@@ -352,7 +352,7 @@ const getAddress = async () => {
               例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F
             </div>
           </div>
-          <div>{{ addressError }}</div>
+          <div class="errorMessages">{{ addressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
@@ -360,7 +360,7 @@ const getAddress = async () => {
             <input id="tel" type="tel" v-model="telephone" />
             <div class="ex">例：03-6675-3638</div>
           </div>
-          <div>{{ telephoneError }}</div>
+          <div class="errorMessages">{{ telephoneError }}</div>
         </div>
         <div class="row order-confirm-delivery-datetime">
           <div class="input-field">
@@ -449,7 +449,7 @@ const getAddress = async () => {
             <span>18時</span>
           </label>
           <div class="ex">例：2022年/01月/01日 13時</div>
-          <div>{{ deliveryDateError }}</div>
+          <div class="errorMessages">{{ deliveryDateError }}</div>
         </div>
       </div>
 
@@ -570,10 +570,20 @@ const getAddress = async () => {
           <span>この内容で注文する</span>
         </button>
       </div>
-      <div>{{ errorMessage }}</div>
+      <div class="errorMessages">{{ errorMessage }}</div>
     </div>
     <!-- end container -->
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.ex {
+  font-size: 12px;
+  color: rgb(152, 152, 152);
+}
+
+.errorMessages {
+  font-size: 14px;
+  color: red;
+}
+</style>
