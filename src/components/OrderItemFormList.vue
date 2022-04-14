@@ -30,15 +30,19 @@ let currentOrder = ref<Order>(
     []
   )
 );
+const showOrderItem = ref(true);
 
 onMounted(() => {
   currentOrderList.value = orderStore.userOrderInfo.value.orderItemList;
   currentOrder.value = orderStore.userOrderInfo.value;
+  if (currentOrderList.value.length === 0) {
+    showOrderItem.value = false;
+  }
 });
 </script>
 
 <template>
-  <div class="row">
+  <div class="row" v-show="showOrderItem">
     <table class="striped">
       <thead>
         <tr>
@@ -108,14 +112,14 @@ onMounted(() => {
 
 <style scoped>
 table {
-   border-collapse: collapse;
-   border:solid 1px;
+  border-collapse: collapse;
+  border: solid 1px;
 }
-table th, table td {
-   border-style: solid ;/* 線種 */
-   border-width: 2px; /* 線の太さ */
-   border-color: rgb(173, 172, 172);
-   padding:15px;
+table th,
+table td {
+  border-style: solid; /* 線種 */
+  border-width: 2px; /* 線の太さ */
+  border-color: rgb(173, 172, 172);
+  padding: 15px;
 }
-
 </style>
