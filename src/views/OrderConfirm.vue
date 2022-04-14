@@ -28,6 +28,18 @@ const router = useRouter();
 const orderStore = inject(orderProviderKey);
 const userStore = inject(useUserProviderKey);
 
+const card_num = ref("");
+const card_exp_year = ref(0);
+const card_exp_month = ref(0);
+const card_name = ref("");
+const card_cvv = ref("");
+const errorMessageOfCreditCardNumber = ref("");
+const errorMessageOfCreditCardNumber2 = ref("");
+const errorMessageOfExpiry = ref("");
+const errorMessageOfCardName = ref("");
+const errorMessageOfCardCvv = ref("");
+const errorMessageOfNotNumber = ref("");
+
 if (!userStore) {
   throw new Error("");
 }
@@ -38,6 +50,7 @@ if (!orderStore) {
 
 onMounted(() => {
   userStore.currentUser;
+  orderStore.order;
 });
 
 /**
@@ -148,15 +161,84 @@ const orderConfirm = async () => {
   }
 
   // クレジットカードの決済処理
-
-  if (checkError.value === false) {
-    return;
-  }
-
-  // 注文内容を送信する
   let currentUser = userStore.currentUser;
   let currentOrder = orderStore.order.value;
 
+  if (paymentMethod.value === 2) {
+    const response2 = await axios.post(
+      "http://153.127.48.168:8080/sample-credit-card-web-api/credit-card/payment",
+      {
+        user_id: currentOrder.userId,
+        order_number: zipCode.value + paymentMethod.value + 12345678,
+        amount: currentOrder.calcTotalPrice,
+        card_number: card_num.value,
+        card_exp_year: card_exp_year.value,
+        card_exp_month: card_exp_month.value,
+        card_name: card_name.value,
+        card_cvv: card_cvv.value,
+      }
+    );
+    console.log(JSON.stringify(response2));
+
+    // エラーチェック
+    if (typeof card_num.value !== "number") {
+      errorMessageOfCreditCardNumber2.value =
+        "クレジットカード番号は数字で入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCreditCardNumber2.value = "";
+      checkError.value = true;
+    }
+
+    if (String(card_num.value).length !== 16) {
+      errorMessageOfCreditCardNumber.value =
+        "クレジットカード番号の桁数が間違っています";
+      checkError.value = false;
+    } else {
+      errorMessageOfCreditCardNumber.value = "";
+      checkError.value = true;
+    }
+
+    if (card_name.value === "") {
+      errorMessageOfCardName.value =
+        "クレジットカードの名義人を入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCardName.value = "";
+      checkError.value = true;
+    }
+
+    if (response2.data.error_code === "E-01") {
+      errorMessageOfExpiry.value = "有効期限がきれています";
+      checkError.value = false;
+    } else {
+      errorMessageOfExpiry.value = "";
+      checkError.value = true;
+    }
+
+    if (response2.data.error_code === "E-02") {
+      errorMessageOfCardCvv.value = "セキュリティーコードが間違っています";
+      checkError.value = false;
+    } else {
+      errorMessageOfCardCvv.value = "";
+      checkError.value = true;
+    }
+
+    if (response2.data.error_code === "E-03") {
+      errorMessageOfNotNumber.value =
+        "セキュリティーコードは数字で入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfNotNumber.value = "";
+      checkError.value = true;
+    }
+
+    if (checkError.value === false) {
+      return;
+    }
+  }
+
+  // 注文内容を送信する
   const response = await axios.post(
     "http://153.127.48.168:8080/ecsite-api/order",
     {
@@ -408,7 +490,7 @@ const getAddress = async () => {
               <label for="creditCardNumber">クレジットカード番号</label>
               <input
                 type="text"
-                v-model.number="card_number"
+                v-model.number="card_num"
                 id="creditCardNumber"
                 maxlength="16"
               />
