@@ -23,11 +23,12 @@ if (userStore.currentUser.value.email === "") {
 const getOrderData = async (): Promise<void> => {
   console.log("メソッド起動");
   const response = await axios.get(
-    // `"http://153.127.48.168:8080/ecsite-api/item/items/noodle"/${userStore.currentUser.value.id}`
-    `"http://153.127.48.168:8080/ecsite-api/item/items/noodle"/1`
+    `"http://153.127.48.168:8080/ecsite-api/item/items/noodle"/${userStore.currentUser.value.id}`
   );
   console.dir(JSON.stringify(response.data));
+
   const orders = ref(response.data.orders);
+
   for (const order of orders) {
     currentOrderList.value.push(
       new Order(
@@ -52,14 +53,17 @@ const getOrderData = async (): Promise<void> => {
 </script>
 <template>
   <h1>注文履歴</h1>
-  <div v-for="currentUserData of currentOrderList">
-    <span>tott:{{ currentUserData.calcTotalPrice }}</span>
-    <div v-for="orderItem of currentUserData.orderItemList">
-      <span>name:{{ orderItem.item.name }}</span>
-      <span>size:{{ orderItem.size }}</span>
-      <span>quantity:{{ orderItem.quantity }}</span>
-      <span>image</span><img :src="orderItem.item.imagePath" />
+  <div v-if="currentOrderList >= 1">
+    <div v-for="currentUserData of currentOrderList">
+      <span>totalPrice:{{ currentUserData.calcTotalPrice }}</span>
+      <div v-for="orderItem of currentUserData.orderItemList">
+        <span>name:{{ orderItem.item.name }}</span>
+        <span>size:{{ orderItem.size }}</span>
+        <span>quantity:{{ orderItem.quantity }}</span>
+        <span>image</span><img :src="orderItem.item.imagePath" />
+      </div>
     </div>
   </div>
+  <div v-else>注文履歴がありません</div>
 </template>
 <style scoped></style>
