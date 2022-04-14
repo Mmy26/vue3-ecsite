@@ -49,7 +49,10 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(orderItem,index) of currentOrderList" v-bind:key="orderItem.id">
+        <tr
+          v-for="(orderItem, index) of currentOrderList"
+          v-bind:key="orderItem.id"
+        >
           <td class="cart-item-name">
             <div class="cart-item-icon">
               <img v-bind:src="orderItem.item.imagePath" />
@@ -80,20 +83,24 @@ onMounted(() => {
             </div>
           </td>
           <td>
-            <button class="btn" type="button" @click="orderStore.deleteItem(index)">
+            <button
+              class="btn"
+              type="button"
+              @click="orderStore.deleteItem(index)"
+            >
               <span>削除</span>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-  </div>
 
-  <div class="row cart-total-price">
-    <div>消費税：{{ currentOrder.tax.toLocaleString() }}円</div>
-    <div>
-      ご注文金額合計：{{ currentOrder.calcTotalPrice.toLocaleString() }}円
-      (税込)
+    <div class="row cart-total-price">
+      <div>消費税：{{ currentOrder.tax.toLocaleString() }}円</div>
+      <div>
+        ご注文金額合計：{{ currentOrder.calcTotalPrice.toLocaleString() }}円
+        (税込)
+      </div>
     </div>
   </div>
 </template>
