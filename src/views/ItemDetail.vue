@@ -1,30 +1,26 @@
 <script setup lang="ts">
-import { Order } from "@/types/Order";
-import { OrderItem } from "@/types/OrderItem";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, inject } from "vue";
 import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { userOrderKey } from "@/providers/useOrderProvider";
+
+const store = inject(userOrderKey);
+if (!store) {
+  throw new Error("");
+}
 
 const currentItem = reactive(
   new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
 );
-const checkedToppingList = reactive(Array<Topping>());
-const size = ref<string>("M");
-const quantity = ref<number>(1);
-type items = {
-  item: typeof currentItem;
-  topping: typeof checkedToppingList;
-  quantity: typeof quantity;
-  size: typeof size;
-};
 
+const router = useRouter();
 console.log("created");
 // 選択した商品サイズの情報
 const selectItemSize = ref<string>("M");
 // 選択したトッピング情報
-const selectToppingList = ref([]);
+const selectToppingList = ref<number[]>([]);
 // 選択した商品の数量
 const selectItemQuantity = ref<number>(1);
 // 選択商品情報(トッピング情報も入る)
@@ -56,12 +52,25 @@ console.log(selectItemSize.value);
 
 // 注文メソッド
 const addItem = () => {
+  console.log("call");
+
+  //payload
+  store.addOrderItem({
+    selectItemSize: selectItemSize.value,
+    selectOrderToppingList: selectToppingList.value,
+    selectQuantity: selectItemQuantity.value,
+    selectItem: selectedItem.value as Item,
+  });
+
   console.log(selectItemSize.value);
   console.log(selectToppingList.value);
   console.log(selectItemQuantity.value);
   console.log(selectedItem.value);
+  console.log(store.userOrderInfo);
+  router.push("/cartlist");
 };
 </script>
+
 <template>
   {{ "name:" + selectedItem.name }}<br />
   {{ "description:" + selectedItem.description }}
@@ -109,7 +118,7 @@ const addItem = () => {
         <option value="11">11</option>
         <option value="12">12</option>
       </select>
-      <div><button @click="addItem()" type="button">Order</button></div>
+      <div><button @click="addItem" type="button">Order</button></div>
     </div>
   </form>
 </template>

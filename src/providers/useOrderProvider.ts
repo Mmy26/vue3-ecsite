@@ -2,13 +2,22 @@ import { Order } from "@/types/Order";
 import { User } from "@/types/User";
 import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
-import type { OrderItem } from "@/types/OrderItem";
+import { OrderTopping } from "@/types/OrderTopping";
+import { OrderItem } from "@/types/OrderItem";
 import { reactive, ref, toRefs, type InjectionKey } from "vue";
-import type { type } from "os";
+
 //stateの型を定義
 type OrderStateType = {
   userOrderInfo: Order;
 };
+//payloadの型を定義
+type AddCartPayloadType = {
+  selectItemSize: string;
+  selectOrderToppingList: number[];
+  selectQuantity: number;
+  selectItem: Item;
+};
+
 //state
 export const useOrderProvider = () => {
   const orderState = reactive<OrderStateType>({
@@ -31,20 +40,10 @@ export const useOrderProvider = () => {
   });
 
   /**
-   * カートに商品を入れる
+   *カートに商品を追加する.
+   * @param - 追加する商品の情報
    */
-  //選択されたトッピング
-  const selectToppingList = ref([]);
-  // 選択された商品のサイズ
-  const selectItemSize = ref<string>("M");
-  // 選択された商品のオーダー数量
-  const selectQuantity = ref<number>(1);
-  // 選択された商品
-  const selectItem = ref(
-    new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
-  );
-
-  const orderItem = () => {
+  const addOrderItem = (payload: AddCartPayloadType) => {
     const orderItemList = ref(orderState.userOrderInfo.orderItemList);
     //最後に選択した商品を取得
     const latestOrderItem = orderItemList.value[orderItemList.value.length - 1];
@@ -55,34 +54,85 @@ export const useOrderProvider = () => {
     }
     console.dir(JSON.stringify(latestOrderItem));
 
-    // const orderItem = new OrderItem(
-    //     newOrderItemId.value,
-    //     selectItem.value.id,
-    //     1,
-    //     selectQuantity.value,
-    //     selectItemSize.value,
-    //     new Item(
-    //         selectItem.value.id,
-    //         selectItem.value.type,
-    //         selectItem.value.name,
-    //         selectItem.value.description,
-    //         selectItem.value.priceM,
-    //         selectItem.value.priceL,
-    //         selectItem.value.imagePath,
-    //         selectItem.value.deleted,
-    //         selectItem.value.toppingList
-    //     ),//トッピングのidとトッピングの商品名を紐づける
-    //     selectToppingList(selectToppingList.value)
+    const payloadItem = ref(
+      new OrderItem(
+        newOrderItemId.value,
+        payload.selectItem.id,
+        1,
+        payload.selectQuantity,
+        payload.selectItemSize,
+        new Item(
+          payload.selectItem.id,
+          payload.selectItem.type,
+          payload.selectItem.name,
+          payload.selectItem.description,
+          payload.selectItem.priceM,
+          payload.selectItem.priceL,
+          payload.selectItem.imagePath,
+          payload.selectItem.deleted,
+          payload.selectItem.toppingList as Array<Topping>
+        ),
+        checkedToppingList(
+          payload.selectOrderToppingList,
+          payload.selectItem,
+          newOrderItemId.value
+        )
+      )
+    );
+    console.log("addItem", payloadItem.value);
 
-    // )
+    orderState.userOrderInfo.orderItemList.push(payloadItem.value);
   };
+  /**
+   * トッピングのidとトッピングの商品名を紐づける.
+   * @param selectToppingIdList
+   * @returns 選択したトッピング
+   */
+  const checkedToppingList = (
+    selectToppingIdList: Array<number>,
+    selectItem: Item,
+    orderItemId: number
+  ): Array<OrderTopping> => {
+    const selectOrderToppingList = new Array<OrderTopping>();
+    let i = 0;
+    for (let toppingId of selectToppingIdList) {
+      const topping = ref(
+        selectItem.toppingList.find((topping) => {
+          return topping.id === toppingId;
+        })
+      );
+      //トッピングを選択していない場合
+      if (!topping) {
+        const orderedTopping = new OrderTopping(++i, toppingId, 0, topping);
+        selectOrderToppingList.push(orderedTopping);
+        console.log("for文の中", orderedTopping);
+        //トッピングを選択した場合
+      } else {
+        const orderedTopping = new OrderTopping(
+          ++i,
+          toppingId,
+          orderItemId,
+          topping.value as Topping
+        );
+        selectOrderToppingList.push(orderedTopping);
+      }
+    }
+    console.log("checkedToppingList", selectOrderToppingList);
 
-  const putInCart = () => {
-    let orderItem = orderState.userOrderInfo.orderItemList.length;
-    let orderItemList = ref<OrderItem[]>([]);
+    return selectOrderToppingList;
   };
-
-  return { ...toRefs(orderState) };
+  /**
+   * 商品を削除する.
+   */
+  const deleteItem = (index: number) => {
+    orderState.userOrderInfo.orderItemList.splice(index, 1);
+  };
+  return {
+    ...toRefs(orderState),
+    checkedToppingList,
+    addOrderItem,
+    deleteItem,
+  };
 };
 type UserOrderProviderType = ReturnType<typeof useOrderProvider>;
 export const userOrderKey: InjectionKey<UserOrderProviderType> =

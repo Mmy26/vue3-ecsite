@@ -1,116 +1,69 @@
 <template>
-  <div class="row">
-    <table class="striped">
-      <thead>
-        <tr>
-          <th class="cart-table-th">商品名</th>
-          <th>サイズ、価格(税抜)、数量</th>
-          <th>トッピング、価格(税抜)</th>
-          <th>小計</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="cart-item-name">
-            <div class="cart-item-icon">
-              <img src="img/1.jpg" />
-            </div>
-            <span>ハワイアンパラダイス</span>
-          </td>
-          <td>
-            <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-            &nbsp;&nbsp;1個
-          </td>
-          <td>
-            <ul>
-              <li>---</li>
-              <li>---</li>
-              <li>---</li>
-            </ul>
-          </td>
-          <td><div class="text-center">---円</div></td>
-          <td>
-            <button class="btn" type="button">
-              <span>削除</span>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td class="cart-item-name">
-            <div class="cart-item-icon">
-              <img src="img/1.jpg" />
-            </div>
-            <span>ハワイアンパラダイス</span>
-          </td>
-          <td>
-            <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-            &nbsp;&nbsp;1個
-          </td>
-          <td>
-            <ul>
-              <li>ピーマン300円</li>
-              <li>オニオン300円</li>
-              <li>あらびきソーセージ300円</li>
-            </ul>
-          </td>
-          <td><div class="text-center">3,280円</div></td>
-          <td>
-            <button class="btn" type="button">
-              <span>削除</span>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td class="cart-item-name">
-            <div class="cart-item-icon">
-              <img src="img/1.jpg" />
-            </div>
-            <span>ハワイアンパラダイス</span>
-          </td>
-          <td>
-            <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-            &nbsp;&nbsp;1個
-          </td>
-          <td>
-            <ul>
-              <li>ピーマン300円</li>
-              <li>オニオン300円</li>
-              <li>あらびきソーセージ300円</li>
-            </ul>
-          </td>
-          <td><div class="text-center">3,280円</div></td>
-          <td>
-            <button class="btn" type="button">
-              <span>削除</span>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <!-- //componensを張り付ける -->
+  <div
+    v-for="(orderItem, index) of store.userOrderInfo.value.orderItemList"
+    :key="orderItem.id"
+  >
+    {{ index }}
+    {{ orderItem.item.name }}
+    <img :src="orderItem.item.imagePath" />
+    <div>
+      <span class="price">&nbsp;{{ orderItem.size }}</span
+      >&nbsp;&nbsp;<span v-if="orderItem.size === 'M'"
+        >{{ orderItem.item.priceM.toLocaleString() }}円</span
+      >
+      <span v-if="orderItem.size === 'L'"
+        >{{ orderItem.item.priceL.toLocaleString() }}円</span
+      >
+      &nbsp;&nbsp;{{ orderItem.quantity }}個
+    </div>
+    トッピング:
 
-  <div class="row cart-total-price">
-    <div>消費税：8,000円</div>
-    <div>ご注文金額合計：38,000円 (税込)</div>
+    <div v-for="Topping of orderItem.orderToppingList" v-bind:key="Topping.id">
+      {{ Topping.topping.name }}>
+      <span v-if="orderItem.size === 'M'">{{ Topping.topping.priceM }}</span>
+      <span v-if="orderItem.size === 'L'">{{ Topping.topping.priceL }}</span
+      >円
+    </div>
+    <div>小計：{{ orderItem.getCalcSubTotalPrice().toLocaleString() }}</div>
+
+    <button type="button" @click="store.deleteItem(index)">削除</button>
+    <hr />
   </div>
+  <div v-if="OrderInfo.orderItemList.length !== 0">
+    消費税：{{ OrderInfo.tax.toLocaleString() }}円
+  </div>
+  <div v-if="OrderInfo.orderItemList.length !== 0">
+    ご注文金額合計：{{ OrderInfo.calcTotalPrice.toLocaleString() }}円 (税込)
+  </div>
+  <button class="btn" type="button" @click="backToItemList">
+    <span>商品一覧へ戻る</span>
+  </button>
   <div class="row order-confirm-btn">
-    <button
-      class="btn"
-      type="button"
-      onclick="location.href='order_confirm.html'"
-    >
+    <button class="btn" type="button" onclick="/orderConfirm">
       <span>注文に進む</span>
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { userOrderKey } from "@/providers/useOrderProvider";
+import { Item } from "@/types/Item";
 import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
-import { reactive } from "vue";
+import { onMounted, ref, inject } from "vue";
+import { useRouter } from "vue-router";
 
-const OrderInfo = reactive(
+const store = inject(userOrderKey);
+if (!store) {
+  throw new Error("");
+}
+//routerを使えるようにする
+const router = useRouter();
+
+//注文内容
+const OrderInfo = ref(
   new Order(
     0,
     0,
@@ -128,6 +81,20 @@ const OrderInfo = reactive(
     new Array<OrderItem>()
   )
 );
+
+/**
+ * ショッピングカート一覧を表示させる.
+ */
+onMounted(() => {
+  OrderInfo.value = store.userOrderInfo.value;
+  console.log(OrderInfo.value);
+});
+/**
+ * 商品一覧画面に戻る.
+ */
+const backToItemList = (): void => {
+  router.push("/itemList");
+};
 </script>
 
 <style scoped></style>
