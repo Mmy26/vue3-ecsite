@@ -558,7 +558,7 @@ const getAddress = async () => {
             </div>
             <div class="input-field">
               <label for="card_cvv">セキュリティーコード</label>
-              <input type="password" v-model="card_cvv" id="card_cvv" />
+              <input type="password" v-model.number="card_cvv" id="card_cvv" />
             </div>
             <div class="ex">例：123</div>
           </div>
