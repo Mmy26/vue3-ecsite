@@ -49,7 +49,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="orderItem of currentOrderList" v-bind:key="orderItem.id">
+        <tr v-for="(orderItem,index) of currentOrderList" v-bind:key="orderItem.id">
           <td class="cart-item-name">
             <div class="cart-item-icon">
               <img v-bind:src="orderItem.item.imagePath" />
@@ -80,7 +80,7 @@ onMounted(() => {
             </div>
           </td>
           <td>
-            <button class="btn" type="button">
+            <button class="btn" type="button" @click="orderStore.deleteItem(index)">
               <span>削除</span>
             </button>
           </td>
