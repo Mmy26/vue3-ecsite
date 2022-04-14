@@ -3,10 +3,11 @@ import { onMounted, reactive, ref, inject } from "vue";
 import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
 import axios from "axios";
+import { computed } from "@vue/reactivity";
 import { useRoute, useRouter } from "vue-router";
-import { userOrderKey } from "@/providers/useOrderProvider";
+import { CartListKey } from "@/providers/useCartProvider";
 
-const store = inject(userOrderKey);
+const store = inject(CartListKey);
 if (!store) {
   throw new Error("");
 }
@@ -16,6 +17,7 @@ const currentItem = reactive(
 );
 
 const router = useRouter();
+
 console.log("created");
 // 選択した商品サイズの情報
 const selectItemSize = ref<string>("M");
@@ -32,7 +34,9 @@ const selectedItem = ref(
 const route = useRoute();
 const itemId = route.params.id;
 
-// APIから書品情報を取得し事前に設置した空のオブジェクトに入れる
+/**
+ * APIから商品情報を取得し事前に設置した空のオブジェクトに入れる
+ */
 const getToppingData = async (): Promise<void> => {
   console.log("メソッド起動");
   console.log(itemId);
@@ -49,6 +53,24 @@ const getToppingData = async (): Promise<void> => {
 onMounted(getToppingData);
 
 console.log(selectItemSize.value);
+
+/**
+ 小計金額の計算（変更され都度反映される）.
+ * @returns - 小計金額
+ */
+const calcSubTotal = computed(() => {
+  if (selectItemSize.value === "M") {
+    return (
+      (selectedItem.value.priceM + selectToppingList.value.length * 200) *
+      selectItemQuantity.value
+    );
+  } else {
+    return (
+      (selectedItem.value.priceL + selectToppingList.value.length * 300) *
+      selectItemQuantity.value
+    );
+  }
+});
 
 // 注文メソッド
 const addItem = () => {
@@ -72,6 +94,7 @@ const addItem = () => {
 </script>
 
 <template>
+  <img class="itemImage" :src="selectedItem.imagePath" /><br />
   {{ "name:" + selectedItem.name }}<br />
   {{ "description:" + selectedItem.description }}
   <form action="">
@@ -121,5 +144,11 @@ const addItem = () => {
       <div><button @click="addItem" type="button">Order</button></div>
     </div>
   </form>
+  {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}
 </template>
-<style scoped></style>
+<style scoped>
+.itemImage {
+  width: 200px;
+  height: 200px;
+}
+</style>
