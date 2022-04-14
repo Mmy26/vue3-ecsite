@@ -39,13 +39,14 @@ onMounted(() => {
 
 <template>
   <div class="row">
-    <table class="striped" border="1">
+    <table class="striped">
       <thead>
         <tr>
           <th class="cart-table-th">商品名</th>
           <th>サイズ、価格(税抜)、数量</th>
           <th>トッピング、価格(税抜)</th>
           <th>小計</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -105,4 +106,16 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+table {
+   border-collapse: collapse;
+   border:solid 1px;
+}
+table th, table td {
+   border-style: solid ;/* 線種 */
+   border-width: 2px; /* 線の太さ */
+   border-color: rgb(173, 172, 172);
+   padding:15px;
+}
+
+</style>
