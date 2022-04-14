@@ -4,6 +4,7 @@ import type { User } from "@/types/User";
 import { inject, ref } from "vue";
 import axios from "axios";
 import { useUserProviderKey } from "@/providers/useUserProvider";
+import router from "@/router";
 // APIから受け取った情報を入れるインスタンス
 const currentOrderList = ref<Order[]>([]);
 // ログイン中のユーザーー情報（ストアから取得）
@@ -14,6 +15,10 @@ if (!userStore) {
   throw new Error("Error");
 }
 
+// ログインしていなければ、ログイン画面に遷移
+if (userStore.currentUser.value.email === "") {
+  router.push("/login");
+}
 // APIから情報取得
 const getOrderData = async (): Promise<void> => {
   console.log("メソッド起動");

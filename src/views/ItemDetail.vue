@@ -101,11 +101,10 @@ const addItem = () => {
       <img class="itemImage" :src="selectedItem.imagePath"
     /></el-col>
     <el-col :span="10">
+      <el-row :gutter="20"></el-row>
       <el-row :gutter="20">
-        <el-col :span="24">{{ "name:" + selectedItem.name }}</el-col>
-        <el-col :span="24">{{
-          "description:" + selectedItem.description
-        }}</el-col>
+        <el-col :span="24">{{ selectedItem.name }}</el-col>
+        <el-col :span="24">{{ selectedItem.description }}</el-col>
       </el-row>
     </el-col>
     <el-col :span="2"></el-col>
@@ -165,7 +164,7 @@ const addItem = () => {
   <el-row :gutter="20">
     <el-col :span="5"></el-col>
     <el-col :span="14"
-      ><div>この商品の合計金額:</div>
+      ><span>この商品の合計金額:</span>
       {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}</el-col
     >
     <el-col :span="5"></el-col>
@@ -173,17 +172,16 @@ const addItem = () => {
   <el-row :gutter="20">
     <el-col :span="5"></el-col>
     <el-col :span="14"
-      ><button @click="addItem" type="button">Order</button></el-col
+      ><el-button type="primary" plain @click="addItem"
+        >カートに追加</el-button
+      ></el-col
     >
     <el-col :span="5"></el-col>
   </el-row>
 </template>
 <style scoped>
 .itemImage {
-  width: 200px;
-  height: 200px;
-}
-.el-col {
-  border: black solid 0.1px;
+  width: 300px;
+  height: 300px;
 }
 </style>
