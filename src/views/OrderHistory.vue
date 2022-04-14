@@ -18,7 +18,8 @@ if (!userStore) {
 const getOrderData = async (): Promise<void> => {
   console.log("メソッド起動");
   const response = await axios.get(
-    `"http://153.127.48.168:8080/ecsite-api/item/items/noodle"/${userStore.currentUser.value.id}`
+    // `"http://153.127.48.168:8080/ecsite-api/item/items/noodle"/${userStore.currentUser.value.id}`
+    `"http://153.127.48.168:8080/ecsite-api/item/items/noodle"/1`
   );
   console.dir(JSON.stringify(response.data));
   const orders = ref(response.data.orders);
@@ -47,7 +48,7 @@ const getOrderData = async (): Promise<void> => {
 <template>
   <h1>注文履歴</h1>
   <div v-for="currentUserData of currentOrderList">
-    <span>totalPrice:{{ currentUserData.calcTotalPrice }}</span>
+    <span>tott:{{ currentUserData.calcTotalPrice }}</span>
     <div v-for="orderItem of currentUserData.orderItemList">
       <span>name:{{ orderItem.item.name }}</span>
       <span>size:{{ orderItem.size }}</span>

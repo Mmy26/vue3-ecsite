@@ -22,20 +22,26 @@ watch((route), (currentPage) => {
 </script>
 
 <template>
-  <el-header>
+  <el-header class="headerArea">
     <el-row class="row-bg" justify="space-between">
-      <el-col :span="6"><div class="grid-content bg-purple">Title</div></el-col>
-      <el-col :span="6"
+      <el-col :span="6"><el-image src="/img_noodle/header_logo.png" fit="scale-down" style="height: 5vh;"/></el-col>
+      <el-col :span="8"
         ><div class="grid-content bg-purple">
-          <el-space :size="10">
-            <RouterLink to="/itemList"
+          <el-space :size="20">
+            <RouterLink to="/itemList" class="link"
               ><el-link type="primary">商品一覧</el-link></RouterLink
             >
-            <RouterLink to="/registerUser"
+            <RouterLink to="/cartList" class="link"
+              ><el-link type="primary">カート</el-link></RouterLink
+            >
+            <RouterLink to="/registerUser" class="link"
               ><el-link type="primary">ユーザー登録</el-link></RouterLink
             >
-            <RouterLink to="/cartList"
-              ><el-link type="primary">カート</el-link></RouterLink
+            <RouterLink to="/login" class="link"
+              ><el-link type="primary">ログイン</el-link></RouterLink
+            >
+            <RouterLink to="/logout" class="link"
+              ><el-link type="primary">ログアウト</el-link></RouterLink
             >
           </el-space>
         </div></el-col
@@ -44,8 +50,14 @@ watch((route), (currentPage) => {
   </el-header>
 </template>
 <style scoped>
-.row-bg {
-  background-color: #d3dce6;
+.headerArea {
+  width: 100%;
+  background-color: #eee;
   height: 5vh;
+  align-items: center;
+}
+.link {
+  text-decoration: none;
+  margin-top: 10px;
 }
 </style>

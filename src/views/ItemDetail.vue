@@ -1,15 +1,28 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, inject } from "vue";
 import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
 import axios from "axios";
-import { useRoute } from "vue-router";
 import { computed } from "@vue/reactivity";
+import { useRoute, useRouter } from "vue-router";
+import { CartListKey } from "@/providers/useCartProvider";
+
+const store = inject(CartListKey);
+if (!store) {
+  throw new Error("");
+}
+
+const currentItem = reactive(
+  new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
+);
+
+const router = useRouter();
+
 console.log("created");
 // 選択した商品サイズの情報
 const selectItemSize = ref<string>("M");
 // 選択したトッピング情報
-const selectToppingList = ref([]);
+const selectToppingList = ref<number[]>([]);
 // 選択した商品の数量
 const selectItemQuantity = ref<number>(1);
 // 選択商品情報(トッピング情報も入る)
@@ -61,12 +74,25 @@ const calcSubTotal = computed(() => {
 
 // 注文メソッド
 const addItem = () => {
+  console.log("call");
+
+  //payload
+  store.addOrderItem({
+    selectItemSize: selectItemSize.value,
+    selectOrderToppingList: selectToppingList.value,
+    selectQuantity: selectItemQuantity.value,
+    selectItem: selectedItem.value as Item,
+  });
+
   console.log(selectItemSize.value);
   console.log(selectToppingList.value);
   console.log(selectItemQuantity.value);
   console.log(selectedItem.value);
+  console.log(store.userOrderInfo);
+  router.push("/cartlist");
 };
 </script>
+
 <template>
   <img class="itemImage" :src="selectedItem.imagePath" /><br />
   {{ "name:" + selectedItem.name }}<br />
@@ -115,7 +141,7 @@ const addItem = () => {
         <option value="11">11</option>
         <option value="12">12</option>
       </select>
-      <div><button @click="addItem()" type="button">Order</button></div>
+      <div><button @click="addItem" type="button">Order</button></div>
     </div>
   </form>
   {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}
