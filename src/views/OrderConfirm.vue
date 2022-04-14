@@ -5,7 +5,6 @@ import { format, getDate, getHours, getMonth, getYear } from "date-fns";
 import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
-import OrderItemFormList from "@/components/OrderItemFormList.vue";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -28,7 +27,6 @@ const checkError = ref(true);
 const router = useRouter();
 const orderStore = inject(orderProviderKey);
 const userStore = inject(useUserProviderKey);
-
 
 if (!userStore) {
   throw new Error("");
@@ -213,9 +211,18 @@ const orderConfirm = async () => {
  * APIで郵便番号から住所を取得する.
  */
 const getAddress = async () => {
+  if (zipCode.value === "") {
+    zipCodeError.value = "郵便番号が入力されていません";
+    checkError.value = false;
+    return;
+  }
+  zipCodeError.value = "";
+  checkError.value = true;
+
   const axios = require("axios");
+  const axiosJsonpAdapter = require("axios-jsonp");
   const response = await axios.get("https://zipcoda.net/api", {
-    adapter: require("axios-jsonp"),
+    adapter: axiosJsonpAdapter,
     params: {
       zipcode: zipCode.value.replace("-", ""),
     },
