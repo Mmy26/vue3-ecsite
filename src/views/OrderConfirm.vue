@@ -299,10 +299,8 @@ const getAddress = async () => {
   zipCodeError.value = "";
   checkError.value = true;
 
-  const axios = require("axios");
-  const axiosJsonpAdapter = require("axios-jsonp");
   const response = await axios.get("https://zipcoda.net/api", {
-    adapter: axiosJsonpAdapter,
+    adapter: require("axios-jsonp"),
     params: {
       zipcode: zipCode.value.replace("-", ""),
     },
@@ -323,7 +321,7 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="name">お名前</label>
             <input id="name" type="text" v-model="name" />
-            <div>例：山田太郎</div>
+            <div class="ex">例：山田太郎</div>
           </div>
           <div>{{ nameError }}</div>
         </div>
@@ -331,7 +329,7 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="email">メールアドレス</label>
             <input id="email" type="email" v-model="mailAddress" />
-            <div>例：taro@gmail.com</div>
+            <div class="ex">例：taro@gmail.com</div>
           </div>
           <div>{{ mailAddressError }}</div>
         </div>
@@ -342,7 +340,7 @@ const getAddress = async () => {
             <button class="btn" type="button" @click="getAddress">
               <span>住所検索</span>
             </button>
-            <div>例：1600022</div>
+            <div class="ex">例：1600022</div>
           </div>
           <div>{{ zipCodeError }}</div>
         </div>
@@ -350,7 +348,9 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="address">住所</label>
             <input id="address" type="text" v-model="address" />
-            <div>例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F</div>
+            <div class="ex">
+              例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F
+            </div>
           </div>
           <div>{{ addressError }}</div>
         </div>
@@ -358,7 +358,7 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="tel">電話番号</label>
             <input id="tel" type="tel" v-model="telephone" />
-            <div>例：03-6675-3638</div>
+            <div class="ex">例：03-6675-3638</div>
           </div>
           <div>{{ telephoneError }}</div>
         </div>
@@ -448,7 +448,7 @@ const getAddress = async () => {
             />
             <span>18時</span>
           </label>
-          <div>例：2022年/01月/01日 13時</div>
+          <div class="ex">例：2022年/01月/01日 13時</div>
           <div>{{ deliveryDateError }}</div>
         </div>
       </div>
@@ -494,7 +494,7 @@ const getAddress = async () => {
                 id="creditCardNumber"
                 maxlength="16"
               />
-              <div>例：1234 1234 5678 5678</div>
+              <div class="ex">例：1234 1234 5678 5678</div>
             </div>
           </div>
           <div class="row">
@@ -536,7 +536,7 @@ const getAddress = async () => {
                 <option value="2037">2037</option>
                 <option value="2038">2038</option></select
               >年
-              <div>例：01月/2022年</div>
+              <div class="ex">例：01月/2022年</div>
             </div>
           </div>
           <div class="row">
@@ -547,7 +547,7 @@ const getAddress = async () => {
               <label for="card_name">カード名義人</label>
               <input type="text" v-model="card_name" id="card_name" />
             </div>
-            <div>例：TARO YAMADA</div>
+            <div class="ex">例：TARO YAMADA</div>
           </div>
           <div class="row">
             <div class="errorMessages">
@@ -560,7 +560,7 @@ const getAddress = async () => {
               <label for="card_cvv">セキュリティーコード</label>
               <input type="password" v-model="card_cvv" id="card_cvv" />
             </div>
-            <div>例：123</div>
+            <div class="ex">例：123</div>
           </div>
         </div>
       </div>
