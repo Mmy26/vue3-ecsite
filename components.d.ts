@@ -6,6 +6,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ElCol: typeof import('element-plus/es')['ElCol']
     ElHeader: typeof import('element-plus/es')['ElHeader']
+    ElLink: typeof import('element-plus/es')['ElLink']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSpace: typeof import('element-plus/es')['ElSpace']
     Footer: typeof import('./src/components/Footer.vue')['default']
@@ -16,6 +17,7 @@ declare module '@vue/runtime-core' {
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
+    OrderItemFormList: typeof import('./src/components/OrderItemFormList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
