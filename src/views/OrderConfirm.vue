@@ -329,13 +329,16 @@ const getAddress = async () => {
   zipCodeError.value = "";
   checkError.value = true;
 
-  const response = await axios.get("https://zipcoda.net/api", {
-    adapter: require("axios-jsonp"),
-    params: {
-      zipcode: zipCode.value.replace("-", ""),
-    },
-  });
-  address.value = response.data.items[0].address;
+  const response = await axios.get(
+    "https://zipcloud.ibsnet.co.jp/api/search",
+    {
+      params: {
+        zipcode: zipCode.value,
+      },
+    }
+  );
+  const data = response.data.results[0];
+  address.value = data.address1 + data.address2 + data.address3;
 };
 </script>
 
