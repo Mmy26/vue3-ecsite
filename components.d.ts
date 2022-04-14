@@ -4,6 +4,7 @@
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Cart: typeof import('./src/components/Cart.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElForm: typeof import('element-plus/es')['ElForm']
@@ -24,7 +25,6 @@ declare module '@vue/runtime-core' {
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
-    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     OrderItemFormList: typeof import('./src/components/OrderItemFormList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

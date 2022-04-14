@@ -10,6 +10,25 @@ const searchItemName = ref("");
 const searchItemMessage = ref("");
 const sorting = ref("");
 const shouldShowSorting = ref(true);
+const value = ref("");
+const options = [
+  {
+    value: "recommend",
+    label: "おすすめ順",
+  },
+  {
+    value: "name",
+    label: "五十音順",
+  },
+  {
+    value: "descPrice",
+    label: "値段が安い順",
+  },
+  {
+    value: "ascPrice",
+    label: "値段が高い順",
+  },
+];
 let currentItemList = ref<Item[]>([]);
 let searchItemList = ref<Item[]>([]);
 
@@ -123,19 +142,23 @@ const getItemlistSortByCategory = (category: string): void => {
       </el-col>
     </el-row>
   </form>
-  <select
+  <el-select
     v-if="shouldShowSorting"
     style="display: block"
     name="order"
     v-model="sorting"
     v-on:change="sortByUser"
+    placeholder="並び替える"
+    size="large"
+    class="select"
   >
-    <option value="" hidden>並び替える</option>
-    <option value="recommend">おすすめ順</option>
-    <option value="name">五十音順</option>
-    <option value="descPrice">値段が安い順</option>
-    <option value="ascPrice">値段が高い順</option>
-  </select>
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
   <div class="category">
     <button
       class="btn-circle-stitch"
@@ -228,5 +251,8 @@ img {
 .input-bar {
   margin: 10px;
   width: 300px;
+}
+.select {
+  width: 200px;
 }
 </style>

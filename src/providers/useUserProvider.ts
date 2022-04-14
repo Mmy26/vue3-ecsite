@@ -16,8 +16,16 @@ export const useUserProvider = () => {
   });
 
   //actions
+  /**
+   * ログインしたユーザー情報を保存するメソッド.
+   * @param user - APIのレスポンスデータ
+   */
+  const setCurrentUser = (user: User) => {
+    userState.currentUser = user;
+  }
 
-  return { ...toRefs(userState) };
+
+  return { ...toRefs(userState), setCurrentUser };
 };
 
 //キーを作るためのuseUserProviderの型
