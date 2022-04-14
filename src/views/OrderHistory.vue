@@ -47,7 +47,7 @@ const getOrderData = async (): Promise<void> => {
 <template>
   <h1>注文履歴</h1>
   <div v-for="currentUserData of currentOrderList">
-    <span>合計金額:{{ currentUserData.calcTotalPrice }}</span>
+    <span>totalPrice:{{ currentUserData.calcTotalPrice }}</span>
     <div v-for="orderItem of currentUserData.orderItemList">
       <span>name:{{ orderItem.item.name }}</span>
       <span>size:{{ orderItem.size }}</span>
