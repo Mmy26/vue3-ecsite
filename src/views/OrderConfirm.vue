@@ -212,16 +212,16 @@ const orderConfirm = async () => {
 /**
  * APIで郵便番号から住所を取得する.
  */
-const getAddress = async () => {
-  const axios = require("axios");
-  const response = await axios.get("https://zipcoda.net/api", {
-    adapter: require("axios-jsonp"),
-    params: {
-      zipcode: zipCode.value.replace("-", ""),
-    },
-  });
-  address.value = response.data.items[0].address;
-};
+// const getAddress = async () => {
+//   const axios = require("axios");
+//   const response = await axios.get("https://zipcoda.net/api", {
+//     adapter: require("axios-jsonp"),
+//     params: {
+//       zipcode: zipCode.value.replace("-", ""),
+//     },
+//   });
+//   address.value = response.data.items[0].address;
+// };
 </script>
 
 <template>
@@ -252,7 +252,7 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button" @click="getAddress">
+            <button class="btn" type="button" >
               <span>住所検索</span>
             </button>
             <div>例：1600022</div>
