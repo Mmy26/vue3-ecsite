@@ -175,12 +175,29 @@ const orderConfirm = async () => {
       checkError.value = true;
     }
 
+    if (card_exp_year.value === 0 || card_exp_month.value === 0) {
+      errorMessageOfExpiry.value =
+        "クレジットカードの有効期限を入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfExpiry.value = "";
+      checkError.value = true;
+    }
+
     if (card_name.value === "") {
       errorMessageOfCardName.value =
         "クレジットカードの名義人を入力してください";
       checkError.value = false;
     } else {
       errorMessageOfCardName.value = "";
+      checkError.value = true;
+    }
+
+    if (card_cvv.value === "") {
+      errorMessageOfCardCvv.value = "セキュリティコードを入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCardCvv.value = "";
       checkError.value = true;
     }
 
