@@ -84,48 +84,66 @@ const addItem = () => {
     selectItem: selectedItem.value as Item,
   });
 
-  console.log(selectItemSize.value);
-  console.log(selectToppingList.value);
-  console.log(selectItemQuantity.value);
-  console.log(selectedItem.value);
-  console.log(store.userOrderInfo);
   router.push("/cartlist");
 };
 </script>
 
 <template>
-  <img class="itemImage" :src="selectedItem.imagePath" /><br />
-  {{ "name:" + selectedItem.name }}<br />
-  {{ "description:" + selectedItem.description }}
-  <form action="">
-    <div>
+  <!-- 今だけ境界線がわかるようにborderをつけました。 -->
+  <el-row :gutter="20" class="border">
+    <el-col :span="2"></el-col>
+    <el-col :span="20"><span>商品詳細</span></el-col>
+    <el-col :span="2"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="2"></el-col>
+    <el-col :span="10">
+      <img class="itemImage" :src="selectedItem.imagePath"
+    /></el-col>
+    <el-col :span="10">
+      <el-row :gutter="20">
+        <el-col :span="24">{{ "name:" + selectedItem.name }}</el-col>
+        <el-col :span="24">{{
+          "description:" + selectedItem.description
+        }}</el-col>
+      </el-row>
+    </el-col>
+    <el-col :span="2"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><div>サイズ</div>
       <span>M</span>
       <input
         type="radio"
         value="M"
         name="size"
         v-model="selectItemSize"
-        selected
-      />
+        selected />
       <span>L</span>
-      <input type="radio" value="L" name="size" v-model="selectItemSize" />
-    </div>
-
-    <div>
-      <span>Topping</span>
-      <div>
-        <span v-for="topping of selectedItem.toppingList" :key="topping.id">
-          {{ topping.name
-          }}<input
-            type="checkbox"
-            :value="topping.id"
-            v-model="selectToppingList"
-          />
-        </span>
-      </div>
-    </div>
-    <div>
-      <span>Quantity</span>
+      <input type="radio" value="L" name="size" v-model="selectItemSize"
+    /></el-col>
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><div>トッピング： 1つにつき М 200円(税抜) Ｌ 300円(税抜)</div>
+      <span v-for="topping of selectedItem.toppingList" :key="topping.id">
+        {{ topping.name
+        }}<input
+          type="checkbox"
+          :value="topping.id"
+          v-model="selectToppingList"
+        /> </span
+    ></el-col>
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><div>数量:</div>
       <select name="" id="" v-model="selectItemQuantity">
         <option value="" disabled>選択して下さい</option>
         <option value="1" selected>1</option>
@@ -140,15 +158,32 @@ const addItem = () => {
         <option value="10">10</option>
         <option value="11">11</option>
         <option value="12">12</option>
-      </select>
-      <div><button @click="addItem" type="button">Order</button></div>
-    </div>
-  </form>
-  {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}
+      </select></el-col
+    >
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><div>この商品の合計金額:</div>
+      {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}</el-col
+    >
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><button @click="addItem" type="button">Order</button></el-col
+    >
+    <el-col :span="5"></el-col>
+  </el-row>
 </template>
 <style scoped>
 .itemImage {
   width: 200px;
   height: 200px;
+}
+.el-col {
+  border: black solid 0.1px;
 }
 </style>
