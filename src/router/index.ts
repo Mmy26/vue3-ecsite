@@ -37,13 +37,18 @@ const router = createRouter({
       component: () => import("../views/ItemList.vue"),
     },
     {
-      path: "/itemDetail:id",
+      path: "/itemDetail/:id",
       component: () => import("../views/ItemDetail.vue"),
     },
     {
       path: "/registerUser",
       name: "RegisterUser",
       component: () => import("../views/RegisterUser.vue"),
+    },
+    {
+      path: "/logout",
+      name: "Logout",
+      component: () => import("../views/Logout.vue"),
     },
     {
       path: "/login",
