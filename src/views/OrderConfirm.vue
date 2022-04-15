@@ -256,9 +256,7 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button" @click="getAddress">
-              <span>住所検索</span>
-            </button>
+            <el-button type="primary" plain size="small" @click="getAddress">住所検索</el-button>
             <div class="ex">例：1600022</div>
           </div>
           <div class="errorMessages">{{ zipCodeError }}</div>
@@ -403,9 +401,7 @@ const getAddress = async () => {
       </div>
 
       <div class="row order-confirm-btn">
-        <button class="btn" type="button" @click="orderConfirm">
-          <span>この内容で注文する</span>
-        </button>
+        <el-button type="primary" @click="orderConfirm">この内容で注文する</el-button>
       </div>
       <div class="errorMessages">{{ errorMessage }}</div>
     </div>

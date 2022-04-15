@@ -217,9 +217,9 @@ const checkCredit = async () => {
     <div class="ex">例：123</div>
   </div>
   <div>
-    <button type="button" @click="checkCredit">
-      クレジットカードが利用できるか確認する
-    </button>
+    <el-button type="primary" plain size="small" @click="checkCredit"
+      >クレジットカードが利用できるか確認する</el-button
+    >
   </div>
   <div>{{ message }}</div>
 </template>
