@@ -66,7 +66,6 @@ const orderConfirm = (): void => {
  */
 const backToItemList = (): void => {
   router.push("/itemList");
-  console.log("");
 };
 </script>
 
