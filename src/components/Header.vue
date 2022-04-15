@@ -23,14 +23,14 @@ watch(route, (currentPage) => {
 
 <template>
   <el-header class="headerArea">
-    <el-row class="row-bg" justify="space-between">
-      <el-col :span="6"
+    <el-row class="row-bg">
+      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
         ><el-image
           src="/img_noodle/header_logo.png"
           fit="scale-down"
           style="height: 5vh"
       /></el-col>
-      <el-col :span="8"
+      <el-col :xs="20" :sm="18" :md="14" :lg="13" :xl="13" class="listArea"
         ><div class="grid-content bg-purple">
           <el-space :size="20">
             <RouterLink to="/itemList" class="link"
@@ -60,12 +60,14 @@ watch(route, (currentPage) => {
 <style scoped>
 .headerArea {
   width: 100%;
-  background-color: #eee;
   height: 5vh;
   align-items: center;
 }
 .link {
   text-decoration: none;
   margin-top: 10px;
+}
+.listArea {
+  text-align: right;
 }
 </style>
