@@ -2,8 +2,8 @@
 import { CartListKey } from "@/providers/useCartProvider";
 import "element-plus/theme-chalk/display.css";
 import { onMounted, watch, ref, inject } from "vue";
-import { RouterLink, useRoute } from "vue-router";
 import { CaretBottom } from "@element-plus/icons-vue";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
 const orderStore = inject(CartListKey);
 if (!orderStore) {
@@ -25,19 +25,29 @@ watch(route, (currentPage) => {
   }
   console.log("canShowの値   ", canShow.value);
 });
+
+const router = useRouter();
+
+/**
+ * トップページに戻る.
+ */
+const backToTop = () => {
+  router.push("/");
+};
 </script>
 
 <template>
   <el-header class="headerArea">
     <el-row class="row-bg">
-      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11">
-        <RouterLink to="/top"
-          ><el-image
+      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
+        ><div class="logo">
+          <el-image
             src="/img_noodle/header_logo.png"
             fit="scale-down"
             style="height: 5vh"
-        /></RouterLink>
-      </el-col>
+            @click="backToTop"
+          /></div
+      ></el-col>
 
       <el-col :xs="20" :sm="18" :md="14" :lg="13" :xl="13" class="listArea"
         ><div class="grid-content bg-purple">
@@ -98,7 +108,16 @@ watch(route, (currentPage) => {
 .listArea {
   text-align: right;
 }
+
 .el-dropdown {
   margin-top: 4px;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.logo:hover {
+  opacity: 0.7;
 }
 </style>

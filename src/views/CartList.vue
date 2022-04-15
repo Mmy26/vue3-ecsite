@@ -21,14 +21,28 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import OrderItemFormList from "@/components/OrderItemFormList.vue";
+import { useUserProviderKey } from "@/providers/useUserProvider";
+import { inject } from "vue";
+import { User } from "@/types/User";
 
 // //routerを使えるようにする
 const router = useRouter();
+const userStore = inject(useUserProviderKey);
+
+if (!userStore) {
+  throw new Error("");
+}
 
 /**
  * 注文画面へ遷移する.
  */
 const orderConfirm = (): void => {
+  // ログインしていなければログイン画面に遷移
+  if (userStore.currentUser.value.name === "") {
+    router.push("/login");
+    return;
+  }
+
   router.push("/orderConfirm");
 };
 
