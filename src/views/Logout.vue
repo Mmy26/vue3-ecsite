@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElLoading } from "element-plus";
+import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
+import { User } from "@/types/User";
 
 const fullscreenLoading = ref(false);
 const openFullScreen = () => {
@@ -23,6 +25,14 @@ onMounted(async (): Promise<void> => {
   openFullScreen();
   router.push("/login");
 });
+
+//userProviderに関するオブジェクト
+const userStore = inject(useUserProviderKey);
+
+if (!userStore) {
+  throw new Error("");
+}
+userStore.setCurrentUser(new User(0, "", "", "", "", "", ""));
 </script>
 
 <template>
