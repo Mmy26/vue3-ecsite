@@ -25,7 +25,7 @@ console.log(userStore.currentUser.value.id);
 // APIから情報取得
 const getOrderData = async (): Promise<void> => {
   const response = await axios.get(
-    `http://153.127.48.168:8080/ecsite-api/item/items/noodle/${userStore.currentUser.value.id}`
+    `http://153.127.48.168:8080/ecsite-api/order/orders/noodle/${userStore.currentUser.value.id}`
   );
   console.dir(JSON.stringify(response.data));
 
