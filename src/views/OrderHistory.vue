@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Order } from "@/types/Order";
 import type { User } from "@/types/User";
-import { inject, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import axios from "axios";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import router from "@/router";
@@ -21,13 +21,12 @@ if (userStore.currentUser.value.email === "") {
 }
 // APIから情報取得
 const getOrderData = async (): Promise<void> => {
-  console.log("メソッド起動");
   const response = await axios.get(
     `"http://153.127.48.168:8080/ecsite-api/item/items/noodle"/${userStore.currentUser.value.id}`
   );
   console.dir(JSON.stringify(response.data));
 
-  const orders = ref(response.data.orders);
+  const orders = response.data.orders;
 
   for (const order of orders) {
     currentOrderList.value.push(
@@ -50,12 +49,15 @@ const getOrderData = async (): Promise<void> => {
     );
   }
 };
+// 非同期で上記のメソッドを実行
+onMounted(getOrderData);
 </script>
 <template>
   <h1>注文履歴</h1>
-  <div v-if="currentOrderList >= 1">
+  <div v-if="currentOrderList.length >= 1">
     <div v-for="currentUserData of currentOrderList">
-      <span>totalPrice:{{ currentUserData.calcTotalPrice }}</span>
+      <span>Date:{{ currentUserData.deliveryTime }}</span>
+      <span>totalPrice:{{ currentUserData.totalPrice }}</span>
       <div v-for="orderItem of currentUserData.orderItemList">
         <span>name:{{ orderItem.item.name }}</span>
         <span>size:{{ orderItem.size }}</span>
