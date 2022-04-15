@@ -14,6 +14,7 @@ const userStore = inject(useUserProviderKey);
 if (!userStore) {
   throw new Error("Error");
 }
+console.log(userStore.currentUser.value.email);
 
 // ログインしていなければ、ログイン画面に遷移
 if (userStore.currentUser.value.email === "") {
