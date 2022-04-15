@@ -226,8 +226,16 @@ const getItemlistSortByCategory = (category: string): void => {
       <RouterLink :to="'/itemDetail/' + item.id">
         <div class="name">{{ item.name }}</div>
       </RouterLink>
-      <div><span class="price">Ｍ</span>{{ item.formatPriceM }}円(税抜)</div>
-      <div><span class="price">Ｌ</span>{{ item.formatPriceL }}円(税抜)</div>
+      <div class="size">
+        <img class="size-icon" src="/img_noodle/M_icon.png" />{{
+          item.formatPriceM
+        }}円(税抜)
+      </div>
+      <div class="size">
+        <img class="size-icon" src="/img_noodle/L_icon.png" />{{
+          item.formatPriceL
+        }}円(税抜)
+      </div>
       <div class="description">{{ item.description }}</div>
     </el-col>
   </el-row>
@@ -235,7 +243,7 @@ const getItemlistSortByCategory = (category: string): void => {
 
 <style scoped>
 .bg-purple {
-  background: #d3dce6;
+  background-color: rgb(250, 213, 202);
   border: solid black 1px;
   padding: 10px;
 }
@@ -267,10 +275,7 @@ img {
 }
 .name {
   font-size: 18px;
-}
-.price {
-  background-color: #ff4500;
-  border-radius: 50%; /* 角丸にする設定 */
+  font-weight: bold;
 }
 .description {
   font-size: 13px;
@@ -284,5 +289,12 @@ img:hover {
 .category-btn {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.size {
+  padding: 5px;
+}
+.size-icon {
+  width: 25px;
+  height: 25px;
 }
 </style>
