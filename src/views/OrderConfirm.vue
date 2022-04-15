@@ -368,7 +368,7 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button" >
+            <button class="btn" type="button" @click="getAddress">
               <span>住所検索</span>
             </button>
             <div class="ex">例：1600022</div>
