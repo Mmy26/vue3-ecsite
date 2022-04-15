@@ -67,6 +67,10 @@ const router = createRouter({
       path: "/orderHistory",
       component: () => import("../views/OrderHistory.vue"),
     },
+    {
+      path: "/orderFinished",
+      component: () => import("../views/OrderFinished.vue"),
+    },
   ],
 });
 

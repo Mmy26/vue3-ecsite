@@ -48,6 +48,21 @@ export class Order {
     return totalPrice + this.tax;
   }
 
+  /** 注文をする際に利用するフォームリストを作成するgetter.
+   * @returns オーダー表の配列
+   */
+  public get makeOrderFormList(): any {
+    const newArray = [];
+    for (const orderItem of this.orderItemList) {
+      newArray.push({
+        itemId: orderItem.itemId,
+        quantity: orderItem.quantity,
+        size: orderItem.size,
+      });
+    }
+    return newArray;
+  }
+
   public get id(): number {
     return this._id;
   }
