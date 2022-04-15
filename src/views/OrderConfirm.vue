@@ -241,39 +241,11 @@ const getAddress = async () => {
           <div class="row">
             <div class="input-field">
               <label for="name">お名前</label>
-              <input id="name" type="text" v-model="name" />
+              <el-input v-model="name" size="small" />
               <div class="ex">例：山田太郎</div>
             </div>
             <div class="errorMessages">{{ nameError }}</div>
           </div>
-          <div class="row">
-            <div class="input-field">
-              <label for="email">メールアドレス</label>
-              <input id="email" type="email" v-model="mailAddress" />
-              <div class="ex">例：taro@gmail.com</div>
-            </div>
-            <div class="errorMessages">{{ mailAddressError }}</div>
-          </div>
-          <div class="row">
-            <div class="input-field">
-              <label for="zipcode">郵便番号(ハイフンなし)</label>
-              <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-              <button class="btn" type="button">
-                <span>住所検索</span>
-              </button>
-              <div class="ex">例：1600022</div>
-            </div>
-            <div class="errorMessages">{{ zipCodeError }}</div>
-          </div>
-          <div class="row">
-            <div class="input-field">
-              <label for="address">住所</label>
-              <input id="address" type="text" v-model="address" />
-              <div class="ex">
-                例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F
-              </div>
-              <div class="errorMessages">{{ nameError }}</div>
-            </div>
             <div class="row">
               <div class="input-field">
                 <label for="email">メールアドレス</label>
@@ -346,8 +318,8 @@ const getAddress = async () => {
               <div class="ex">例：2022年/01月/01日 13時</div>
               <div class="errorMessages">{{ deliveryDateError }}</div>
             </div>
-          </div>
         </div>
+      </div>
 
         <h2 class="page-title">お支払い方法</h2>
         <div class="container">
@@ -378,7 +350,6 @@ const getAddress = async () => {
       </div>
     </div>
     <!-- end container -->
-  </div>
 </template>
 
 <style scoped>
