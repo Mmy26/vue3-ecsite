@@ -107,7 +107,7 @@ onMounted(() => {
 .toppingArea {
   padding-top: 5px;
   width: 100%;
-  height: 35vh;
+  height: 100%;
   background-color: #eee;
   box-shadow: 2px 2px 2px 2px lightgray;
   border-radius: 5px;

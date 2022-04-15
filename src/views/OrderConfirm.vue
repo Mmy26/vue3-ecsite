@@ -172,6 +172,7 @@ const orderConfirm = async () => {
   let currentUser = userStore.currentUser;
   let currentOrder = orderStore.userOrderInfo.value;
 
+
   // 注文内容を送信する
   const response = await axios.post(
     "http://153.127.48.168:8080/ecsite-api/order",
@@ -190,7 +191,7 @@ const orderConfirm = async () => {
         deliveryTime.value +
         format(new Date(), ":mm:ss"),
       paymentMethod: paymentMethod.value,
-      orderItemFormList: currentOrder.orderItemList,
+      orderItemFormList: currentOrder.makeOrderFormList,
     }
   );
 
