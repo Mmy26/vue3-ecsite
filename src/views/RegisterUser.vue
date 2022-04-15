@@ -171,13 +171,9 @@ const test = () => {
 </script>
 
 <template>
+  <h1 class="title">ユーザー登録</h1>
   <el-row :gutter="20">
     <el-col :span="4"></el-col>
-    <el-row :gutter="20">
-      <el-col :span="24" class="center">
-        <h1 class="title">ユーザー登録</h1>
-      </el-col>
-    </el-row>
     <el-col :span="20" class="center">
       <el-form label-width="120px" class="registerUser-area">
         <el-row :gutter="20">
@@ -257,6 +253,6 @@ const test = () => {
 }
 .title {
   text-align: center;
-  margin: 0 auto;
+  margin-top: 10vh;
 }
 </style>

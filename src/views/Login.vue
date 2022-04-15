@@ -140,5 +140,6 @@ const loginUser = async (): Promise<void> => {
 }
 .title {
   text-align: center;
+  margin-top: 10vh;
 }
 </style>
