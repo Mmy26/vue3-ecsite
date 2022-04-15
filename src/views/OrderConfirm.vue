@@ -2,9 +2,9 @@
 import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { format, getDate, getHours, getMonth, getYear } from "date-fns";
-import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
+import { CartListKey } from "@/providers/useCartProvider";
 import OrderItemFormList from "@/components/OrderItemFormList.vue";
 
 const name = ref("");
@@ -14,7 +14,7 @@ const address = ref("");
 const telephone = ref("");
 const deliveryDate = ref("");
 const deliveryTime = ref("10");
-const paymentMethod = ref(1);
+const paymentMethod = ref("1");
 
 const errorMessage = ref("");
 const nameError = ref("");
@@ -26,9 +26,20 @@ const deliveryDateError = ref("");
 const checkError = ref(true);
 
 const router = useRouter();
-const orderStore = inject(orderProviderKey);
+const orderStore = inject(CartListKey);
 const userStore = inject(useUserProviderKey);
 
+const card_num = ref("");
+const card_exp_year = ref(0);
+const card_exp_month = ref(0);
+const card_name = ref("");
+const card_cvv = ref("");
+const errorMessageOfCreditCardNumber = ref("");
+const errorMessageOfCreditCardNumber2 = ref("");
+const errorMessageOfExpiry = ref("");
+const errorMessageOfCardName = ref("");
+const errorMessageOfCardCvv = ref("");
+const errorMessageOfNotNumber = ref("");
 
 if (!userStore) {
   throw new Error("");
@@ -40,6 +51,7 @@ if (!orderStore) {
 
 onMounted(() => {
   userStore.currentUser;
+  orderStore.userOrderInfo.value;
 });
 
 /**
@@ -149,12 +161,113 @@ const orderConfirm = async () => {
     checkError.value = true;
   }
 
-  if (checkError.value === false) {
-    return;
-  }
-
+  // クレジットカードの決済処理
   let currentUser = userStore.currentUser;
-  let currentOrder = orderStore.order.value;
+  let currentOrder = orderStore.userOrderInfo.value;
+
+  if (paymentMethod.value === "2") {
+    // エラーチェック
+    if (card_num.value === "") {
+      errorMessageOfCreditCardNumber.value =
+        "クレジットカード番号を入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCreditCardNumber.value = "";
+      checkError.value = true;
+    }
+
+    if (card_exp_year.value === 0 || card_exp_month.value === 0) {
+      errorMessageOfExpiry.value =
+        "クレジットカードの有効期限を入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfExpiry.value = "";
+      checkError.value = true;
+    }
+
+    if (card_name.value === "") {
+      errorMessageOfCardName.value =
+        "クレジットカードの名義人を入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCardName.value = "";
+      checkError.value = true;
+    }
+
+    if (card_cvv.value === "") {
+      errorMessageOfCardCvv.value = "セキュリティコードを入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCardCvv.value = "";
+      checkError.value = true;
+    }
+
+    if (checkError.value === false) {
+      return;
+    }
+
+    const response2 = await axios.post(
+      "http://153.127.48.168:8080/sample-credit-card-web-api/credit-card/payment",
+      {
+        user_id: currentOrder.userId,
+        order_number: zipCode.value + paymentMethod.value + 12345678,
+        amount: currentOrder.calcTotalPrice,
+        card_number: card_num.value,
+        card_exp_year: card_exp_year.value,
+        card_exp_month: card_exp_month.value,
+        card_name: card_name.value,
+        card_cvv: card_cvv.value,
+      }
+    );
+    console.log(JSON.stringify(response2));
+
+    if (typeof card_num.value !== "number") {
+      errorMessageOfCreditCardNumber2.value =
+        "クレジットカード番号は数字で入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfCreditCardNumber2.value = "";
+      checkError.value = true;
+    }
+
+    if (String(card_num.value).length !== 16) {
+      errorMessageOfCreditCardNumber.value =
+        "クレジットカード番号の桁数が間違っています";
+      checkError.value = false;
+    } else {
+      errorMessageOfCreditCardNumber.value = "";
+      checkError.value = true;
+    }
+
+    if (response2.data.error_code === "E-01") {
+      errorMessageOfExpiry.value = "有効期限がきれています";
+      checkError.value = false;
+    } else {
+      errorMessageOfExpiry.value = "";
+      checkError.value = true;
+    }
+
+    if (response2.data.error_code === "E-02") {
+      errorMessageOfCardCvv.value = "セキュリティーコードが間違っています";
+      checkError.value = false;
+    } else {
+      errorMessageOfCardCvv.value = "";
+      checkError.value = true;
+    }
+
+    if (response2.data.error_code === "E-03") {
+      errorMessageOfNotNumber.value =
+        "セキュリティーコードは数字で入力してください";
+      checkError.value = false;
+    } else {
+      errorMessageOfNotNumber.value = "";
+      checkError.value = true;
+    }
+
+    if (checkError.value === false) {
+      return;
+    }
+  }
 
   // 注文内容を送信する
   const response = await axios.post(
@@ -186,9 +299,7 @@ const orderConfirm = async () => {
     distinationZipcode,
     distinationAddress,
     distinationTel,
-  } = orderStore.order.value;
-
-  console.log("ok");
+  } = orderStore.userOrderInfo.value;
 
   if (response.data.status !== "success") {
     // 失敗ならエラーメッセージを出す
@@ -202,8 +313,6 @@ const orderConfirm = async () => {
   distinationAddress = address.value;
   distinationTel = telephone.value;
 
-  console.log("ok2");
-
   // 注文完了ページに遷移
   router.push("/orderFinished");
   console.log("注文されました");
@@ -212,16 +321,23 @@ const orderConfirm = async () => {
 /**
  * APIで郵便番号から住所を取得する.
  */
-// const getAddress = async () => {
-//   const axios = require("axios");
-//   const response = await axios.get("https://zipcoda.net/api", {
-//     adapter: require("axios-jsonp"),
-//     params: {
-//       zipcode: zipCode.value.replace("-", ""),
-//     },
-//   });
-//   address.value = response.data.items[0].address;
-// };
+const getAddress = async () => {
+  if (zipCode.value === "") {
+    zipCodeError.value = "郵便番号が入力されていません";
+    checkError.value = false;
+    return;
+  }
+  zipCodeError.value = "";
+  checkError.value = true;
+
+  const response = await axios.get("https://zipcloud.ibsnet.co.jp/api/search", {
+    params: {
+      zipcode: zipCode.value,
+    },
+  });
+  const data = response.data.results[0];
+  address.value = data.address1 + data.address2 + data.address3;
+};
 </script>
 
 <template>
@@ -230,50 +346,53 @@ const orderConfirm = async () => {
       <h1 class="page-title">注文内容確認</h1>
       <!-- table -->
       <OrderItemFormList></OrderItemFormList>
+      <!-- <Form></Form> -->
       <h2 class="page-title">お届け先情報</h2>
       <div class="order-confirm-delivery-info">
         <div class="row">
           <div class="input-field">
             <label for="name">お名前</label>
             <input id="name" type="text" v-model="name" />
-            <div>例：山田太郎</div>
+            <div class="ex">例：山田太郎</div>
           </div>
-          <div>{{ nameError }}</div>
+          <div class="errorMessages">{{ nameError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
             <label for="email">メールアドレス</label>
             <input id="email" type="email" v-model="mailAddress" />
-            <div>例：taro@gmail.com</div>
+            <div class="ex">例：taro@gmail.com</div>
           </div>
-          <div>{{ mailAddressError }}</div>
+          <div class="errorMessages">{{ mailAddressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button" >
+            <button class="btn" type="button">
               <span>住所検索</span>
             </button>
-            <div>例：1600022</div>
+            <div class="ex">例：1600022</div>
           </div>
-          <div>{{ zipCodeError }}</div>
+          <div class="errorMessages">{{ zipCodeError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
             <label for="address">住所</label>
             <input id="address" type="text" v-model="address" />
-            <div>例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F</div>
+            <div class="ex">
+              例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F
+            </div>
           </div>
-          <div>{{ addressError }}</div>
+          <div class="errorMessages">{{ addressError }}</div>
         </div>
         <div class="row">
           <div class="input-field">
             <label for="tel">電話番号</label>
             <input id="tel" type="tel" v-model="telephone" />
-            <div>例：03-6675-3638</div>
+            <div class="ex">例：03-6675-3638</div>
           </div>
-          <div>{{ telephoneError }}</div>
+          <div class="errorMessages">{{ telephoneError }}</div>
         </div>
         <div class="row order-confirm-delivery-datetime">
           <div class="input-field">
@@ -361,8 +480,8 @@ const orderConfirm = async () => {
             />
             <span>18時</span>
           </label>
-          <div>例：2022年/01月/01日 13時</div>
-          <div>{{ deliveryDateError }}</div>
+          <div class="ex">例：2022年/01月/01日 13時</div>
+          <div class="errorMessages">{{ deliveryDateError }}</div>
         </div>
       </div>
 
@@ -389,15 +508,114 @@ const orderConfirm = async () => {
           </label>
         </span>
       </div>
+
+      <div class="order-confirm-delivery-info">
+        <div v-if="paymentMethod === '2'">
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfCreditCardNumber }}
+            </div>
+            <div class="errorMessages">
+              {{ errorMessageOfCreditCardNumber2 }}
+            </div>
+            <div class="input-field">
+              <label for="creditCardNumber">クレジットカード番号</label>
+              <input
+                type="text"
+                v-model.number="card_num"
+                id="creditCardNumber"
+                maxlength="16"
+              />
+              <div class="ex">例：1234 1234 5678 5678</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfExpiry }}
+            </div>
+            <div class="col s10 expiry">
+              <span class="expiry2"> 有効期限： </span>
+              <select class="browser-default" v-model="card_exp_month">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option></select
+              >月
+              <select class="browser-default" v-model="card_exp_year">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+                <option value="2033">2033</option>
+                <option value="2034">2034</option>
+                <option value="2035">2035</option>
+                <option value="2036">2036</option>
+                <option value="2037">2037</option>
+                <option value="2038">2038</option></select
+              >年
+              <div class="ex">例：01月/2022年</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfCardName }}
+            </div>
+            <div class="input-field">
+              <label for="card_name">カード名義人</label>
+              <input type="text" v-model="card_name" id="card_name" />
+            </div>
+            <div class="ex">例：TARO YAMADA</div>
+          </div>
+          <div class="row">
+            <div class="errorMessages">
+              {{ errorMessageOfCardCvv }}
+            </div>
+            <div class="errorMessages">
+              {{ errorMessageOfNotNumber }}
+            </div>
+            <div class="input-field">
+              <label for="card_cvv">セキュリティーコード</label>
+              <input type="password" v-model.number="card_cvv" id="card_cvv" />
+            </div>
+            <div class="ex">例：123</div>
+          </div>
+        </div>
+      </div>
+
       <div class="row order-confirm-btn">
         <button class="btn" type="button" @click="orderConfirm">
           <span>この内容で注文する</span>
         </button>
       </div>
-      <div>{{ errorMessage }}</div>
+      <div class="errorMessages">{{ errorMessage }}</div>
     </div>
     <!-- end container -->
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.ex {
+  font-size: 12px;
+  color: rgb(152, 152, 152);
+}
+
+.errorMessages {
+  font-size: 14px;
+  color: red;
+}
+</style>
