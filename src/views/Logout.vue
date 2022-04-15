@@ -36,5 +36,5 @@ userStore.setCurrentUser(new User(0, "", "", "", "", "", ""));
 </script>
 
 <template>
-  <div v-loading.fullscreen.lock="fullscreenLoading"></div>
+  <div v-loading.fullscreen.lock="fullscreenLoading" class="text-color"></div>
 </template>
