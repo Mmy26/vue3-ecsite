@@ -7,8 +7,9 @@ import axios from "axios";
 import { CartListKey } from "@/providers/useCartProvider";
 import OrderItemFormList from "@/components/OrderItemFormList.vue";
 import CreditCardPayment from "@/components/CreditCardPayment.vue";
+import type { constants } from "fs";
 
-const name = ref("");
+const userName = ref("");
 const mailAddress = ref("");
 const zipCode = ref("");
 const address = ref("");
@@ -44,11 +45,25 @@ onMounted(() => {
 });
 
 /**
+ * ログイン中のユーザー情報を取得する.
+ */
+const getUserInfo = () => {
+  console.log("ok");
+
+  const userInfo = userStore.currentUser.value;
+  userName.value = userInfo.name;
+  mailAddress.value = userInfo.email;
+  zipCode.value = userInfo.zipcode;
+  address.value = userInfo.address;
+  telephone.value = userInfo.telephone;
+};
+
+/**
  * 注文する.
  */
 const orderConfirm = async () => {
   // エラー処理
-  if (name.value === "") {
+  if (userName.value === "") {
     nameError.value = "名前が入力されていません";
     checkError.value = false;
   } else {
@@ -165,7 +180,7 @@ const orderConfirm = async () => {
       userId: currentUser.value.id,
       status: currentOrder.status,
       totalPrice: currentOrder.calcTotalPrice,
-      destinationName: name.value,
+      destinationName: userName.value,
       destinationEmail: mailAddress.value,
       destinationZipcode: zipCode.value.replace("-", ""),
       destinationAddress: address.value,
@@ -196,7 +211,7 @@ const orderConfirm = async () => {
     return;
   }
 
-  distinationName = name.value;
+  distinationName = userName.value;
   distinationEmail = mailAddress.value;
   distinationZipcode = zipCode.value;
   distinationAddress = address.value;
@@ -239,10 +254,18 @@ const getAddress = async () => {
       <h2 class="page-title">お届け先情報</h2>
       <div class="container">
         <div class="order-confirm-delivery-info">
+          <el-button
+            class="btn"
+            type="danger"
+            plain
+            size="small"
+            @click="getUserInfo"
+            >ログイン情報を反映する</el-button
+          >
           <div class="row">
             <div class="input-field">
               <label for="name">お名前</label>
-              <el-input v-model="name" size="small" />
+              <el-input v-model="userName" size="small" />
               <div class="ex">例：山田太郎</div>
             </div>
             <div class="errorMessages">{{ nameError }}</div>
@@ -356,6 +379,9 @@ const getAddress = async () => {
 <style scoped>
 @import url("@/assets/css/input-check.css");
 
+.btn {
+  margin-bottom: 8px;
+}
 .container {
   display: flex;
   justify-content: center;
