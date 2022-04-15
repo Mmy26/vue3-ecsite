@@ -223,7 +223,9 @@ const getItemlistSortByCategory = (category: string): void => {
     <!-- spanはgrid数を表す(大きさは24まで) -->
     <el-col
       class="bg-purple"
-      :span="8"
+      :sm="24"
+      :md="12"
+      :lg="8"
       v-for="item of currentItemList"
       :key="item.id"
     >
@@ -233,20 +235,24 @@ const getItemlistSortByCategory = (category: string): void => {
           class="card"
         >
           <RouterLink :to="'/itemDetail/' + item.id">
-            <img :src="item.imagePath" />
+            <img class="food" :src="item.imagePath" />
           </RouterLink>
           <RouterLink :to="'/itemDetail/' + item.id">
             <div class="name">{{ item.name }}</div>
           </RouterLink>
-          <div class="size">
-            <img class="size-icon" src="/img_noodle/M_icon.png" />{{
-              item.formatPriceM
-            }}円(税抜)
-          </div>
-          <div class="size">
-            <img class="size-icon" src="/img_noodle/L_icon.png" />{{
-              item.formatPriceL
-            }}円(税抜)
+          <div class="size-wrapper">
+            <div class="size">
+              <img class="size-icon" src="/img_noodle/M_icon.png" /><span>{{
+                item.formatPriceM
+              }}</span
+              >円(税抜)
+            </div>
+            <div class="size">
+              <img class="size-icon" src="/img_noodle/L_icon.png" /><span>{{
+                item.formatPriceL
+              }}</span
+              >円(税抜)
+            </div>
           </div>
           <div class="description">{{ item.description }}</div>
         </el-card>
@@ -279,7 +285,9 @@ img {
   width: 300px;
 }
 .select {
-  margin-left: 1100px;
+  margin-left: auto;
+  margin-right: 20px;
+  margin-top: 10px;
   width: 200px;
 }
 .items {
@@ -308,5 +316,10 @@ img:hover {
 .size-icon {
   width: 25px;
   height: 25px;
+}
+.size-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
 }
 </style>
