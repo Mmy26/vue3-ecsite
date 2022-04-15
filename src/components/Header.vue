@@ -20,26 +20,28 @@ watch(route, (currentPage) => {
   console.log("canShowの値   ", canShow.value);
 });
 
-const router= useRouter();
+const router = useRouter();
 
 /**
  * トップページに戻る.
  */
-const backToTop =()=>{
+const backToTop = () => {
   router.push("/");
-}
+};
 </script>
 
 <template>
   <el-header class="headerArea">
     <el-row class="row-bg">
       <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
-        ><div class="logo"><el-image
-          src="/img_noodle/header_logo.png"
-          fit="scale-down"
-          style="height: 5vh"
-          @click="backToTop"
-      /></div></el-col>
+        ><div class="logo">
+          <el-image
+            src="/img_noodle/header_logo.png"
+            fit="scale-down"
+            style="height: 5vh"
+            @click="backToTop"
+          /></div
+      ></el-col>
       <el-col :xs="20" :sm="18" :md="14" :lg="13" :xl="13" class="listArea"
         ><div class="grid-content bg-purple">
           <el-space :size="20">
@@ -81,11 +83,11 @@ const backToTop =()=>{
   text-align: right;
 }
 
-.logo{
+.logo {
   cursor: pointer;
 }
 
-.logo:hover{
+.logo:hover {
   opacity: 0.7;
 }
 </style>
