@@ -216,7 +216,9 @@ const getItemlistSortByCategory = (category: string): void => {
     <!-- spanはgrid数を表す(大きさは24まで) -->
     <el-col
       class="bg-purple"
-      :span="8"
+      :sm="24"
+      :md="12"
+      :lg="8"
       v-for="item of currentItemList"
       :key="item.id"
     >
@@ -226,7 +228,7 @@ const getItemlistSortByCategory = (category: string): void => {
       <RouterLink :to="'/itemDetail/' + item.id">
         <div class="name">{{ item.name }}</div>
       </RouterLink>
-      <div><span class="price">Ｍ</span>{{ item.formatPriceM }}円(税抜)</div>
+      <div><span class="price">Ｍ</span> {{ item.formatPriceM }}円(税抜)</div>
       <div><span class="price">Ｌ</span>{{ item.formatPriceL }}円(税抜)</div>
       <div class="description">{{ item.description }}</div>
     </el-col>
@@ -259,7 +261,9 @@ img {
   width: 300px;
 }
 .select {
-  margin-left: 1100px;
+  margin-left: auto;
+  margin-right: 20px;
+  margin-top: 10px;
   width: 200px;
 }
 .items {
