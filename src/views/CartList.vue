@@ -1,11 +1,19 @@
 <template>
   <div>
+    <h1>ショッピングカート</h1>
     <OrderItemFormList></OrderItemFormList>
-    <button type="button" @click="backToItemList">商品一覧へ戻る</button>
-    <div class="row order-confirm-btn">
-      <button class="btn" type="button" @click="orderConfirm">
-        <span>注文に進む</span>
-      </button>
+    <div class="btn">
+      <el-button
+        type="warning"
+        plain
+        @click="backToItemList"
+        button
+        size="large"
+        >商品一覧へ戻る</el-button
+      >
+      <el-button type="danger" plain @click="orderConfirm" button size="large"
+        >注文に進む</el-button
+      >
     </div>
   </div>
 </template>
@@ -29,9 +37,14 @@ const orderConfirm = (): void => {
  */
 const backToItemList = (): void => {
   router.push("/itemList");
-  console.log("");
-  console.log("");
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+h1 {
+  text-align: center;
+}
+.btn {
+  text-align: center;
+}
+</style>

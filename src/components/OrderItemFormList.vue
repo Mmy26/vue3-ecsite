@@ -4,7 +4,8 @@ import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
-
+import { Delete } from "@element-plus/icons-vue";
+const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
 
 if (!orderStore) {
@@ -60,7 +61,11 @@ onMounted(() => {
         >
           <td class="cart-item-name">
             <div class="cart-item-icon">
-              <img v-bind:src="orderItem.item.imagePath" />
+              <!-- <img v-bind:src="orderItem.item.imagePath" />  -->
+              <el-image
+                style="width: 200px; height: 160px"
+                :src="orderItem.item.imagePath"
+              />
             </div>
             <span>{{ orderItem.item.name }}</span>
           </td>
@@ -88,19 +93,22 @@ onMounted(() => {
             </div>
           </td>
           <td>
-            <button
-              class="btn"
-              type="button"
+            <el-button
+              type="primary"
+              plain
+              :icon="Delete"
               @click="orderStore.deleteItem(index)"
+              >削除</el-button
             >
-              <span>削除</span>
-            </button>
           </td>
         </tr>
       </tbody>
     </table>
 
     <div class="row cart-total-price">
+      <h4 class="page-title" v-if="currentOrder.orderItemList.length === 0">
+        カートの中に商品がありません
+      </h4>
       <div>消費税：{{ currentOrder.tax.toLocaleString() }}円</div>
       <div>
         ご注文金額合計：{{ currentOrder.calcTotalPrice.toLocaleString() }}円
@@ -114,6 +122,8 @@ onMounted(() => {
 table {
   border-collapse: collapse;
   border: solid 1px;
+  margin-left: auto;
+  margin-right: auto;
 }
 table th,
 table td {
@@ -121,5 +131,10 @@ table td {
   border-width: 2px; /* 線の太さ */
   border-color: rgb(173, 172, 172);
   padding: 15px;
+  text-align: center;
+}
+.cart-total-price {
+  font-size: 30px;
+  text-align: center;
 }
 </style>
