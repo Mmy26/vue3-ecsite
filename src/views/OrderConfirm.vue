@@ -2,9 +2,11 @@
 import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { format, getDate, getHours, getMonth, getYear } from "date-fns";
-import { orderProviderKey } from "@/providers/useOrderProvider";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import axios from "axios";
+import { CartListKey } from "@/providers/useCartProvider";
+import OrderItemFormList from "@/components/OrderItemFormList.vue";
+import CreditCardPayment from "@/components/CreditCardPayment.vue";
 
 const name = ref("");
 const mailAddress = ref("");
@@ -12,9 +14,10 @@ const zipCode = ref("");
 const address = ref("");
 const telephone = ref("");
 const deliveryDate = ref("");
-const deliveryTime = ref("10時");
-const paymentMethod = ref(1);
+const deliveryTime = ref("1");
+const paymentMethod = ref("1");
 
+const errorMessage = ref("");
 const nameError = ref("");
 const mailAddressError = ref("");
 const zipCodeError = ref("");
@@ -24,7 +27,7 @@ const deliveryDateError = ref("");
 const checkError = ref(true);
 
 const router = useRouter();
-const orderStore = inject(orderProviderKey);
+const orderStore = inject(CartListKey);
 const userStore = inject(useUserProviderKey);
 
 if (!userStore) {
@@ -37,12 +40,13 @@ if (!orderStore) {
 
 onMounted(() => {
   userStore.currentUser;
+  orderStore.userOrderInfo.value;
 });
 
 /**
  * 注文する.
  */
-const orderConfirm = () => {
+const orderConfirm = async () => {
   // エラー処理
   if (name.value === "") {
     nameError.value = "名前が入力されていません";
@@ -52,6 +56,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // ある文字列を含むか
   const includeOrNot = (str: string): boolean => {
     return mailAddress.value.includes(str);
   };
@@ -83,6 +88,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // 電話番号の表記チェック
   const telCheck = (): boolean => {
     let telError = true;
     let targetArray = new Array<string>();
@@ -113,6 +119,7 @@ const orderConfirm = () => {
     checkError.value = true;
   }
 
+  // 配達日時のチェック
   const hoursCheck = (): boolean => {
     let currentDate = new Date();
     let splitedArray = deliveryDate.value.split("-");
@@ -148,284 +155,229 @@ const orderConfirm = () => {
   }
 
   let currentUser = userStore.currentUser;
-  let currentOrder = orderStore;
+  let currentOrder = orderStore.userOrderInfo.value;
+
 
   // 注文内容を送信する
-  // const response = await axios.post(
-  //   "http://153.127.48.168:8080/ecsite-api/order",
-  //   {
-  //     userId: currentUser.value.id,
-  //     status: currentOrder.status,
-  //     destinationName: name.value,
-  //     destinationEmail: mailAddress.value,
-  //     destinationZipcode: zipCode.value.replace(
-  //       "-",
-  //       ""
-  //     ),
-  //     destinationAddress: address.value,
-  //     destinationTel: address.value,
-  //     deliveryTime: deliveryDate.value.replaceAll("-","/")+ " " + deliveryTime.value + format(new Date(),":mm/ss"),
+  const response = await axios.post(
+    "http://153.127.48.168:8080/ecsite-api/order",
+    {
+      userId: currentUser.value.id,
+      status: currentOrder.status,
+      totalPrice: currentOrder.calcTotalPrice,
+      destinationName: name.value,
+      destinationEmail: mailAddress.value,
+      destinationZipcode: zipCode.value.replace("-", ""),
+      destinationAddress: address.value,
+      destinationTel: telephone.value,
+      deliveryTime:
+        deliveryDate.value.split("-").join("/") +
+        " " +
+        deliveryTime.value +
+        format(new Date(), ":mm:ss"),
+      paymentMethod: paymentMethod.value,
+      orderItemFormList: currentOrder.makeOrderFormList,
+    }
+  );
 
-  //   }
-  // );
+  console.log(JSON.stringify(response));
+
+  let {
+    distinationName,
+    distinationEmail,
+    distinationZipcode,
+    distinationAddress,
+    distinationTel,
+  } = orderStore.userOrderInfo.value;
+
+  if (response.data.status !== "success") {
+    // 失敗ならエラーメッセージを出す
+    errorMessage.value = "注文できませんでした";
+    return;
+  }
+
+  distinationName = name.value;
+  distinationEmail = mailAddress.value;
+  distinationZipcode = zipCode.value;
+  distinationAddress = address.value;
+  distinationTel = telephone.value;
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
+  console.log("注文されました");
+};
+
+/**
+ * APIで郵便番号から住所を取得する.
+ */
+const getAddress = async () => {
+  if (zipCode.value === "") {
+    zipCodeError.value = "郵便番号が入力されていません";
+    checkError.value = false;
+    return;
+  }
+  zipCodeError.value = "";
+  checkError.value = true;
+
+  const response = await axios.get("https://zipcloud.ibsnet.co.jp/api/search", {
+    params: {
+      zipcode: zipCode.value,
+    },
+  });
+  const data = response.data.results[0];
+  address.value = data.address1 + data.address2 + data.address3;
 };
 </script>
 
 <template>
   <div class="top-wrapper">
-    <div class="container">
+    <div>
       <h1 class="page-title">注文内容確認</h1>
       <!-- table -->
-      <div class="row">
-        <table class="striped" border="1">
-          <thead>
-            <tr>
-              <th class="cart-table-th">商品名</th>
-              <th>サイズ、価格(税抜)、数量</th>
-              <th>トッピング、価格(税抜)</th>
-              <th>小計</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="cart-item-name">
-                <div class="cart-item-icon">
-                  <img src="img/1.jpg" />
-                </div>
-                <span>ハワイアンパラダイス</span>
-              </td>
-              <td>
-                <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-                &nbsp;&nbsp;1個
-              </td>
-              <td>
-                <ul>
-                  <li>ピーマン300円</li>
-                  <li>オニオン300円</li>
-                  <li>あらびきソーセージ300円</li>
-                </ul>
-              </td>
-              <td><div class="text-center">3,280円</div></td>
-            </tr>
-            <tr>
-              <td class="cart-item-name">
-                <div class="cart-item-icon">
-                  <img src="img/1.jpg" />
-                </div>
-                <span>ハワイアンパラダイス</span>
-              </td>
-              <td>
-                <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-                &nbsp;&nbsp;1個
-              </td>
-              <td>
-                <ul>
-                  <li>ピーマン300円</li>
-                  <li>オニオン300円</li>
-                  <li>あらびきソーセージ300円</li>
-                </ul>
-              </td>
-              <td><div class="text-center">3,280円</div></td>
-            </tr>
-            <tr>
-              <td class="cart-item-name">
-                <div class="cart-item-icon">
-                  <img src="img/1.jpg" />
-                </div>
-                <span>ハワイアンパラダイス</span>
-              </td>
-              <td>
-                <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-                &nbsp;&nbsp;1個
-              </td>
-              <td>
-                <ul>
-                  <li>ピーマン300円</li>
-                  <li>オニオン300円</li>
-                  <li>あらびきソーセージ300円</li>
-                </ul>
-              </td>
-              <td><div class="text-center">3,280円</div></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="row cart-total-price">
-        <div>消費税：8,000円</div>
-        <div>ご注文金額合計：38,000円 (税込)</div>
-      </div>
-
+      <OrderItemFormList></OrderItemFormList>
+      <!-- <Form></Form> -->
       <h2 class="page-title">お届け先情報</h2>
-      <div class="order-confirm-delivery-info">
-        <div class="row">
-          <div class="input-field">
-            <label for="name">お名前</label>
-            <input id="name" type="text" v-model="name" />
-            <div>例：山田太郎</div>
+      <div class="container">
+        <div class="order-confirm-delivery-info">
+          <div class="row">
+            <div class="input-field">
+              <label for="name">お名前</label>
+              <el-input v-model="name" size="small" />
+              <div class="ex">例：山田太郎</div>
+            </div>
+            <div class="errorMessages">{{ nameError }}</div>
           </div>
-          <div>{{ nameError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="email">メールアドレス</label>
-            <input id="email" type="email" v-model="mailAddress" />
-            <div>例：taro@gmail.com</div>
+          <div class="row">
+            <div class="input-field">
+              <label for="email">メールアドレス</label>
+              <el-input v-model="mailAddress" size="small" />
+              <div class="ex">例：taro@gmail.com</div>
+            </div>
+            <div class="errorMessages">{{ mailAddressError }}</div>
           </div>
-          <div>{{ mailAddressError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="zipcode">郵便番号(ハイフンなし)</label>
-            <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button">
-              <span>住所検索</span>
-            </button>
-            <div>例：1600022</div>
+          <div class="row">
+            <div class="input-field">
+              <label for="zipcode">郵便番号(ハイフンなし)</label>
+              <el-input v-model="zipCode" size="small" maxlength="7" />
+              <el-button type="danger" plain size="small" @click="getAddress"
+                >住所検索</el-button
+              >
+              <div class="ex">例：1600022</div>
+            </div>
+            <div class="errorMessages">{{ zipCodeError }}</div>
           </div>
-          <div>{{ zipCodeError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="address">住所</label>
-            <input id="address" type="text" v-model="address" />
-            <div>例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F</div>
+          <div class="row">
+            <div class="input-field">
+              <label for="address">住所</label>
+              <el-input v-model="address" size="small" />
+              <div class="ex">
+                例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F
+              </div>
+            </div>
+            <div class="errorMessages">{{ addressError }}</div>
           </div>
-          <div>{{ addressError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="tel">電話番号</label>
-            <input id="tel" type="tel" v-model="telephone" />
-            <div>例：03-6675-3638</div>
+          <div class="row">
+            <div class="input-field">
+              <label for="tel">電話番号</label>
+              <el-input v-model="telephone" size="small" />
+              <div class="ex">例：03-6675-3638</div>
+            </div>
+            <div class="errorMessages">{{ telephoneError }}</div>
           </div>
-          <div>{{ telephoneError }}</div>
-        </div>
-        <div class="row order-confirm-delivery-datetime">
-          <div class="input-field">
-            <label for="address">配達日時</label>
-            <input id="deliveryDate" type="date" v-model="deliveryDate" />
+          <div class="row order-confirm-delivery-datetime">
+            <div class="input-field">
+              <label for="address">配達日時</label>
+              <el-input v-model="deliveryDate" type="date" size="small" />
+            </div>
+            <el-radio v-model="deliveryTime" label="1" size="small"
+              >10時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="2" size="small"
+              >11時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="3" size="small"
+              >12時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="4" size="small"
+              >13時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="5" size="small"
+              >14時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="6" size="small"
+              >15時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="7" size="small"
+              >16時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="8" size="small"
+              >17時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="9" size="small"
+              >18時</el-radio
+            >
+            <div class="ex">例：2022年/01月/01日 13時</div>
+            <div class="errorMessages">{{ deliveryDateError }}</div>
           </div>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="10時"
-              v-model="deliveryTime"
-            />
-            <span>10時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="11時"
-              v-model="deliveryTime"
-            />
-            <span>11時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="12時"
-              v-model="deliveryTime"
-            />
-            <span>12時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="13時"
-              v-model="deliveryTime"
-            />
-            <span>13時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="14時"
-              v-model="deliveryTime"
-            />
-            <span>14時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="15時"
-              v-model="deliveryTime"
-            />
-            <span>15時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="16時"
-              v-model="deliveryTime"
-            />
-            <span>16時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="17時"
-              v-model="deliveryTime"
-            />
-            <span>17時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="18時"
-              v-model="deliveryTime"
-            />
-            <span>18時</span>
-          </label>
-          <div>例：2022年/01月/01日 13時</div>
-          <div>{{ deliveryDateError }}</div>
         </div>
       </div>
 
       <h2 class="page-title">お支払い方法</h2>
-      <div class="row order-confirm-payment-method">
-        <span>
-          <label class="order-confirm-payment-method-radio">
-            <input
-              name="paymentMethod"
-              type="radio"
-              value="1"
-              v-model="paymentMethod"
-            />
-            <span>代金引換</span>
-          </label>
-          <label class="order-confirm-payment-method-radio">
-            <input
-              name="paymentMethod"
-              type="radio"
-              value="2"
-              v-model="paymentMethod"
-            />
-            <span>クレジットカード</span>
-          </label>
-        </span>
+      <div class="container">
+        <div class="row order-confirm-delivery-info">
+          <div class="radio">
+            <el-radio v-model="paymentMethod" label="1" size="large"
+              >代金引換</el-radio
+            >
+            <el-radio v-model="paymentMethod" label="2" size="large"
+              >クレジットカード</el-radio
+            >
+          </div>
+
+          <div>
+            <div v-if="paymentMethod === '2'">
+              <CreditCardPayment></CreditCardPayment>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="row order-confirm-btn">
-        <button class="btn" type="button" @click="orderConfirm">
-          <span>この内容で注文する</span>
-        </button>
+        <el-button type="danger" size="large" @click="orderConfirm"
+          >この内容で注文する</el-button
+        >
       </div>
+      <div class="errorMessages">{{ errorMessage }}</div>
     </div>
-    <!-- end container -->
   </div>
+  <!-- end container -->
 </template>
 
-<style scoped></style>
+<style scoped>
+@import url("@/assets/css/input-check.css");
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.order-confirm-btn {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+.order-confirm-delivery-info {
+  padding: 40px;
+  width: 700px;
+  background-color: rgb(255, 244, 240);
+}
+
+.page-title {
+  text-align: center;
+  font-weight: normal;
+}
+
+.radio {
+  margin-bottom: 8px;
+}
+</style>

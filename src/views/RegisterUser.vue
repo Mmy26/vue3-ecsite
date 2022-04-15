@@ -171,59 +171,74 @@ const test = () => {
 </script>
 
 <template>
-  <el-form label-width="120px" class="registerUser-area">
-    <el-form-item label="姓">
-      <el-input type="text" autocomplete="off" v-model="lastName" />
-    </el-form-item>
-    <el-form-item label="名">
-      <el-input type="text" autocomplete="off" v-model="firstName" />
-      <span class="error">
-        {{ nameError }}
-      </span>
-    </el-form-item>
-    <el-form-item label="E-mail">
-      <el-input type="email" v-model="email" />
-      <span class="error">
-        {{ emailError }}
-      </span>
-    </el-form-item>
-    <el-form-item label="パスワード">
-      <el-input type="password" v-model="password" />
-      <span class="error">
-        {{ passwordError }}
-      </span>
-    </el-form-item>
-    <!-- <el-form-item label="確認用パスワード">
+  <h1 class="title">ユーザー登録</h1>
+  <el-row :gutter="20">
+    <el-col :span="4"></el-col>
+    <el-col :span="20" class="center">
+      <el-form label-width="120px" class="registerUser-area">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="姓">
+              <el-input
+                type="text"
+                autocomplete="off"
+                v-model="lastName"
+              /> </el-form-item
+          ></el-col>
+          <el-col :span="12"
+            ><el-form-item label="名">
+              <el-input type="text" autocomplete="off" v-model="firstName" />
+              <span class="error">
+                {{ nameError }}
+              </span>
+            </el-form-item></el-col
+          >
+        </el-row>
+        <el-form-item label="E-mail">
+          <el-input type="email" v-model="email" />
+          <span class="error">
+            {{ emailError }}
+          </span>
+        </el-form-item>
+        <el-form-item label="パスワード">
+          <el-input type="password" v-model="password" />
+          <span class="error">
+            {{ passwordError }}
+          </span>
+        </el-form-item>
+        <!-- <el-form-item label="確認用パスワード">
       <el-input />
     </el-form-item> -->
-    <el-form-item label="郵便番号">
-      <el-input type="text" v-model.number="zipcode" />
-      <span class="error">
-        {{ zipcodeError }}
-      </span>
-    </el-form-item>
-    <el-form-item label="住所">
-      <el-input type="text" v-model="address" />
-      <span class="error">
-        {{ addressError }}
-      </span>
-    </el-form-item>
-    <el-form-item label="電話番号">
-      <el-input type="text" v-model="telephone" />
-      <span class="error">
-        {{ telephoneError }}
-      </span>
-    </el-form-item>
-    <el-form-item>
-      <el-button plain type="primary" v-on:click="registerUser"
-        >Sign Up</el-button
-      >
-      <el-button v-on:click="resetButton">Reset</el-button>
-      <el-button v-on:click="test"
-        >テスト(メールアドレスは変更してください。)</el-button
-      >
-    </el-form-item>
-  </el-form>
+        <el-form-item label="郵便番号">
+          <el-input type="text" v-model.number="zipcode" />
+          <span class="error">
+            {{ zipcodeError }}
+          </span>
+        </el-form-item>
+        <el-form-item label="住所">
+          <el-input type="text" v-model="address" />
+          <span class="error">
+            {{ addressError }}
+          </span>
+        </el-form-item>
+        <el-form-item label="電話番号">
+          <el-input type="text" v-model="telephone" />
+          <span class="error">
+            {{ telephoneError }}
+          </span>
+        </el-form-item>
+        <el-form-item>
+          <el-button plain type="danger" v-on:click="registerUser"
+            >Sign Up</el-button
+          >
+          <el-button v-on:click="resetButton">Reset</el-button>
+          <el-button v-on:click="test"
+            >テスト(メールアドレスは変更してください。)</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
 </template>
 
 <style scoped>
@@ -232,5 +247,12 @@ const test = () => {
 }
 .error {
   color: red;
+}
+.center {
+  margin: 20px auto;
+}
+.title {
+  text-align: center;
+  margin-top: 10vh;
 }
 </style>
