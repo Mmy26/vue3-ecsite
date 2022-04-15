@@ -44,7 +44,7 @@ onMounted(() => {
 
 <template>
   <div class="row" v-show="showOrderItem">
-    <table class="striped">
+    <table class="striped t-line">
       <thead>
         <tr>
           <th class="cart-table-th">商品名</th>
@@ -136,5 +136,12 @@ table td {
 .cart-total-price {
   font-size: 30px;
   text-align: center;
+}
+.t-line tr:nth-child(odd) td {
+  /* background-color: #fdeaea; */
+  background-color: white;
+}
+.t-line tr:nth-child(even) td {
+  background-color: #efefef;
 }
 </style>
