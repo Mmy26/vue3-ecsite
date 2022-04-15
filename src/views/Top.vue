@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from "vue-router";
+import { Food, DArrowRight } from "@element-plus/icons-vue";
 
 const router = useRouter();
 const registerUser = () => {
   router.push("/registerUser");
+};
+const moveToItemList = () => {
+  router.push("/itemList");
 };
 </script>
 
@@ -17,7 +21,8 @@ const registerUser = () => {
       </p>
       <div class="btn-wrapper">
         <el-button type="success" @click="registerUser" class="register"
-          ><el-icon><food /></el-icon>会員登録をする</el-button
+          ><el-icon size="15px" class="icon1"><food /></el-icon
+          >会員登録をする</el-button
         >
       </div>
     </div>
@@ -31,38 +36,38 @@ const registerUser = () => {
       <div class="top-items">
         <div class="top-item">
           <div class="top-item-icon">
-            <img src="/img_noodle/1.jpg" />
-            <p>ハワイアン料理</p>
+            <img src="/img_noodle/7.jpg" />
+            <p>豊富なメニュー</p>
           </div>
           <p class="text-contents">
-            アロハテーブルやウルフギャング、田中オブ東京などのハワイの有名店で修行を積んだ一流シェフによる本格的なハワイアン料理が家にいてもお手軽に楽しむことができます。
+            誰もが知っている有名チェーン店のラーメンはもちろん、ここでしか味わえないレアなお店のメニューも揃えています。
           </p>
         </div>
         <div class="top-item">
           <div class="top-item-icon">
-            <img src="/img_noodle/2.jpg" />
-            <p>スイーツも充実</p>
+            <img src="/img_noodle/17.jpg" />
+            <p>原点にして頂点</p>
           </div>
           <p class="text-contents">
-            アイランドビンテージコーヒーやボガーツカフェのアサイボウルはもちろんのこと、最近流行りのバナンのソフトクリーム、エッグスンシングスのふわふわパンケーキなど有名店のスイーツも充実しています。
+            名古屋発祥の名物、台湾まぜそばもご用意しています。まだ食べたことがないそこのアナタ、ぜひこの機会にお試しください。
           </p>
         </div>
         <div class="top-item">
           <div class="top-item-icon">
             <img src="/img_noodle/14.jpg" />
-            <p>アルコールも豊富</p>
+            <p>変わり種もあります</p>
           </div>
           <p class="text-contents">
-            ハワイといえばビーチでマイタイ！コナブリューイングのハワイアンコナビールなどハワイでしか飲めないアルコールも豊富にあります。
+            普段食べる機会が少ないつけ麺のような変わり種もご用意していますので、お気軽にご注文いただけます。
           </p>
         </div>
         <div class="top-item">
           <div class="top-item-icon">
-            <img src="/img_noodle/13.jpg" />
-            <p>ホテル創作料理</p>
+            <img src="/img_topping/topping06.jpg" />
+            <p>トッピングも豊富</p>
           </div>
           <p class="text-contents">
-            シェラトンワイキキ、ロイヤルハワイアン、モアナサーフライダー、アウラニに入っているレストランの創作料理も「ラクラクアロハ」なら気軽に注文できます。
+            好きなラーメンやまぜそばにお好みのトッピングを何種類もつけることができます。あなただけのオリジナルラーメンが作れてしまうかも。
           </p>
         </div>
       </div>
@@ -72,10 +77,12 @@ const registerUser = () => {
   <div class="message-wrapper">
     <div class="container">
       <div class="heading">
-        <h2>さぁ、今すぐALOHAの旅に出よう！</h2>
-        <h3>Let's go on an Aloha trip!</h3>
+        <h2>さぁ、今すぐラーメンの世界へ！</h2>
+        <h3>Let's go the Ramen World!</h3>
       </div>
-      <RouterLink to="/itemList" class="btn message">商品一覧を見る</RouterLink>
+      <el-button type="success" @click="moveToItemList" class="list"
+        >商品一覧を見る<el-icon class="icon2"><d-arrow-right /></el-icon
+      ></el-button>
     </div>
   </div>
 </template>
@@ -87,21 +94,21 @@ const registerUser = () => {
 .top-wrapper {
   padding: 180px 0 100px 0; /* 上はヘッダが来るのでその分180px分空ける */
   background-image: url(../img_noodle/background-img.png); /*背景画像設定 */
-  background-size: cover; /*画像の縦横比を崩すことなく、画像ができるだけ大きくなるよう拡大縮小*/
+  background-size: cover;
   color: white;
   text-align: center;
 }
 .top-wrapper h1 {
-  opacity: 0.9; /* 文字の透明度を指定 */
+  opacity: 0.9;
   font-size: 45px;
-  letter-spacing: 5px; /* 文字の間隔を設定 */
+  letter-spacing: 5px;
 }
 .top-wrapper p {
-  opacity: 0.7; /* 文字の透明度を指定 */
+  opacity: 0.7;
   font-size: 20px;
 }
 .btn-wrapper {
-  text-align: center; /* ボタン群の配置を真ん中揃えにする */
+  text-align: center;
   margin: 40px 0;
 }
 .btn-wrapper p {
@@ -111,6 +118,9 @@ const registerUser = () => {
   width: 150px;
   height: 50px;
 }
+.icon1 {
+  margin-right: 5px;
+}
 .fab {
   margin-right: 10px;
 }
@@ -118,14 +128,13 @@ const registerUser = () => {
       top-item-wrapperの設定
      ======================================== */
 .top-item-wrapper {
-  padding-bottom: 80px;
+  padding-top: 20px;
+  padding-bottom: 40px;
   padding-left: 5%;
   padding-right: 5%;
-  background-color: #f7f7f7;
   text-align: center;
-  background-image: url(../img_aloha/stripe3.jpg); /*背景画像設定 */
+  background-image: url(../img_noodle/china.jpeg);
 }
-
 .top-items {
   display: flex;
 }
@@ -133,10 +142,10 @@ const registerUser = () => {
   margin: 30px;
 }
 .top-item-icon {
-  position: relative; /* p要素を重ねるための指定(absoluteと組み合わせて使う) */
+  position: relative;
 }
 .top-item-icon p {
-  position: absolute; /* item-iconからpを位置指定するための指定 */
+  position: absolute;
   top: 35%;
   width: 100%;
   color: white;
@@ -151,15 +160,16 @@ const registerUser = () => {
       message-wrapperの設定
      ======================================== */
 .message-wrapper {
+  padding-top: 20px;
   border-bottom: 1px solid #eee;
-  padding-bottom: 80px;
+  padding-bottom: 40px;
   text-align: center;
   background-image: url(../img_noodle/background-img.png);
 }
 .message {
   padding: 1px 40px;
   background-color: #5dca88;
-  cursor: pointer; /* a要素のようにマウスの乗せるとa要素のようにポインタが変わる */
+  cursor: pointer;
   box-shadow: 1px 5px #1a7940; /* ボタンに影をつける 右1px 下5px */
 }
 /* メッセージクリック時の挙動の設定 */
@@ -171,5 +181,12 @@ const registerUser = () => {
 }
 h2 {
   filter: drop-shadow(2px 2px 0px white);
+}
+.icon2 {
+  margin-left: 5px;
+}
+.list {
+  width: 150px;
+  height: 50px;
 }
 </style>
