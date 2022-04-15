@@ -215,7 +215,7 @@ const getItemlistSortByCategory = (category: string): void => {
     <!-- spanはgrid数を表す(大きさは24まで) -->
     <el-col
       class="bg-purple"
-       :sm="24" :md="12" :lg="8"
+      :span="8"
       v-for="item of currentItemList"
       :key="item.id"
     >
