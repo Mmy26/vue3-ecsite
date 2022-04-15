@@ -14,7 +14,7 @@ const zipCode = ref("");
 const address = ref("");
 const telephone = ref("");
 const deliveryDate = ref("");
-const deliveryTime = ref("10");
+const deliveryTime = ref("1");
 const paymentMethod = ref("1");
 
 const errorMessage = ref("");
@@ -230,178 +230,120 @@ const getAddress = async () => {
 
 <template>
   <div class="top-wrapper">
-    <div class="container">
+    <div>
       <h1 class="page-title">注文内容確認</h1>
       <!-- table -->
       <OrderItemFormList></OrderItemFormList>
       <h2 class="page-title">お届け先情報</h2>
-      <div class="order-confirm-delivery-info">
-        <div class="row">
-          <div class="input-field">
-            <label for="name">お名前</label>
-            <input id="name" type="text" v-model="name" />
-            <div class="ex">例：山田太郎</div>
-          </div>
-          <div class="errorMessages">{{ nameError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="email">メールアドレス</label>
-            <input id="email" type="email" v-model="mailAddress" />
-            <div class="ex">例：taro@gmail.com</div>
-          </div>
-          <div class="errorMessages">{{ mailAddressError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="zipcode">郵便番号(ハイフンなし)</label>
-            <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <el-button type="primary" plain size="small" @click="getAddress">住所検索</el-button>
-            <div class="ex">例：1600022</div>
-          </div>
-          <div class="errorMessages">{{ zipCodeError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="address">住所</label>
-            <input id="address" type="text" v-model="address" />
-            <div class="ex">
-              例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F
+      <div class="container">
+        <div class="order-confirm-delivery-info">
+          <div class="row">
+            <div class="input-field">
+              <label for="name">お名前</label>
+              <el-input v-model="name" size="small" />
+              <div class="ex">例：山田太郎</div>
             </div>
+            <div class="errorMessages">{{ nameError }}</div>
           </div>
-          <div class="errorMessages">{{ addressError }}</div>
-        </div>
-        <div class="row">
-          <div class="input-field">
-            <label for="tel">電話番号</label>
-            <input id="tel" type="tel" v-model="telephone" />
-            <div class="ex">例：03-6675-3638</div>
+          <div class="row">
+            <div class="input-field">
+              <label for="email">メールアドレス</label>
+              <el-input v-model="mailAddress" size="small" />
+              <div class="ex">例：taro@gmail.com</div>
+            </div>
+            <div class="errorMessages">{{ mailAddressError }}</div>
           </div>
-          <div class="errorMessages">{{ telephoneError }}</div>
-        </div>
-        <div class="row order-confirm-delivery-datetime">
-          <div class="input-field">
-            <label for="address">配達日時</label>
-            <input id="deliveryDate" type="date" v-model="deliveryDate" />
+          <div class="row">
+            <div class="input-field">
+              <label for="zipcode">郵便番号(ハイフンなし)</label>
+              <el-input v-model="zipCode" size="small" maxlength="7" />
+              <el-button type="danger" plain size="small" @click="getAddress"
+                >住所検索</el-button
+              >
+              <div class="ex">例：1600022</div>
+            </div>
+            <div class="errorMessages">{{ zipCodeError }}</div>
           </div>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="10"
-              v-model="deliveryTime"
-            />
-            <span>10時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="11"
-              v-model="deliveryTime"
-            />
-            <span>11時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="12"
-              v-model="deliveryTime"
-            />
-            <span>12時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="13"
-              v-model="deliveryTime"
-            />
-            <span>13時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="14"
-              v-model="deliveryTime"
-            />
-            <span>14時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="15"
-              v-model="deliveryTime"
-            />
-            <span>15時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="16"
-              v-model="deliveryTime"
-            />
-            <span>16時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="17"
-              v-model="deliveryTime"
-            />
-            <span>17時</span>
-          </label>
-          <label class="order-confirm-delivery-time">
-            <input
-              name="deliveryTime"
-              type="radio"
-              value="18"
-              v-model="deliveryTime"
-            />
-            <span>18時</span>
-          </label>
-          <div class="ex">例：2022年/01月/01日 13時</div>
-          <div class="errorMessages">{{ deliveryDateError }}</div>
+          <div class="row">
+            <div class="input-field">
+              <label for="address">住所</label>
+              <el-input v-model="address" size="small" />
+              <div class="ex">
+                例：東京都新宿区新宿4-3-25　TOKYU REIT新宿ビル8F
+              </div>
+            </div>
+            <div class="errorMessages">{{ addressError }}</div>
+          </div>
+          <div class="row">
+            <div class="input-field">
+              <label for="tel">電話番号</label>
+              <el-input v-model="telephone" size="small" />
+              <div class="ex">例：03-6675-3638</div>
+            </div>
+            <div class="errorMessages">{{ telephoneError }}</div>
+          </div>
+          <div class="row order-confirm-delivery-datetime">
+            <div class="input-field">
+              <label for="address">配達日時</label>
+              <el-input v-model="deliveryDate" type="date" size="small" />
+            </div>
+            <el-radio v-model="deliveryTime" label="1" size="small"
+              >10時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="2" size="small"
+              >11時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="3" size="small"
+              >12時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="4" size="small"
+              >13時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="5" size="small"
+              >14時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="6" size="small"
+              >15時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="7" size="small"
+              >16時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="8" size="small"
+              >17時</el-radio
+            >
+            <el-radio v-model="deliveryTime" label="9" size="small"
+              >18時</el-radio
+            >
+            <div class="ex">例：2022年/01月/01日 13時</div>
+            <div class="errorMessages">{{ deliveryDateError }}</div>
+          </div>
         </div>
       </div>
 
       <h2 class="page-title">お支払い方法</h2>
-      <div class="row order-confirm-payment-method">
-        <span>
-          <label class="order-confirm-payment-method-radio">
-            <input
-              name="paymentMethod"
-              type="radio"
-              value="1"
-              v-model="paymentMethod"
-            />
-            <span>代金引換</span>
-          </label>
-          <label class="order-confirm-payment-method-radio">
-            <input
-              name="paymentMethod"
-              type="radio"
-              value="2"
-              v-model="paymentMethod"
-            />
-            <span>クレジットカード</span>
-          </label>
-        </span>
-      </div>
+      <div class="container">
+        <div class="row order-confirm-delivery-info">
+          <div class="radio">
+            <el-radio v-model="paymentMethod" label="1" size="large"
+              >代金引換</el-radio
+            >
+            <el-radio v-model="paymentMethod" label="2" size="large"
+              >クレジットカード</el-radio
+            >
+          </div>
 
-      <div class="order-confirm-delivery-info">
-        <div v-if="paymentMethod === '2'">
-          <CreditCardPayment></CreditCardPayment>
+          <div>
+            <div v-if="paymentMethod === '2'">
+              <CreditCardPayment></CreditCardPayment>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row order-confirm-btn">
-        <el-button type="primary" @click="orderConfirm">この内容で注文する</el-button>
+        <el-button type="danger" size="large" @click="orderConfirm"
+          >この内容で注文する</el-button
+        >
       </div>
       <div class="errorMessages">{{ errorMessage }}</div>
     </div>
@@ -411,4 +353,29 @@ const getAddress = async () => {
 
 <style scoped>
 @import url("@/assets/css/input-check.css");
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.order-confirm-btn {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+.order-confirm-delivery-info {
+  padding: 40px;
+  width: 700px;
+  background-color: rgb(255, 244, 240);
+}
+
+.page-title {
+  text-align: center;
+  font-weight: normal;
+}
+
+.radio {
+  margin-bottom: 8px;
+}
 </style>

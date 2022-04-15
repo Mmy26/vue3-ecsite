@@ -22,6 +22,29 @@ if (!orderStore) {
   throw new Error("");
 }
 
+const options = [
+  {
+    value: "1",
+    label: "1",
+  },
+  {
+    value: "2",
+    label: "2",
+  },
+  {
+    value: "3",
+    label: "3",
+  },
+  {
+    value: "4",
+    label: "4",
+  },
+  {
+    value: "5",
+    label: "5",
+  },
+];
+
 const checkCredit = async () => {
   let currentOrder = orderStore.userOrderInfo.value;
 
@@ -142,12 +165,7 @@ const checkCredit = async () => {
     </div>
     <div class="input-field">
       <label for="creditCardNumber">クレジットカード番号</label>
-      <input
-        type="text"
-        v-model.number="card_num"
-        id="creditCardNumber"
-        maxlength="16"
-      />
+      <el-input v-model.number="card_num" size="small" maxlength="16" />
       <div class="ex">例：1234 1234 5678 5678</div>
     </div>
   </div>
@@ -157,6 +175,19 @@ const checkCredit = async () => {
     </div>
     <div class="col s10 expiry">
       <span class="expiry2"> 有効期限： </span>
+      <el-select
+        v-model="card_exp_month"
+        class="m-2"
+        placeholder="Select"
+        size="small"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
       <select class="browser-default" v-model="card_exp_month">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -199,7 +230,7 @@ const checkCredit = async () => {
     </div>
     <div class="input-field">
       <label for="card_name">カード名義人</label>
-      <input type="text" v-model="card_name" id="card_name" />
+      <el-input v-model="card_name" size="small" />
     </div>
     <div class="ex">例：TARO YAMADA</div>
   </div>
@@ -212,12 +243,12 @@ const checkCredit = async () => {
     </div>
     <div class="input-field">
       <label for="card_cvv">セキュリティーコード</label>
-      <input type="password" v-model.number="card_cvv" id="card_cvv" />
+      <el-input v-model.number="card_cvv" size="small" />
     </div>
     <div class="ex">例：123</div>
   </div>
   <div>
-    <el-button type="primary" plain size="small" @click="checkCredit"
+    <el-button type="danger" plain size="small" @click="checkCredit"
       >クレジットカードが利用できるか確認する</el-button
     >
   </div>
