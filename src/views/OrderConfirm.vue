@@ -38,11 +38,6 @@ if (!orderStore) {
   throw new Error("");
 }
 
-onMounted(() => {
-  userStore.currentUser;
-  orderStore.userOrderInfo.value;
-});
-
 /**
  * 注文する.
  */
@@ -156,7 +151,6 @@ const orderConfirm = async () => {
 
   let currentUser = userStore.currentUser;
   let currentOrder = orderStore.userOrderInfo.value;
-
 
   // 注文内容を送信する
   const response = await axios.post(
