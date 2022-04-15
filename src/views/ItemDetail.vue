@@ -6,6 +6,7 @@ import axios from "axios";
 import { computed } from "@vue/reactivity";
 import { useRoute, useRouter } from "vue-router";
 import { CartListKey } from "@/providers/useCartProvider";
+import ToppingImg from "../components/ToppingImg.vue";
 
 const store = inject(CartListKey);
 if (!store) {
@@ -178,6 +179,9 @@ const addItem = () => {
     >
     <el-col :span="5"></el-col>
   </el-row>
+
+  <!-- おすすめトッピングの部分 -->
+  <ToppingImg />
 </template>
 <style scoped>
 .itemImage {

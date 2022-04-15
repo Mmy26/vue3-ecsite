@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
+    ElImg: typeof import('element-plus/es')['ElImg']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElLink: typeof import('element-plus/es')['ElLink']
     ElOption: typeof import('element-plus/es')['ElOption']
@@ -19,6 +20,7 @@ declare module '@vue/runtime-core' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSpace: typeof import('element-plus/es')['ElSpace']
     Footer: typeof import('./src/components/Footer.vue')['default']
+    Form: typeof import('./src/components/Form.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
@@ -31,6 +33,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
+    ToppingImg: typeof import('./src/components/ToppingImg.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
 }
