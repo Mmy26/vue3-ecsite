@@ -346,6 +346,7 @@ const getAddress = async () => {
       <h1 class="page-title">注文内容確認</h1>
       <!-- table -->
       <OrderItemFormList></OrderItemFormList>
+      <!-- <Form></Form> -->
       <h2 class="page-title">お届け先情報</h2>
       <div class="order-confirm-delivery-info">
         <div class="row">
@@ -368,7 +369,7 @@ const getAddress = async () => {
           <div class="input-field">
             <label for="zipcode">郵便番号(ハイフンなし)</label>
             <input id="zipcode" type="text" maxlength="7" v-model="zipCode" />
-            <button class="btn" type="button" >
+            <button class="btn" type="button">
               <span>住所検索</span>
             </button>
             <div class="ex">例：1600022</div>
