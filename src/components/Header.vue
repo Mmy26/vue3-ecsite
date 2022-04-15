@@ -34,19 +34,19 @@ watch(route, (currentPage) => {
         ><div class="grid-content bg-purple">
           <el-space :size="20">
             <RouterLink to="/itemList" class="link"
-              ><el-link type="primary">商品一覧</el-link></RouterLink
+              ><el-link type="danger">商品一覧</el-link></RouterLink
             >
             <RouterLink to="/cartList" class="link"
-              ><el-link type="primary">カート</el-link></RouterLink
+              ><el-link type="danger">カート</el-link></RouterLink
             >
             <RouterLink to="/registerUser" class="link"
-              ><el-link type="primary">ユーザー登録</el-link></RouterLink
+              ><el-link type="danger">ユーザー登録</el-link></RouterLink
             >
             <RouterLink to="/login" class="link"
-              ><el-link type="primary">ログイン</el-link></RouterLink
+              ><el-link type="danger">ログイン</el-link></RouterLink
             >
             <RouterLink to="/logout" class="link"
-              ><el-link type="primary">ログアウト</el-link></RouterLink
+              ><el-link type="danger">ログアウト</el-link></RouterLink
             >
             <RouterLink to="/orderHistory" class="link"
               ><el-link type="primary">注文履歴</el-link></RouterLink

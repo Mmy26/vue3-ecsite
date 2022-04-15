@@ -129,6 +129,12 @@ const checkCredit = async () => {
     errorMessageOfNotNumber.value = "";
     checkError.value = true;
   }
+
+  if (checkError.value === false) {
+    return;
+  }
+
+  message.value = "ご利用いただけます";
 };
 </script>
 
@@ -151,7 +157,7 @@ const checkCredit = async () => {
       {{ errorMessageOfExpiry }}
     </div>
     <div class="col s10 expiry">
-      <span class="expiry2"> 有効期限： </span>
+      <span class="expiry2"> 有効期限 </span>
       <el-select v-model="card_exp_month" size="small">
         <el-option label="1" value="1" />
         <el-option label="2" value="2" />
