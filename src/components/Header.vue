@@ -48,6 +48,9 @@ watch(route, (currentPage) => {
             <RouterLink to="/logout" class="link"
               ><el-link type="danger">ログアウト</el-link></RouterLink
             >
+            <RouterLink to="/orderHistory" class="link"
+              ><el-link type="primary">注文履歴</el-link></RouterLink
+            >
           </el-space>
         </div></el-col
       >
