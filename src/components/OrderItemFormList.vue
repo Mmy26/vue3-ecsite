@@ -40,6 +40,47 @@ onMounted(() => {
     showOrderItem.value = false;
   }
 });
+/**
+ * 合計金額が8000円以下の場合は送料を表示する.
+ */
+const num = ref(8000);
+const message1 = ref("");
+const message2 = ref("");
+const message3 = ref("");
+const freeShipping = () => {
+  if (num.value - currentOrder.value.calcTotalPrice < 0) {
+    message1.value = "今回のご注文は送料無料";
+    return message1.value;
+  } else {
+    message2.value =
+      "あと" + (num.value - currentOrder.value.calcTotalPrice) + "円で送料無料";
+
+    return message2.value;
+  }
+};
+/**
+ * 送料を表示する.
+ */
+const ShippingMessage = () => {
+  if (num.value - currentOrder.value.calcTotalPrice > 0) {
+    message3.value = "410";
+    return message3.value;
+  } else {
+    return 0;
+  }
+};
+/**
+ * 合計金額に送料を追加する.
+ */
+const calculation = () => {
+  if (num.value - currentOrder.value.calcTotalPrice > 0) {
+    return currentOrder.value.calcTotalPrice + 410;
+  } else {
+    return currentOrder.value.calcTotalPrice;
+  }
+};
+
+const pass = ref(location.pathname);
 </script>
 
 <template>
@@ -109,10 +150,35 @@ onMounted(() => {
       <h4 class="page-title" v-if="currentOrder.orderItemList.length === 0">
         カートの中に商品がありません
       </h4>
-      <div>消費税：{{ currentOrder.tax.toLocaleString() }}円</div>
-      <div>
-        ご注文金額合計：{{ currentOrder.calcTotalPrice.toLocaleString() }}円
-        (税込)
+      <div v-if="currentOrder.orderItemList.length >= 1">
+        <el-row :gutter="0" class="tax">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left"> 消費税： </el-col>
+          <el-col :span="6" class="right">
+            <div>{{ currentOrder.tax.toLocaleString() }}円</div></el-col
+          >
+          <el-col :span="6"></el-col>
+        </el-row>
+
+        <el-row :gutter="0">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left"> 送料：</el-col>
+          <el-col :span="6" class="right">
+            <div>{{ ShippingMessage() }}円</div>
+          </el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+
+        <el-row :gutter="0" class="total-price">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left"> ご注文金額合計：</el-col>
+          <el-col :span="6" class="right">
+            <div>{{ calculation() }}円 (税込)</div>
+          </el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+        <div class="shipping">{{ freeShipping() }}</div>
+        <!-- <div v-if="pass === '/cartlist'"> -->
       </div>
     </div>
   </div>
@@ -134,7 +200,7 @@ table td {
   text-align: center;
 }
 .cart-total-price {
-  font-size: 30px;
+  font-size: 20px;
   text-align: center;
 }
 .t-line tr:nth-child(odd) td {
@@ -143,5 +209,23 @@ table td {
 }
 .t-line tr:nth-child(even) td {
   background-color: #efefef;
+}
+.shipping {
+  color: red;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.total-price {
+  font-size: 25px;
+}
+
+.left {
+  text-align: right;
+}
+.right {
+  text-align: left;
+}
+.tax {
+  margin-top: 20px;
 }
 </style>

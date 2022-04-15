@@ -3,6 +3,7 @@ import { CartListKey } from "@/providers/useCartProvider";
 import "element-plus/theme-chalk/display.css";
 import { onMounted, watch, ref, inject } from "vue";
 import { RouterLink, useRoute } from "vue-router";
+import { CaretBottom } from "@element-plus/icons-vue";
 
 const orderStore = inject(CartListKey);
 if (!orderStore) {
@@ -41,13 +42,27 @@ watch(route, (currentPage) => {
             <RouterLink to="/itemList" class="link"
               ><el-link type="primary">商品一覧</el-link></RouterLink
             >
-            <RouterLink to="/cartList" class="link">
-              <el-badge
-                :value="orderStore.userOrderInfo.value.orderItemList.length"
-                class="item"
-                ><el-link type="primary">カート</el-link></el-badge
-              ></RouterLink
-            >
+            <RouterLink to="/cartList" class="link"
+              ><el-link type="primary"> カート </el-link>
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  <el-icon class="el-icon--right"><caret-bottom /></el-icon>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item class="clearfix">
+                      商品数
+                      <el-badge
+                        class="mark"
+                        :value="
+                          orderStore.userOrderInfo.value.orderItemList.length
+                        "
+                      />
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </RouterLink>
             <RouterLink to="/registerUser" class="link"
               ><el-link type="primary">ユーザー登録</el-link></RouterLink
             >
@@ -75,5 +90,8 @@ watch(route, (currentPage) => {
 }
 .listArea {
   text-align: right;
+}
+.el-dropdown {
+  margin-top: 4px;
 }
 </style>
