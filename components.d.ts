@@ -7,6 +7,7 @@ declare module '@vue/runtime-core' {
     Cart: typeof import('./src/components/Cart.vue')['default']
     CreditCardPayment: typeof import('./src/components/CreditCardPayment.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
