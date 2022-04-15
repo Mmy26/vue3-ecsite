@@ -10,6 +10,25 @@ const searchItemName = ref("");
 const searchItemMessage = ref("");
 const sorting = ref("");
 const shouldShowSorting = ref(true);
+const value = ref("");
+const options = [
+  {
+    value: "recommend",
+    label: "おすすめ順",
+  },
+  {
+    value: "name",
+    label: "五十音順",
+  },
+  {
+    value: "descPrice",
+    label: "値段が安い順",
+  },
+  {
+    value: "ascPrice",
+    label: "値段が高い順",
+  },
+];
 let currentItemList = ref<Item[]>([]);
 let searchItemList = ref<Item[]>([]);
 
@@ -101,7 +120,7 @@ const getItemlistSortByCategory = (category: string): void => {
 <template>
   <form method="post" class="search-form">
     <div>{{ searchItemMessage }}</div>
-    <el-row>
+    <el-row class="search-form">
       <el-col :span="24">
         <el-input
           autocomplete="on"
@@ -123,73 +142,76 @@ const getItemlistSortByCategory = (category: string): void => {
       </el-col>
     </el-row>
   </form>
-  <select
+  <el-select
     v-if="shouldShowSorting"
     style="display: block"
     name="order"
     v-model="sorting"
     v-on:change="sortByUser"
+    placeholder="並び替える"
+    size="large"
+    class="select"
   >
-    <option value="" hidden>並び替える</option>
-    <option value="recommend">おすすめ順</option>
-    <option value="name">五十音順</option>
-    <option value="descPrice">値段が安い順</option>
-    <option value="ascPrice">値段が高い順</option>
-  </select>
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
   <div class="category">
-    <button
-      class="btn-circle-stitch"
-      type="button"
+    <el-button
+      round
+      class="category-btn"
       v-on:click="getItemlistSortByCategory('all')"
+      >全ての商品</el-button
     >
-      全ての商品
-    </button>
-    <button
-      class="btn-circle-stitch"
-      type="button"
+    <el-button
+      round
+      class="category-btn"
       v-on:click="getItemlistSortByCategory('pigBones')"
     >
       豚骨
-    </button>
-    <button
-      class="btn-circle-stitch"
-      type="button"
+    </el-button>
+    <el-button
+      round
+      class="category-btn"
       v-on:click="getItemlistSortByCategory('miso')"
     >
       味噌
-    </button>
-    <button
-      class="btn-circle-stitch"
-      type="button"
+    </el-button>
+    <el-button
+      round
+      class="category-btn"
       v-on:click="getItemlistSortByCategory('soysauce')"
     >
       醤油
-    </button>
-    <button
-      class="btn-circle-stitch"
-      type="button"
+    </el-button>
+    <el-button
+      round
+      class="category-btn"
       v-on:click="getItemlistSortByCategory('salt')"
     >
       塩
-    </button>
-    <button
-      class="btn-circle-stitch"
-      type="button"
+    </el-button>
+    <el-button
+      round
+      class="category-btn"
       v-on:click="getItemlistSortByCategory('seafood')"
     >
       魚介
-    </button>
-    <button
-      class="btn-circle-stitch"
-      type="button"
+    </el-button>
+    <el-button
+      round
+      class="category-btn"
       v-on:click="getItemlistSortByCategory('other')"
     >
       その他
-    </button>
+    </el-button>
   </div>
 
   <!-- gutterは間隔の幅を表す -->
-  <el-row :gutter="10">
+  <el-row :gutter="10" class="items">
     <!-- spanはgrid数を表す(大きさは24まで) -->
     <el-col
       class="bg-purple"
@@ -198,14 +220,14 @@ const getItemlistSortByCategory = (category: string): void => {
       :key="item.id"
     >
       <RouterLink :to="'/itemDetail/' + item.id">
-        <div>{{ item.name }}</div>
-      </RouterLink>
-      <div>{{ item.description }}</div>
-      <div>{{ item.priceM }}円</div>
-      <div>{{ item.priceL }}円</div>
-      <RouterLink :to="'/itemDetail/' + item.id">
         <img :src="item.imagePath" />
       </RouterLink>
+      <RouterLink :to="'/itemDetail/' + item.id">
+        <div class="name">{{ item.name }}</div>
+      </RouterLink>
+      <div><span class="price">Ｍ</span>{{ item.formatPriceM }}円(税抜)</div>
+      <div><span class="price">Ｌ</span>{{ item.formatPriceL }}円(税抜)</div>
+      <div class="description">{{ item.description }}</div>
     </el-col>
   </el-row>
 </template>
@@ -214,6 +236,7 @@ const getItemlistSortByCategory = (category: string): void => {
 .bg-purple {
   background: #d3dce6;
   border: solid black 1px;
+  padding: 10px;
 }
 .grid-content {
   border-radius: 4px;
@@ -225,8 +248,40 @@ img {
   height: 300px;
   object-fit: cover;
 }
+.search-form {
+  text-align: center;
+  margin: auto;
+}
 .input-bar {
-  margin: 10px;
+  margin-top: 30px;
+  margin-right: 10px;
   width: 300px;
+}
+.select {
+  margin-left: 1100px;
+  width: 200px;
+}
+.items {
+  text-align: center;
+}
+.name {
+  font-size: 18px;
+}
+.price {
+  background-color: #ff4500;
+  border-radius: 50%; /* 角丸にする設定 */
+}
+.description {
+  font-size: 13px;
+}
+img:hover {
+  opacity: 0.7;
+}
+.category {
+  text-align: center;
+}
+.category-btn {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>
