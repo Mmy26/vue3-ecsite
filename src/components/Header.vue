@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import "element-plus/theme-chalk/display.css";
 import { onMounted, watch, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
 //ヘッダーページを表示するかどうかを表すフラグ
 const canShow = ref(true);
@@ -19,19 +19,27 @@ watch(route, (currentPage) => {
   }
   console.log("canShowの値   ", canShow.value);
 });
+
+const router= useRouter();
+
+/**
+ * トップページに戻る.
+ */
+const backToTop =()=>{
+  router.push("/");
+}
 </script>
 
 <template>
   <el-header class="headerArea">
     <el-row class="row-bg">
-      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11">
-        <RouterLink to="/top"
-          ><el-image
-            src="/img_noodle/header_logo.png"
-            fit="scale-down"
-            style="height: 5vh"
-        /></RouterLink>
-      </el-col>
+      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
+        ><div class="logo"><el-image
+          src="/img_noodle/header_logo.png"
+          fit="scale-down"
+          style="height: 5vh"
+          @click="backToTop"
+      /></div></el-col>
       <el-col :xs="20" :sm="18" :md="14" :lg="13" :xl="13" class="listArea"
         ><div class="grid-content bg-purple">
           <el-space :size="20">
@@ -71,5 +79,13 @@ watch(route, (currentPage) => {
 }
 .listArea {
   text-align: right;
+}
+
+.logo{
+  cursor: pointer;
+}
+
+.logo:hover{
+  opacity: 0.7;
 }
 </style>
