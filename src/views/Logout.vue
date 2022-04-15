@@ -26,5 +26,5 @@ onMounted(async (): Promise<void> => {
 </script>
 
 <template>
-  <div v-loading.fullscreen.lock="fullscreenLoading"></div>
+  <div v-loading.fullscreen.lock="fullscreenLoading" class="text-color"></div>
 </template>

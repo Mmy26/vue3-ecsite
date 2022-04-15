@@ -108,10 +108,10 @@ const loginUser = async (): Promise<void> => {
       </span>
     </el-form-item>
     <el-form-item>
-      <el-button plain type="primary" v-on:click="loginUser">Sign In</el-button
+      <el-button plain type="danger" v-on:click="loginUser">Sign In</el-button
       >&nbsp;&nbsp;
-      <RouterLink to="/registerUser"
-        ><el-link type="primary">ユーザー登録に戻る</el-link></RouterLink
+      <RouterLink to="/registerUser" class="link"
+        ><el-link type="danger">ユーザー登録に戻る</el-link></RouterLink
       >
     </el-form-item>
   </el-form>
@@ -123,5 +123,8 @@ const loginUser = async (): Promise<void> => {
 }
 .error {
   color: red;
+}
+.link {
+  text-decoration: none;
 }
 </style>
