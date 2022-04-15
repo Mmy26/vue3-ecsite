@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { CartListKey } from "@/providers/useCartProvider";
 import "element-plus/theme-chalk/display.css";
-import { onMounted, watch, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { onMounted, watch, ref, inject } from "vue";
+import { CaretBottom } from "@element-plus/icons-vue";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
+const orderStore = inject(CartListKey);
+if (!orderStore) {
+  throw new Error("");
+}
 //ヘッダーページを表示するかどうかを表すフラグ
 const canShow = ref(true);
 
@@ -19,17 +25,30 @@ watch(route, (currentPage) => {
   }
   console.log("canShowの値   ", canShow.value);
 });
+
+const router = useRouter();
+
+/**
+ * トップページに戻る.
+ */
+const backToTop = () => {
+  router.push("/");
+};
 </script>
 
 <template>
   <el-header class="headerArea">
     <el-row class="row-bg">
       <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
-        ><el-image
-          src="/img_noodle/header_logo.png"
-          fit="scale-down"
-          style="height: 5vh"
-      /></el-col>
+        ><div class="logo">
+          <el-image
+            src="/img_noodle/header_logo.png"
+            fit="scale-down"
+            style="height: 5vh"
+            @click="backToTop"
+          /></div
+      ></el-col>
+
       <el-col :xs="20" :sm="18" :md="14" :lg="13" :xl="13" class="listArea"
         ><div class="grid-content bg-purple">
           <el-space :size="20">
@@ -37,8 +56,27 @@ watch(route, (currentPage) => {
               ><el-link type="danger">商品一覧</el-link></RouterLink
             >
             <RouterLink to="/cartList" class="link"
-              ><el-link type="danger">カート</el-link></RouterLink
-            >
+              ><el-link type="danger"> カート </el-link>
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  <el-icon class="el-icon--right"><caret-bottom /></el-icon>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item class="clearfix">
+                      商品数
+                      <el-badge
+                        class="mark"
+                        :value="
+                          orderStore.userOrderInfo.value.orderItemList.length
+                        "
+                      />
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </RouterLink>
+
             <RouterLink to="/registerUser" class="link"
               ><el-link type="danger">ユーザー登録</el-link></RouterLink
             >
@@ -69,5 +107,17 @@ watch(route, (currentPage) => {
 }
 .listArea {
   text-align: right;
+}
+
+.el-dropdown {
+  margin-top: 4px;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.logo:hover {
+  opacity: 0.7;
 }
 </style>
