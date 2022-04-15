@@ -1,15 +1,29 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, inject } from "vue";
 import { Item } from "@/types/Item";
 import type { Topping } from "@/types/Topping";
 import axios from "axios";
-import { useRoute } from "vue-router";
 import { computed } from "@vue/reactivity";
+import { useRoute, useRouter } from "vue-router";
+import { CartListKey } from "@/providers/useCartProvider";
+import ToppingImg from "../components/ToppingImg.vue";
+
+const store = inject(CartListKey);
+if (!store) {
+  throw new Error("");
+}
+
+const currentItem = reactive(
+  new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
+);
+
+const router = useRouter();
+
 console.log("created");
 // 選択した商品サイズの情報
 const selectItemSize = ref<string>("M");
 // 選択したトッピング情報
-const selectToppingList = ref([]);
+const selectToppingList = ref<number[]>([]);
 // 選択した商品の数量
 const selectItemQuantity = ref<number>(1);
 // 選択商品情報(トッピング情報も入る)
@@ -61,45 +75,75 @@ const calcSubTotal = computed(() => {
 
 // 注文メソッド
 const addItem = () => {
-  console.log(selectItemSize.value);
-  console.log(selectToppingList.value);
-  console.log(selectItemQuantity.value);
-  console.log(selectedItem.value);
+  console.log("call");
+
+  //payload
+  store.addOrderItem({
+    selectItemSize: selectItemSize.value,
+    selectOrderToppingList: selectToppingList.value,
+    selectQuantity: selectItemQuantity.value,
+    selectItem: selectedItem.value as Item,
+  });
+
+  router.push("/cartlist");
 };
 </script>
+
 <template>
-  <img class="itemImage" :src="selectedItem.imagePath" /><br />
-  {{ "name:" + selectedItem.name }}<br />
-  {{ "description:" + selectedItem.description }}
-  <form action="">
-    <div>
+  <!-- 今だけ境界線がわかるようにborderをつけました。 -->
+  <el-row :gutter="20" class="border">
+    <el-col :span="2"></el-col>
+    <el-col :span="20"><span>商品詳細</span></el-col>
+    <el-col :span="2"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="2"></el-col>
+    <el-col :span="10">
+      <img class="itemImage" :src="selectedItem.imagePath"
+    /></el-col>
+    <el-col :span="10">
+      <el-row :gutter="20"></el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">{{ selectedItem.name }}</el-col>
+        <el-col :span="24">{{ selectedItem.description }}</el-col>
+      </el-row>
+    </el-col>
+    <el-col :span="2"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><div>サイズ</div>
       <span>M</span>
       <input
         type="radio"
         value="M"
         name="size"
         v-model="selectItemSize"
-        selected
-      />
+        selected />
       <span>L</span>
-      <input type="radio" value="L" name="size" v-model="selectItemSize" />
-    </div>
-
-    <div>
-      <span>Topping</span>
-      <div>
-        <span v-for="topping of selectedItem.toppingList" :key="topping.id">
-          {{ topping.name
-          }}<input
-            type="checkbox"
-            :value="topping.id"
-            v-model="selectToppingList"
-          />
-        </span>
-      </div>
-    </div>
-    <div>
-      <span>Quantity</span>
+      <input type="radio" value="L" name="size" v-model="selectItemSize"
+    /></el-col>
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><div>トッピング： 1つにつき М 200円(税抜) Ｌ 300円(税抜)</div>
+      <span v-for="topping of selectedItem.toppingList" :key="topping.id">
+        {{ topping.name
+        }}<input
+          type="checkbox"
+          :value="topping.id"
+          v-model="selectToppingList"
+        /> </span
+    ></el-col>
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><div>数量:</div>
       <select name="" id="" v-model="selectItemQuantity">
         <option value="" disabled>選択して下さい</option>
         <option value="1" selected>1</option>
@@ -114,15 +158,34 @@ const addItem = () => {
         <option value="10">10</option>
         <option value="11">11</option>
         <option value="12">12</option>
-      </select>
-      <div><button @click="addItem()" type="button">Order</button></div>
-    </div>
-  </form>
-  {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}
+      </select></el-col
+    >
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><span>この商品の合計金額:</span>
+      {{ "税抜" + calcSubTotal.toLocaleString() + "円" }}</el-col
+    >
+    <el-col :span="5"></el-col>
+  </el-row>
+  <el-row :gutter="20">
+    <el-col :span="5"></el-col>
+    <el-col :span="14"
+      ><el-button type="primary" plain @click="addItem"
+        >カートに追加</el-button
+      ></el-col
+    >
+    <el-col :span="5"></el-col>
+  </el-row>
+
+  <!-- おすすめトッピングの部分 -->
+  <ToppingImg />
 </template>
 <style scoped>
 .itemImage {
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
 }
 </style>

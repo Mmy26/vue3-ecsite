@@ -4,6 +4,7 @@
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Cart: typeof import('./src/components/Cart.vue')['default']
     CreditCardPayment: typeof import('./src/components/CreditCardPayment.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -19,6 +20,7 @@ declare module '@vue/runtime-core' {
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSpace: typeof import('element-plus/es')['ElSpace']
+    ElTable: typeof import('element-plus/es')['ElTable']
     Footer: typeof import('./src/components/Footer.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']

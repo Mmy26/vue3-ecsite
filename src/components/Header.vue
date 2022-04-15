@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import "element-plus/theme-chalk/display.css";
-import { onMounted, watch, ref } from "vue"
+import { onMounted, watch, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 
 //ヘッダーページを表示するかどうかを表すフラグ
@@ -10,11 +10,11 @@ const canShow = ref(true);
 const route = useRoute();
 
 // watch((変更を検知したい変数) , ( 検知した変数が引数として入れられる ) => { 処理 } )
-watch((route), (currentPage) => {
+watch(route, (currentPage) => {
   console.log("watchが呼ばれました!");
-  console.log("currentPageの値      ",currentPage.path)
+  console.log("currentPageの値      ", currentPage.path);
   canShow.value = true;
-  if( currentPage.path === "/login" || currentPage.path === "/registerUser"){
+  if (currentPage.path === "/login" || currentPage.path === "/registerUser") {
     canShow.value = false;
   }
   console.log("canShowの値   ", canShow.value);
@@ -22,20 +22,34 @@ watch((route), (currentPage) => {
 </script>
 
 <template>
-  <el-header>
-    <el-row class="row-bg" justify="space-between">
-      <el-col :span="6"><div class="grid-content bg-purple">Title</div></el-col>
-      <el-col :span="6"
+  <el-header class="headerArea">
+    <el-row class="row-bg">
+      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
+        ><el-image
+          src="/img_noodle/header_logo.png"
+          fit="scale-down"
+          style="height: 5vh"
+      /></el-col>
+      <el-col :xs="20" :sm="18" :md="14" :lg="13" :xl="13" class="listArea"
         ><div class="grid-content bg-purple">
-          <el-space :size="10">
-            <RouterLink to="/itemList"
-              ><el-link type="primary">商品一覧</el-link></RouterLink
+          <el-space :size="20">
+            <RouterLink to="/itemList" class="link"
+              ><el-link type="danger">商品一覧</el-link></RouterLink
             >
-            <RouterLink to="/registerUser"
-              ><el-link type="primary">ユーザー登録</el-link></RouterLink
+            <RouterLink to="/cartList" class="link"
+              ><el-link type="danger">カート</el-link></RouterLink
             >
-            <RouterLink to="/cartList"
-              ><el-link type="primary">カート</el-link></RouterLink
+            <RouterLink to="/registerUser" class="link"
+              ><el-link type="danger">ユーザー登録</el-link></RouterLink
+            >
+            <RouterLink to="/login" class="link"
+              ><el-link type="danger">ログイン</el-link></RouterLink
+            >
+            <RouterLink to="/logout" class="link"
+              ><el-link type="danger">ログアウト</el-link></RouterLink
+            >
+            <RouterLink to="/orderHistory" class="link"
+              ><el-link type="danger">注文履歴</el-link></RouterLink
             >
           </el-space>
         </div></el-col
@@ -44,8 +58,16 @@ watch((route), (currentPage) => {
   </el-header>
 </template>
 <style scoped>
-.row-bg {
-  background-color: #d3dce6;
+.headerArea {
+  width: 100%;
   height: 5vh;
+  align-items: center;
+}
+.link {
+  text-decoration: none;
+  margin-top: 10px;
+}
+.listArea {
+  text-align: right;
 }
 </style>
