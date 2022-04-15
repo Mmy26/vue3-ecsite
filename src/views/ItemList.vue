@@ -44,6 +44,7 @@ onMounted(() => {
     searchItemList.value = store.itemList.value;
   } else {
     currentItemList.value = store.itemList.value;
+    searchItemList.value = store.itemList.value;
   }
 });
 const searchItems = (searchItemName: string) => {
