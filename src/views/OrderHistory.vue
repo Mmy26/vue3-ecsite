@@ -56,70 +56,46 @@ const getOrderData = async (): Promise<void> => {
 onMounted(getOrderData);
 </script>
 <template>
-  <div v-if="currentOrderList.length >= 1">
-    <div v-for="currentUserData of currentOrderList">
-      <span>Date:{{ currentUserData.deliveryTime }}</span>
-      <span>totalPrice:{{ currentUserData.totalPrice }}</span>
-      <div v-for="orderItem of currentUserData.orderItemList">
-        <span>name:{{ orderItem.item.name }}</span>
-        <span>size:{{ orderItem.size }}</span>
-        <span>quantity:{{ orderItem.quantity }}</span>
-        <span>image</span><img :src="orderItem.item.imagePath" />
-      </div>
-    </div>
-  </div>
-  <div v-else>注文履歴がありません</div>
   <h1>注文履歴</h1>
   <div v-if="currentOrderList.length >= 1">
     <el-row :gutter="20">
       <el-col :span="1"> <!-- ここは余白--> </el-col>
-      <el-col :span="1"
-        ><div class="grid-content bg-purple">index番号</div></el-col
-      >
-      <el-col :span="4"
+      <el-col :span="2"><div class="grid-content bg-purple">番号</div></el-col>
+      <el-col :span="3"
         ><div class="grid-content bg-purple">商品画像</div></el-col
       >
-      <el-col :span="4"
+      <el-col :span="3"
         ><div class="grid-content bg-purple">商品名</div></el-col
       >
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">項目３</div></el-col
+      <el-col :span="3"
+        ><div class="grid-content bg-purple">サイズ</div></el-col
       >
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">項目４</div></el-col
+      <el-col :span="3"><div class="grid-content bg-purple">数量</div></el-col>
+      <el-col :span="3"
+        ><div class="grid-content bg-purple">注文日時</div></el-col
       >
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">項目５</div></el-col
+      <el-col :span="3"
+        ><div class="grid-content bg-purple">配達日時</div></el-col
       >
-
-      <el-col :span="2"><!-- ここは余白--></el-col>
+      <el-col :span="1"><!-- ここは余白--></el-col>
     </el-row>
     <div v-for="currentUserData of currentOrderList">
-      <div v-for="orderItem of currentUserData.orderItemList">
+      <div v-for="(orderItem, i) of currentUserData.orderItemList">
         <el-row :gutter="20">
           <el-col :span="1"> <!-- ここは余白--> </el-col>
-          <el-col :span="1">１</el-col>
-          <el-col :span="4"><img :src="orderItem.item.imagePath" /></el-col>
-          <el-col :span="4">{{ orderItem.item.name }}</el-col>
-          <el-col :span="4">カラム３</el-col>
-          <el-col :span="4">カラム４</el-col>
-          <el-col :span="4">カラム５</el-col>
-          <el-col :span="2"><!-- ここは余白--></el-col>
+          <el-col :span="2">{{ i + 1 }}</el-col>
+          <el-col :span="3"><img :src="orderItem.item.imagePath" /></el-col>
+          <el-col :span="3">{{ orderItem.item.name }}</el-col>
+          <el-col :span="3">{{ orderItem.size + "サイズ" }}</el-col>
+          <el-col :span="3">{{ orderItem.quantity + "個" }}</el-col>
+          <el-col :span="3">{{ currentUserData.orderDate }}</el-col>
+          <el-col :span="3">{{ currentUserData.deliveryTime }}</el-col>
+          <el-col :span="1"><!-- ここは余白--></el-col>
         </el-row>
       </div>
     </div>
   </div>
   <div v-else>注文履歴がありません</div>
-  <el-row :gutter="20">
-    <el-col :span="1"> <!-- ここは余白--> </el-col>
-    <el-col :span="1">２</el-col>
-    <el-col :span="4">カラム１</el-col>
-    <el-col :span="4">カラム２</el-col>
-    <el-col :span="4">カラム３</el-col>
-    <el-col :span="4">カラム４</el-col>
-    <el-col :span="4">カラム５</el-col>
-    <el-col :span="2"><!-- ここは余白--></el-col>
-  </el-row>
 </template>
 <style scoped>
 bg-purple {
