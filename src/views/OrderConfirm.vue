@@ -29,7 +29,6 @@ const router = useRouter();
 const orderStore = inject(orderProviderKey);
 const userStore = inject(useUserProviderKey);
 
-
 if (!userStore) {
   throw new Error("");
 }
@@ -229,7 +228,8 @@ const getAddress = async () => {
     <div class="container">
       <h1 class="page-title">注文内容確認</h1>
       <!-- table -->
-      <OrderItemFormList></OrderItemFormList>
+      <!-- <OrderItemFormList></OrderItemFormList> -->
+      <Form></Form>
       <h2 class="page-title">お届け先情報</h2>
       <div class="order-confirm-delivery-info">
         <div class="row">

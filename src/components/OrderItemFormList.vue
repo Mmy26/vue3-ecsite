@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { CartListKey } from "@/providers/useCartProvider";
 import { orderProviderKey } from "@/providers/useOrderProvider";
 import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
 
-const orderStore = inject(orderProviderKey);
+// const orderStore = inject(orderProviderKey);
+const store = inject(CartListKey);
 
-if (!orderStore) {
+// if (!orderStore) {
+//   throw new Error("");
+// }
+if (!store) {
   throw new Error("");
 }
-
 let currentOrderList = ref<OrderItem[]>([]);
 let currentOrder = ref<Order>(
   new Order(
@@ -32,8 +36,11 @@ let currentOrder = ref<Order>(
 );
 
 onMounted(() => {
-  currentOrderList.value = orderStore.order.value.orderItemList;
-  currentOrder.value = orderStore.order.value;
+  // currentOrderList.value = orderStore.order.value.orderItemList;
+  // currentOrder.value = orderStore.order.value;
+
+  currentOrderList.value = store.userOrderInfo.value.orderItemList;
+  currentOrder.value = store.userOrderInfo.value;
 });
 </script>
 
