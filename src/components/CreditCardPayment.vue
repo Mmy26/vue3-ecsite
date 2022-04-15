@@ -4,7 +4,7 @@ import axios from "axios";
 import { inject, ref } from "vue";
 
 const card_num = ref("");
-const card_exp_year = ref(0);
+const card_exp_year = ref("1");
 const card_exp_month = ref(0);
 const card_name = ref("");
 const card_cvv = ref("");
@@ -24,7 +24,7 @@ if (!orderStore) {
 
 const options = [
   {
-    value: "1",
+    card_exp_year: "1",
     label: "1",
   },
   {
@@ -42,6 +42,34 @@ const options = [
   {
     value: "5",
     label: "5",
+  },
+  {
+    value: "6",
+    label: "6",
+  },
+  {
+    value: "7",
+    label: "7",
+  },
+  {
+    value: "8",
+    label: "8",
+  },
+  {
+    value: "9",
+    label: "9",
+  },
+  {
+    value: "10",
+    label: "10",
+  },
+  {
+    value: "11",
+    label: "11",
+  },
+  {
+    value: "12",
+    label: "12",
   },
 ];
 
@@ -152,6 +180,12 @@ const checkCredit = async () => {
     errorMessageOfNotNumber.value = "";
     checkError.value = true;
   }
+
+  if (checkError.value === false) {
+    return;
+  }
+
+  message.value = "ご利用いただけます";
 };
 </script>
 
