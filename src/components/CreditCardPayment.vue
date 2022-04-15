@@ -180,6 +180,12 @@ const checkCredit = async () => {
     errorMessageOfNotNumber.value = "";
     checkError.value = true;
   }
+
+  if (checkError.value === false) {
+    return;
+  }
+
+  message.value = "ご利用いただけます";
 };
 </script>
 
