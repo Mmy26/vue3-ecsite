@@ -142,19 +142,16 @@ const addItem = () => {
     <el-row :gutter="20">
       <el-col :span="5"></el-col>
       <el-col :span="14"
-        >サイズ：<input
-          type="radio"
-          value="M"
-          name="size"
-          v-model="selectItemSize"
-          selected
-        /><img class="size-icon" src="/img_noodle/M_icon.png" />{{
-          selectedItem.priceM.toLocaleString()
-        }}円(税抜)
-        <input type="radio" value="L" name="size" v-model="selectItemSize" />
-        <img class="size-icon" src="/img_noodle/L_icon.png" />{{
-          selectedItem.priceL.toLocaleString()
-        }}円(税抜)
+        >サイズ：<el-radio label="M" name="size" v-model="selectItemSize"
+          ><img class="size-icon" src="/img_noodle/M_icon.png" />{{
+            selectedItem.priceM.toLocaleString()
+          }}円(税抜)</el-radio
+        >
+        <el-radio label="L" name="size" v-model="selectItemSize">
+          <img class="size-icon" src="/img_noodle/L_icon.png" />{{
+            selectedItem.priceL.toLocaleString()
+          }}円(税抜)</el-radio
+        >
       </el-col>
       <el-col :span="5"></el-col>
     </el-row>
@@ -165,15 +162,16 @@ const addItem = () => {
           トッピング： 1つにつき М 200円(税抜) Ｌ 300円(税抜)
         </div>
         <span v-for="topping of selectedItem.toppingList" :key="topping.id">
-          <input
+          <el-checkbox
             name="topping"
-            type="checkbox"
+            size="large"
+            :label="topping.name"
             :value="topping.id"
             v-model="selectToppingList"
-          />
-          {{ topping.name }}
-        </span></el-col
-      >
+          ></el-checkbox>
+          &nbsp;</span
+        >
+      </el-col>
       <el-col :span="5"></el-col>
     </el-row>
     <el-row :gutter="20">
