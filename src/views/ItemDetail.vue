@@ -30,6 +30,10 @@ const selectItemQuantity = ref<number>(1);
 const selectedItem = ref(
   new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
 );
+// クーポン取得メッセージ
+const couponMessage = ref("");
+//
+const canClickCoupon = ref(false);
 
 // URLからidを取得
 const route = useRoute();
@@ -54,6 +58,14 @@ const getToppingData = async (): Promise<void> => {
 onMounted(getToppingData);
 
 console.log(selectItemSize.value);
+
+/**
+ * クーポンを取得する.
+ */
+const getCoupon = () => {
+  canClickCoupon.value = true;
+  couponMessage.value = "クーポンを取得しました";
+};
 
 /**
  小計金額の計算（変更され都度反映される）.
@@ -170,6 +182,12 @@ const addItem = () => {
     >
     <el-col :span="5"></el-col>
   </el-row>
+  <div>
+    <button type="button" @click="getCoupon" v-bind:disabled="canClickCoupon">
+      200OFFクーポンを取得する
+    </button>
+  </div>
+  <div>{{ couponMessage }}</div>
   <el-row :gutter="20">
     <el-col :span="5"></el-col>
     <el-col :span="14"
