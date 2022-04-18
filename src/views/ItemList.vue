@@ -163,12 +163,14 @@ const getItemlistSortByCategory = (category: string): void => {
   <div class="category">
     <el-button
       round
+      type="danger"
       class="category-btn"
       v-on:click="getItemlistSortByCategory('all')"
       >全ての商品</el-button
     >
     <el-button
       round
+      type="danger"
       class="category-btn"
       v-on:click="getItemlistSortByCategory('pigBones')"
     >
@@ -176,6 +178,7 @@ const getItemlistSortByCategory = (category: string): void => {
     </el-button>
     <el-button
       round
+      type="danger"
       class="category-btn"
       v-on:click="getItemlistSortByCategory('miso')"
     >
@@ -183,6 +186,7 @@ const getItemlistSortByCategory = (category: string): void => {
     </el-button>
     <el-button
       round
+      type="danger"
       class="category-btn"
       v-on:click="getItemlistSortByCategory('soysauce')"
     >
@@ -190,6 +194,7 @@ const getItemlistSortByCategory = (category: string): void => {
     </el-button>
     <el-button
       round
+      type="danger"
       class="category-btn"
       v-on:click="getItemlistSortByCategory('salt')"
     >
@@ -197,6 +202,7 @@ const getItemlistSortByCategory = (category: string): void => {
     </el-button>
     <el-button
       round
+      type="danger"
       class="category-btn"
       v-on:click="getItemlistSortByCategory('seafood')"
     >
@@ -204,6 +210,7 @@ const getItemlistSortByCategory = (category: string): void => {
     </el-button>
     <el-button
       round
+      type="danger"
       class="category-btn"
       v-on:click="getItemlistSortByCategory('other')"
     >
@@ -212,32 +219,51 @@ const getItemlistSortByCategory = (category: string): void => {
   </div>
 
   <!-- gutterは間隔の幅を表す -->
-  <el-row :gutter="10" class="items">
+  <el-row :gutter="20" class="items">
     <!-- spanはgrid数を表す(大きさは24まで) -->
     <el-col
       class="bg-purple"
-      :span="8"
+      :sm="24"
+      :md="12"
+      :lg="8"
       v-for="item of currentItemList"
       :key="item.id"
     >
-      <RouterLink :to="'/itemDetail/' + item.id">
-        <img :src="item.imagePath" />
-      </RouterLink>
-      <RouterLink :to="'/itemDetail/' + item.id">
-        <div class="name">{{ item.name }}</div>
-      </RouterLink>
-      <div><span class="price">Ｍ</span>{{ item.formatPriceM }}円(税抜)</div>
-      <div><span class="price">Ｌ</span>{{ item.formatPriceL }}円(税抜)</div>
-      <div class="description">{{ item.description }}</div>
+      <el-space direction="vertical" size="large">
+        <el-card
+          :body-style="{ padding: '30px', height: '500px' }"
+          class="card"
+        >
+          <RouterLink :to="'/itemDetail/' + item.id">
+            <img class="food" :src="item.imagePath" />
+          </RouterLink>
+          <RouterLink :to="'/itemDetail/' + item.id">
+            <div class="name">{{ item.name }}</div>
+          </RouterLink>
+          <div class="size-wrapper">
+            <div class="size">
+              <img class="size-icon" src="/img_noodle/M_icon.png" /><span>{{
+                item.formatPriceM
+              }}</span
+              >円(税抜)
+            </div>
+            <div class="size">
+              <img class="size-icon" src="/img_noodle/L_icon.png" /><span>{{
+                item.formatPriceL
+              }}</span
+              >円(税抜)
+            </div>
+          </div>
+          <div class="description">{{ item.description }}</div>
+        </el-card>
+      </el-space>
     </el-col>
   </el-row>
 </template>
 
 <style scoped>
-.bg-purple {
-  background: #d3dce6;
-  border: solid black 1px;
-  padding: 10px;
+.card {
+  background-color: rgb(250, 228, 222);
 }
 .grid-content {
   border-radius: 4px;
@@ -259,7 +285,9 @@ img {
   width: 300px;
 }
 .select {
-  margin-left: 1100px;
+  margin-left: auto;
+  margin-right: 20px;
+  margin-top: 10px;
   width: 200px;
 }
 .items {
@@ -267,10 +295,7 @@ img {
 }
 .name {
   font-size: 18px;
-}
-.price {
-  background-color: #ff4500;
-  border-radius: 50%; /* 角丸にする設定 */
+  font-weight: bold;
 }
 .description {
   font-size: 13px;
@@ -284,5 +309,17 @@ img:hover {
 .category-btn {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.size {
+  padding: 3px;
+}
+.size-icon {
+  width: 25px;
+  height: 25px;
+}
+.size-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
 }
 </style>

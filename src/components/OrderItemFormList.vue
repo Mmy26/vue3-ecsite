@@ -4,7 +4,8 @@ import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
-
+import { Delete } from "@element-plus/icons-vue";
+const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
 
 if (!orderStore) {
@@ -39,11 +40,52 @@ onMounted(() => {
     showOrderItem.value = false;
   }
 });
+/**
+ * 合計金額が8000円以下の場合は送料を表示する.
+ */
+const num = ref(8000);
+const message1 = ref("");
+const message2 = ref("");
+const message3 = ref("");
+const freeShipping = () => {
+  if (num.value - currentOrder.value.calcTotalPrice < 0) {
+    message1.value = "今回のご注文は送料無料";
+    return message1.value;
+  } else {
+    message2.value =
+      "あと" + (num.value - currentOrder.value.calcTotalPrice) + "円で送料無料";
+
+    return message2.value;
+  }
+};
+/**
+ * 送料を表示する.
+ */
+const ShippingMessage = () => {
+  if (num.value - currentOrder.value.calcTotalPrice > 0) {
+    message3.value = "410";
+    return message3.value;
+  } else {
+    return 0;
+  }
+};
+/**
+ * 合計金額に送料を追加する.
+ */
+const calculation = () => {
+  if (num.value - currentOrder.value.calcTotalPrice > 0) {
+    return currentOrder.value.calcTotalPrice + 410;
+  } else {
+    return currentOrder.value.calcTotalPrice;
+  }
+};
+
+const pass = ref(location.pathname);
 </script>
 
 <template>
   <div class="row" v-show="showOrderItem">
-    <table class="striped">
+    <table class="striped t-line">
       <thead>
         <tr>
           <th class="cart-table-th">商品名</th>
@@ -60,7 +102,11 @@ onMounted(() => {
         >
           <td class="cart-item-name">
             <div class="cart-item-icon">
-              <img v-bind:src="orderItem.item.imagePath" />
+              <!-- <img v-bind:src="orderItem.item.imagePath" />  -->
+              <el-image
+                style="width: 200px; height: 160px"
+                :src="orderItem.item.imagePath"
+              />
             </div>
             <span>{{ orderItem.item.name }}</span>
           </td>
@@ -88,23 +134,51 @@ onMounted(() => {
             </div>
           </td>
           <td>
-            <button
-              class="btn"
-              type="button"
+            <el-button
+              type="primary"
+              plain
+              :icon="Delete"
               @click="orderStore.deleteItem(index)"
+              >削除</el-button
             >
-              <span>削除</span>
-            </button>
           </td>
         </tr>
       </tbody>
     </table>
 
     <div class="row cart-total-price">
-      <div>消費税：{{ currentOrder.tax.toLocaleString() }}円</div>
-      <div>
-        ご注文金額合計：{{ currentOrder.calcTotalPrice.toLocaleString() }}円
-        (税込)
+      <h4 class="page-title" v-if="currentOrder.orderItemList.length === 0">
+        カートの中に商品がありません
+      </h4>
+      <div v-if="currentOrder.orderItemList.length >= 1">
+        <el-row :gutter="0" class="tax">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left"> 消費税： </el-col>
+          <el-col :span="6" class="right">
+            <div>{{ currentOrder.tax.toLocaleString() }}円</div></el-col
+          >
+          <el-col :span="6"></el-col>
+        </el-row>
+
+        <el-row :gutter="0">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left"> 送料：</el-col>
+          <el-col :span="6" class="right">
+            <div>{{ ShippingMessage() }}円</div>
+          </el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+
+        <el-row :gutter="0" class="total-price">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left"> ご注文金額合計：</el-col>
+          <el-col :span="6" class="right">
+            <div>{{ calculation() }}円 (税込)</div>
+          </el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+        <div class="shipping">{{ freeShipping() }}</div>
+        <!-- <div v-if="pass === '/cartlist'"> -->
       </div>
     </div>
   </div>
@@ -114,6 +188,8 @@ onMounted(() => {
 table {
   border-collapse: collapse;
   border: solid 1px;
+  margin-left: auto;
+  margin-right: auto;
 }
 table th,
 table td {
@@ -121,5 +197,35 @@ table td {
   border-width: 2px; /* 線の太さ */
   border-color: rgb(173, 172, 172);
   padding: 15px;
+  text-align: center;
+}
+.cart-total-price {
+  font-size: 20px;
+  text-align: center;
+}
+.t-line tr:nth-child(odd) td {
+  /* background-color: #fdeaea; */
+  background-color: white;
+}
+.t-line tr:nth-child(even) td {
+  background-color: #efefef;
+}
+.shipping {
+  color: red;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.total-price {
+  font-size: 25px;
+}
+
+.left {
+  text-align: right;
+}
+.right {
+  text-align: left;
+}
+.tax {
+  margin-top: 20px;
 }
 </style>

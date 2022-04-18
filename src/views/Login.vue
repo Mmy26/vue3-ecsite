@@ -6,6 +6,7 @@ import { ElNotification } from "element-plus";
 import { RouterLink } from "vue-router";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import { User } from "@/types/User";
+import { CartListKey } from "@/providers/useCartProvider";
 
 //email
 const email = ref("");
@@ -19,8 +20,14 @@ const passwordError = ref("");
 const router = useRouter();
 //userProviderに関するオブジェクト
 const userStore = inject(useUserProviderKey);
+// userCartProviderに関するオブジェクト
+const cartStore = inject(CartListKey);
 
 if (!userStore) {
+  throw new Error("");
+}
+
+if (!cartStore) {
   throw new Error("");
 }
 
@@ -79,6 +86,10 @@ const loginUser = async (): Promise<void> => {
           response.data.responseMap.user.telephone
         )
       );
+      if (cartStore.userOrderInfo.value.orderItemList.length !== 0) {
+        router.push("/orderConfirm");
+        return;
+      }
       router.push("/itemList");
     } else {
       ElNotification({
@@ -94,27 +105,33 @@ const loginUser = async (): Promise<void> => {
 </script>
 
 <template>
-  <el-form label-width="120px" class="loginUser-area">
-    <el-form-item label="E-mail">
-      <el-input type="email" v-model="email" />
-      <span class="error">
-        {{ emailError }}
-      </span>
-    </el-form-item>
-    <el-form-item label="パスワード">
-      <el-input type="password" v-model="password" />
-      <span class="error">
-        {{ passwordError }}
-      </span>
-    </el-form-item>
-    <el-form-item>
-      <el-button plain type="primary" v-on:click="loginUser">Sign In</el-button
-      >&nbsp;&nbsp;
-      <RouterLink to="/registerUser"
-        ><el-link type="primary">ユーザー登録に戻る</el-link></RouterLink
-      >
-    </el-form-item>
-  </el-form>
+  <h1 class="title">ログイン</h1>
+  <el-row :gutter="20">
+    <el-col :span="24" class="center">
+      <el-form label-width="120px" class="loginUser-area">
+        <el-form-item label="E-mail">
+          <el-input type="email" v-model="email" />
+          <span class="error">
+            {{ emailError }}
+          </span>
+        </el-form-item>
+        <el-form-item label="パスワード">
+          <el-input type="password" v-model="password" />
+          <span class="error">
+            {{ passwordError }}
+          </span>
+        </el-form-item>
+        <el-form-item>
+          <el-button plain type="danger" v-on:click="loginUser"
+            >Sign In</el-button
+          >&nbsp;&nbsp;
+          <RouterLink to="/registerUser" class="link"
+            ><el-link type="danger">ユーザー登録に戻る</el-link></RouterLink
+          >
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
 </template>
 
 <style scoped>
@@ -123,5 +140,17 @@ const loginUser = async (): Promise<void> => {
 }
 .error {
   color: red;
+}
+.link {
+  text-decoration: none;
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  text-align: center;
+  margin-top: 10vh;
 }
 </style>
