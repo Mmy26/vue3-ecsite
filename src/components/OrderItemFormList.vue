@@ -5,8 +5,10 @@ import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
 import { Delete } from "@element-plus/icons-vue";
+import { Coupon } from "@/types/Coupon";
 const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
+const showCoupon = ref(false);
 
 if (!orderStore) {
   throw new Error("");
@@ -39,6 +41,7 @@ onMounted(() => {
   if (currentOrderList.value.length === 0) {
     showOrderItem.value = false;
   }
+  const currentCoupon = orderStore.coupon.value;
 });
 /**
  * 合計金額が8000円以下の場合は送料を表示する.
@@ -169,6 +172,15 @@ const pass = ref(location.pathname);
           <el-col :span="6"></el-col>
         </el-row>
 
+        <el-row :gutter="0" v-show="showCoupon">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left coupon"> クーポン使用：</el-col>
+          <el-col :span="6" class="right coupon">
+            <div>-{{ orderStore.coupon.value.price }}円</div>
+          </el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+
         <el-row :gutter="0" class="total-price">
           <el-col :span="6"></el-col>
           <el-col :span="6" class="left"> ご注文金額合計：</el-col>
@@ -227,5 +239,10 @@ table td {
 }
 .tax {
   margin-top: 20px;
+}
+
+.coupon {
+  color: rgb(168, 168, 168);
+  font-size: 15px;
 }
 </style>

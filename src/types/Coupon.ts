@@ -3,7 +3,9 @@ export class Coupon {
     // id
     private _id: number,
     // クーポン名
-    private _name: string
+    private _name: string,
+    // 価格
+    private _price: number
   ) {}
 
   public get id(): number {
@@ -20,5 +22,13 @@ export class Coupon {
 
   public set name(name: string) {
     this._name = name;
+  }
+
+  public get price(): number {
+    return this._price;
+  }
+
+  public set price(price: number) {
+    this._price = price;
   }
 }

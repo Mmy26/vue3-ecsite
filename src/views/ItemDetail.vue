@@ -7,6 +7,7 @@ import { computed } from "@vue/reactivity";
 import { useRoute, useRouter } from "vue-router";
 import { CartListKey } from "@/providers/useCartProvider";
 import ToppingImg from "../components/ToppingImg.vue";
+import { Coupon } from "@/types/Coupon";
 
 const store = inject(CartListKey);
 if (!store) {
@@ -65,6 +66,7 @@ console.log(selectItemSize.value);
 const getCoupon = () => {
   canClickCoupon.value = true;
   couponMessage.value = "クーポンを取得しました";
+  store.coupon.value = new Coupon(1, "200円OFF",200);
 };
 
 /**

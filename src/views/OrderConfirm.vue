@@ -26,6 +26,8 @@ const addressError = ref("");
 const telephoneError = ref("");
 const deliveryDateError = ref("");
 const checkError = ref(true);
+const showUseCoupon = ref(true);
+const couponMessage = ref("クーポンを使用する");
 
 const router = useRouter();
 const orderStore = inject(CartListKey);
@@ -51,6 +53,21 @@ const getUserInfo = () => {
   zipCode.value = userInfo.zipcode;
   address.value = userInfo.address;
   telephone.value = userInfo.telephone;
+};
+
+/**
+ * クーポンを使う.
+ */
+const useCoupon = () => {
+  if (showUseCoupon.value === true) {
+    // クーポン利用の表示切り替え
+    showUseCoupon.value = false;
+    couponMessage.value = "クーポンを利用しない";
+  } else {
+    showUseCoupon.value = true;
+    couponMessage.value = "クーポンを利用する";
+  }
+  console.log("ok");
 };
 
 /**
@@ -335,6 +352,20 @@ const getAddress = async () => {
             >
             <div class="ex">例：2022年/01月/01日 13時</div>
             <div class="errorMessages">{{ deliveryDateError }}</div>
+          </div>
+          <div class="row">
+            <div class="input-field">
+              <div>クーポンの利用</div>
+              <div v-if="showUseCoupon">使わない</div>
+              <div v-else>使う：{{ orderStore.coupon.value.name }}クーポン</div>
+              <div class="ex">
+                ご利用可能：{{ orderStore.coupon.value.name }}クーポン
+              </div>
+              <button type="button" @click="useCoupon">
+                {{ couponMessage }}
+              </button>
+            </div>
+            <div class="errorMessages">{{ telephoneError }}</div>
           </div>
         </div>
       </div>
