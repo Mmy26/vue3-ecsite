@@ -5,27 +5,17 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
-      name: "home",
-      redirect: () => {
-        return "itemList";
-      },
-      component: HomeView,
-    },
-    {
       path: "/about",
       name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/AboutView.vue"),
+    },
+    {
+      path: "/",
+      component: () => import("../views/Top.vue"),
     },
     {
       path: "/cartlist",
       name: "cartlist",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/CartList.vue"),
     },
     {
@@ -35,9 +25,6 @@ const router = createRouter({
     {
       path: "/registerUser",
       name: "RegisterUser",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/RegisterUser.vue"),
     },
     {
