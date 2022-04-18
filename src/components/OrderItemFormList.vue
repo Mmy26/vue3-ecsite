@@ -5,10 +5,10 @@ import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
 import { Delete } from "@element-plus/icons-vue";
-import { Coupon } from "@/types/Coupon";
 const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
 const showCoupon = ref(false);
+const includedCoupon = ref(true);
 
 if (!orderStore) {
   throw new Error("");
@@ -185,7 +185,8 @@ const pass = ref(location.pathname);
           <el-col :span="6"></el-col>
           <el-col :span="6" class="left"> ご注文金額合計：</el-col>
           <el-col :span="6" class="right">
-            <div>{{ calculation() }}円 (税込)</div>
+            <div v-if="includedCoupon">{{ calculation() + orderStore.coupon.value.price }}円 (税込)</div>
+            <div v-else>{{ calculation() }}円 (税込)</div>
           </el-col>
           <el-col :span="6"></el-col>
         </el-row>

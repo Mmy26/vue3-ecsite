@@ -27,6 +27,9 @@ const deliveryDateError = ref("");
 const checkError = ref(true);
 const showUseCoupon = ref(true);
 const couponMessage = ref("クーポンを使用する");
+const couponError = ref("");
+const canUseCoupon = ref(false);
+const isCoupon = ref(true);
 
 const router = useRouter();
 const orderStore = inject(CartListKey);
@@ -39,6 +42,14 @@ if (!userStore) {
 if (!orderStore) {
   throw new Error("");
 }
+
+onMounted(() => {
+  if (orderStore.coupon.value.id === 0) {
+    canUseCoupon.value = true;
+    isCoupon.value = false;
+    return;
+  }
+});
 
 /**
  * ログイン中のユーザー情報を取得する.
@@ -356,15 +367,22 @@ const getAddress = async () => {
             <div class="input-field">
               <div>クーポンの利用</div>
               <div v-if="showUseCoupon" class="use-msg">使わない</div>
-              <div v-else class="use-msg">使う：{{ orderStore.coupon.value.name }}クーポン</div>
-              <div class="ex">
+              <div v-else class="use-msg">
+                使う：{{ orderStore.coupon.value.name }}クーポン
+              </div>
+              <div class="ex" v-if="isCoupon">
                 ご利用可能：{{ orderStore.coupon.value.name }}クーポン
               </div>
-              <button type="button" @click="useCoupon">
+              <div class="ex" v-else>ご利用可能：クーポンなし</div>
+              <button
+                type="button"
+                @click="useCoupon"
+                v-bind:disabled="canUseCoupon"
+              >
                 {{ couponMessage }}
               </button>
             </div>
-            <div class="errorMessages">{{ telephoneError }}</div>
+            <div class="errorMessages">{{ couponError }}</div>
           </div>
         </div>
       </div>
@@ -380,7 +398,6 @@ const getAddress = async () => {
               >クレジットカード</el-radio
             >
           </div>
-
           <div>
             <div v-if="paymentMethod === '2'">
               <CreditCardPayment></CreditCardPayment>
@@ -431,7 +448,7 @@ const getAddress = async () => {
   margin-bottom: 8px;
 }
 
-.use-msg{
+.use-msg {
   font-size: 13px;
 }
 </style>
