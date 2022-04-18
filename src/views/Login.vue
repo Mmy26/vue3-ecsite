@@ -99,7 +99,10 @@ const loginUser = async (): Promise<void> => {
     <el-col :span="24" class="center">
       <el-form label-width="120px" class="loginUser-area">
         <el-form-item label="E-mail">
-          <el-input type="email" v-model="email" />
+          <el-input
+            type="email"
+            v-model="email"
+          />
           <span class="error">
             {{ emailError }}
           </span>
@@ -111,7 +114,7 @@ const loginUser = async (): Promise<void> => {
           </span>
         </el-form-item>
         <el-form-item>
-          <el-button plain type="danger" v-on:click="loginUser"
+          <el-button type="danger" v-on:click="loginUser"
             >Sign In</el-button
           >&nbsp;&nbsp;
           <RouterLink to="/registerUser" class="link"

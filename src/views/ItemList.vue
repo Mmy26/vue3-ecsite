@@ -131,7 +131,7 @@ const getItemlistSortByCategory = (category: string): void => {
           placeholder="キーワードを入力"
           v-model="searchItemName"
         /><el-button
-          type="primary"
+          type="danger"
           :icon="Search"
           @click="searchItems(searchItemName)"
         />
@@ -235,8 +235,10 @@ const getItemlistSortByCategory = (category: string): void => {
           <RouterLink :to="'/itemDetail/' + item.id">
             <img :src="item.imagePath" />
           </RouterLink>
-          <RouterLink :to="'/itemDetail/' + item.id">
-            <div class="name">{{ item.name }}</div>
+          <RouterLink :to="'/itemDetail/' + item.id" class="link">
+            <div class="name">
+              <el-link type="danger" >{{ item.name }}</el-link>
+            </div>
           </RouterLink>
           <div class="size">
             <img class="size-icon" src="/img_noodle/M_icon.png" />{{
@@ -308,5 +310,9 @@ img:hover {
 .size-icon {
   width: 25px;
   height: 25px;
+}
+.link {
+  text-decoration: none;
+  margin-top: 10px;
 }
 </style>
