@@ -6,6 +6,7 @@ import { ElNotification } from "element-plus";
 import { RouterLink } from "vue-router";
 import { useUserProviderKey } from "@/providers/useUserProvider";
 import { User } from "@/types/User";
+import { CartListKey } from "@/providers/useCartProvider";
 
 //email
 const email = ref("");
@@ -19,8 +20,14 @@ const passwordError = ref("");
 const router = useRouter();
 //userProviderに関するオブジェクト
 const userStore = inject(useUserProviderKey);
+// userCartProviderに関するオブジェクト
+const cartStore = inject(CartListKey);
 
 if (!userStore) {
+  throw new Error("");
+}
+
+if (!cartStore) {
   throw new Error("");
 }
 
@@ -79,6 +86,10 @@ const loginUser = async (): Promise<void> => {
           response.data.responseMap.user.telephone
         )
       );
+      if (cartStore.userOrderInfo.value.orderItemList.length !== 0) {
+        router.push("/orderConfirm");
+        return;
+      }
       router.push("/itemList");
     } else {
       ElNotification({

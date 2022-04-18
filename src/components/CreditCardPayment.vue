@@ -4,8 +4,8 @@ import axios from "axios";
 import { inject, ref } from "vue";
 
 const card_num = ref("");
-const card_exp_year = ref(0);
-const card_exp_month = ref(0);
+const card_exp_year = ref("2022");
+const card_exp_month = ref("1");
 const card_name = ref("");
 const card_cvv = ref("");
 const errorMessageOfCreditCardNumber = ref("");
@@ -22,29 +22,6 @@ if (!orderStore) {
   throw new Error("");
 }
 
-const options = [
-  {
-    value: "1",
-    label: "1",
-  },
-  {
-    value: "2",
-    label: "2",
-  },
-  {
-    value: "3",
-    label: "3",
-  },
-  {
-    value: "4",
-    label: "4",
-  },
-  {
-    value: "5",
-    label: "5",
-  },
-];
-
 const checkCredit = async () => {
   let currentOrder = orderStore.userOrderInfo.value;
 
@@ -58,7 +35,7 @@ const checkCredit = async () => {
     checkError.value = true;
   }
 
-  if (card_exp_year.value === 0 || card_exp_month.value === 0) {
+  if (card_exp_year.value === "" || card_exp_month.value === "") {
     errorMessageOfExpiry.value = "クレジットカードの有効期限を入力してください";
     checkError.value = false;
   } else {
@@ -152,6 +129,12 @@ const checkCredit = async () => {
     errorMessageOfNotNumber.value = "";
     checkError.value = true;
   }
+
+  if (checkError.value === false) {
+    return;
+  }
+
+  message.value = "ご利用いただけます";
 };
 </script>
 
@@ -174,52 +157,34 @@ const checkCredit = async () => {
       {{ errorMessageOfExpiry }}
     </div>
     <div class="col s10 expiry">
-      <span class="expiry2"> 有効期限： </span>
-      <el-select
-        v-model="card_exp_month"
-        class="m-2"
-        placeholder="Select"
-        size="small"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <select class="browser-default" v-model="card_exp_month">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option></select
+      <span class="expiry2"> 有効期限 </span>
+      <el-select v-model="card_exp_month" size="small">
+        <el-option label="1" value="1" />
+        <el-option label="2" value="2" />
+        <el-option label="3" value="3" />
+        <el-option label="4" value="4" />
+        <el-option label="5" value="5" />
+        <el-option label="6" value="6" />
+        <el-option label="7" value="7" />
+        <el-option label="8" value="8" />
+        <el-option label="9" value="9" />
+        <el-option label="10" value="10" />
+        <el-option label="11" value="11" />
+        <el-option label="12" value="12" /> </el-select
       >月
-      <select class="browser-default" v-model="card_exp_year">
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-        <option value="2027">2027</option>
-        <option value="2028">2028</option>
-        <option value="2029">2029</option>
-        <option value="2030">2030</option>
-        <option value="2031">2031</option>
-        <option value="2032">2032</option>
-        <option value="2033">2033</option>
-        <option value="2034">2034</option>
-        <option value="2035">2035</option>
-        <option value="2036">2036</option>
-        <option value="2037">2037</option>
-        <option value="2038">2038</option></select
+      <el-select v-model="card_exp_year" size="small">
+        <el-option label="2022" value="2022" />
+        <el-option label="2023" value="2023" />
+        <el-option label="2024" value="2024" />
+        <el-option label="2025" value="2025" />
+        <el-option label="2026" value="2026" />
+        <el-option label="2027" value="2027" />
+        <el-option label="2028" value="2028" />
+        <el-option label="2029" value="2029" />
+        <el-option label="2030" value="2030" />
+        <el-option label="2031" value="2031" />
+        <el-option label="2032" value="2032" />
+        <el-option label="2033" value="2033" /> </el-select
       >年
       <div class="ex">例：01月/2022年</div>
     </div>
