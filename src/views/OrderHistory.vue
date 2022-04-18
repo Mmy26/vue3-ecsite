@@ -94,8 +94,8 @@ onMounted(getOrderData);
       >
       <el-col :span="1"><!-- ここは余白--></el-col>
     </el-row>
-    <hr />
-    <div v-for="(currentUserData, i) of currentOrderList">
+    <hr class="border" />
+    <div class="orderList" v-for="(currentUserData, i) of currentOrderList">
       <div v-for="(orderItem, l) of currentUserData.orderItemList">
         <el-row :gutter="20">
           <el-col :span="1"> <!-- ここは余白--> </el-col>
@@ -119,7 +119,7 @@ onMounted(getOrderData);
           <el-col :span="2" v-else>{{ "クレジット支払" }}</el-col>
           <el-col :span="1"><!-- ここは余白--></el-col>
         </el-row>
-        <hr />
+        <hr class="listBorder" />
       </div>
     </div>
   </div>
@@ -148,5 +148,14 @@ bg-purple {
 .food:hover {
   opacity: 0.7;
   color: white;
+}
+.border {
+  border-width: 3px;
+}
+.listBorder {
+  border-color: rgba(253, 230, 20, 0.433);
+}
+.orderList {
+  box-shadow: 5px 5px 5px rgba(200, 199, 199, 0.231);
 }
 </style>
