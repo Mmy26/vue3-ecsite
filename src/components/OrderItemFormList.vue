@@ -39,6 +39,7 @@ onMounted(() => {
   if (currentOrderList.value.length === 0) {
     showOrderItem.value = false;
   }
+  console.log("onMountedでチェック", currentOrder.value.orderItemList);
 });
 /**
  * 合計金額が8000円以下の場合は送料を表示する.

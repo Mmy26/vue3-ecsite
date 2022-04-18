@@ -109,6 +109,7 @@ const calcSubTotal = computed(() => {
 
 // 注文メソッド
 const addItem = () => {
+  console.log("トッピングが入っているかどうか",selectToppingList)
   //payload
   store.addOrderItem({
     selectItemSize: selectItemSize.value,

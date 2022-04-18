@@ -4,6 +4,7 @@ import "element-plus/theme-chalk/display.css";
 import { onMounted, watch, ref, inject } from "vue";
 import { CaretBottom } from "@element-plus/icons-vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
+import { useUserProviderKey } from "@/providers/useUserProvider";
 
 const orderStore = inject(CartListKey);
 if (!orderStore) {
@@ -12,18 +13,30 @@ if (!orderStore) {
 //ヘッダーページを表示するかどうかを表すフラグ
 const canShow = ref(true);
 
+//ログインしているかどうかを表すフラグ
+const isLogin = ref(false);
+
 //routeに関するオブジェクト
 const route = useRoute();
 
+const userStore = inject(useUserProviderKey);
+if(!userStore){
+  throw new Error("")
+}
+
 // watch((変更を検知したい変数) , ( 検知した変数が引数として入れられる ) => { 処理 } )
 watch(route, (currentPage) => {
-  console.log("watchが呼ばれました!");
-  console.log("currentPageの値      ", currentPage.path);
-  canShow.value = true;
-  if (currentPage.path === "/login" || currentPage.path === "/registerUser") {
+  if (
+    currentPage.path === "/login" ||
+    currentPage.path === "/registerUser" ||
+    currentPage.path === "/"
+  ) {
     canShow.value = false;
   }
-  console.log("canShowの値   ", canShow.value);
+
+  if( userStore.currentUser.value.id !== 0){
+    isLogin.value = true;
+  };
 });
 
 const router = useRouter();
@@ -80,10 +93,10 @@ const backToTop = () => {
             <RouterLink to="/registerUser" class="link"
               ><el-link type="danger">ユーザー登録</el-link></RouterLink
             >
-            <RouterLink to="/login" class="link"
+            <RouterLink to="/login" class="link" v-show="!isLogin"
               ><el-link type="danger">ログイン</el-link></RouterLink
             >
-            <RouterLink to="/logout" class="link"
+            <RouterLink to="/logout" class="link" v-show="isLogin"
               ><el-link type="danger">ログアウト</el-link></RouterLink
             >
             <RouterLink to="/orderHistory" class="link"
