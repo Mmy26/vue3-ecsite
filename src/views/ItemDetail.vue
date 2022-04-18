@@ -142,7 +142,7 @@ const addItem = () => {
     <el-row :gutter="20">
       <el-col :span="5"></el-col>
       <el-col :span="14"
-        >サイズ：<el-radio label="M" name="size" v-model="selectItemSize"
+        >サイズ：<el-radio label="M" v-model="selectItemSize"
           ><img class="size-icon" src="/img_noodle/M_icon.png" />{{
             selectedItem.priceM.toLocaleString()
           }}円(税抜)</el-radio
@@ -157,20 +157,22 @@ const addItem = () => {
     </el-row>
     <el-row :gutter="20">
       <el-col :span="5"></el-col>
-      <el-col :span="14"
-        ><div class="topping">
-          トッピング： 1つにつき М 200円(税抜) Ｌ 300円(税抜)
+      <div class="topping">
+        トッピング： 1つにつき М 200円(税抜) Ｌ 300円(税抜)
+      </div>
+      <el-col :span="14" class="checkbox-group">
+        <div v-for="topping of selectedItem.toppingList" :key="topping.id">
+          <el-checkbox-group v-model="selectToppingList">
+            <el-checkbox
+              size="default"
+              :label="topping.name"
+              :value="topping.id"
+              class="checkbox"
+            ></el-checkbox
+            >>
+          </el-checkbox-group>
+          &nbsp;
         </div>
-        <span v-for="topping of selectedItem.toppingList" :key="topping.id">
-          <el-checkbox
-            name="topping"
-            size="large"
-            :label="topping.name"
-            :value="topping.id"
-            v-model="selectToppingList"
-          ></el-checkbox>
-          &nbsp;</span
-        >
       </el-col>
       <el-col :span="5"></el-col>
     </el-row>
@@ -244,5 +246,14 @@ const addItem = () => {
   margin-bottom: 10px;
   font-size: 25px;
   font-weight: bold;
+}
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-top: 10px;
+}
+.checkbox {
+  margin-right: 10px;
 }
 </style>
