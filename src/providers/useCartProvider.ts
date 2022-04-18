@@ -39,6 +39,44 @@ export const useOrderProvider = () => {
     ),
   });
   /**
+   * トッピングのidとトッピングの商品名を紐づける.
+   * @param selectToppingIdList
+   * @returns 選択したトッピング
+   */
+  const checkedToppingList = (
+    selectToppingIdList: Array<number>,
+    selectItem: Item,
+    orderItemId: number
+  ): Array<OrderTopping> => {
+    const selectOrderToppingList = new Array<OrderTopping>();
+    let i = 0;
+    for (let toppingId of selectToppingIdList) {
+      const topping = ref(
+        selectItem.toppingList.find((topping) => {
+          return topping.id === toppingId;
+        })
+      );
+      //トッピングを選択していない場合
+      if (!topping) {
+        const orderedTopping = new OrderTopping(++i, toppingId, 0, topping);
+        selectOrderToppingList.push(orderedTopping);
+        console.log("for文の中", orderedTopping);
+        //トッピングを選択した場合
+      } else {
+        const orderedTopping = new OrderTopping(
+          ++i,
+          toppingId,
+          orderItemId,
+          topping.value as Topping
+        );
+        selectOrderToppingList.push(orderedTopping);
+      }
+    }
+    console.log("checkedToppingList", selectOrderToppingList);
+
+    return selectOrderToppingList;
+  };
+  /**
    *カートに商品を追加する.
    * @param - 追加する商品の情報
    */
@@ -82,44 +120,7 @@ export const useOrderProvider = () => {
 
     orderState.userOrderInfo.orderItemList.push(payloadItem.value);
   };
-  /**
-   * トッピングのidとトッピングの商品名を紐づける.
-   * @param selectToppingIdList
-   * @returns 選択したトッピング
-   */
-  const checkedToppingList = (
-    selectToppingIdList: Array<number>,
-    selectItem: Item,
-    orderItemId: number
-  ): Array<OrderTopping> => {
-    const selectOrderToppingList = new Array<OrderTopping>();
-    let i = 0;
-    for (let toppingId of selectToppingIdList) {
-      const topping = ref(
-        selectItem.toppingList.find((topping) => {
-          return topping.id === toppingId;
-        })
-      );
-      //トッピングを選択していない場合
-      if (!topping) {
-        const orderedTopping = new OrderTopping(++i, toppingId, 0, topping);
-        selectOrderToppingList.push(orderedTopping);
-        console.log("for文の中", orderedTopping);
-        //トッピングを選択した場合
-      } else {
-        const orderedTopping = new OrderTopping(
-          ++i,
-          toppingId,
-          orderItemId,
-          topping.value as Topping
-        );
-        selectOrderToppingList.push(orderedTopping);
-      }
-    }
-    console.log("checkedToppingList", selectOrderToppingList);
 
-    return selectOrderToppingList;
-  };
   /**
    * 商品を削除する.
    */
