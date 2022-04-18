@@ -7,7 +7,6 @@ import axios from "axios";
 import { CartListKey } from "@/providers/useCartProvider";
 import OrderItemFormList from "@/components/OrderItemFormList.vue";
 import CreditCardPayment from "@/components/CreditCardPayment.vue";
-import type { constants } from "fs";
 
 const userName = ref("");
 const mailAddress = ref("");
@@ -356,8 +355,8 @@ const getAddress = async () => {
           <div class="row">
             <div class="input-field">
               <div>クーポンの利用</div>
-              <div v-if="showUseCoupon">使わない</div>
-              <div v-else>使う：{{ orderStore.coupon.value.name }}クーポン</div>
+              <div v-if="showUseCoupon" class="use-msg">使わない</div>
+              <div v-else class="use-msg">使う：{{ orderStore.coupon.value.name }}クーポン</div>
               <div class="ex">
                 ご利用可能：{{ orderStore.coupon.value.name }}クーポン
               </div>
@@ -430,5 +429,9 @@ const getAddress = async () => {
 
 .radio {
   margin-bottom: 8px;
+}
+
+.use-msg{
+  font-size: 13px;
 }
 </style>
