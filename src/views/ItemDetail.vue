@@ -166,13 +166,12 @@ const addItem = () => {
           <el-checkbox-group v-model="selectToppingList">
             <el-checkbox
               size="default"
-              :label="topping.name"
+              :label="topping.id"
               :value="topping.id"
               class="checkbox"
-            ></el-checkbox
-            >>
+              >{{ topping.name }}&nbsp;</el-checkbox
+            >
           </el-checkbox-group>
-          &nbsp;
         </div>
       </el-col>
       <el-col :span="5"></el-col>
