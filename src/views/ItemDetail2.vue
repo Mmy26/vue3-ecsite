@@ -107,6 +107,9 @@ const calcSubTotal = computed(() => {
   }
 });
 
+/**
+ * 商品の内容を編集する.
+ */
 const changeItem = () => {
   store.addOrderItem({
     selectItemSize: selectItemSize.value,

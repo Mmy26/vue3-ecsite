@@ -81,6 +81,10 @@ const calculation = () => {
     return currentOrder.value.calcTotalPrice;
   }
 };
+/**
+ * 商品の内容を編集する.
+ * @param 添字
+ */
 const changeItem = (index: number) => {
   router.push(`/itemDetail2/${currentOrderList.value[index].itemId}`);
   orderStore.deleteItem(index);
