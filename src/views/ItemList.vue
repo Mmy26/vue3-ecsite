@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ElNotification } from "element-plus";
 import { itemListKey } from "@/providers/useItemListProvider";
 import type { Item } from "@/types/Item";
 import { inject, onMounted, ref } from "vue";
@@ -46,6 +47,12 @@ onMounted(() => {
     currentItemList.value = store.itemList.value;
     searchItemList.value = store.itemList.value;
   }
+  ElNotification({
+    title: "人気No.1メニュー !",
+    dangerouslyUseHTMLString: true,
+    message:
+      '<img src="/img_noodle/17.jpg" style="width: 200px; text-align:center;" /><br /><h3 style="text-align:center;">台湾まぜそば</h3>',
+  });
 });
 const searchItems = (searchItemName: string) => {
   currentItemList.value = store.searchItemList(searchItemName);
@@ -131,7 +138,7 @@ const getItemlistSortByCategory = (category: string): void => {
           placeholder="キーワードを入力"
           v-model="searchItemName"
         /><el-button
-          type="primary"
+          type="danger"
           :icon="Search"
           @click="searchItems(searchItemName)"
         />
@@ -237,8 +244,10 @@ const getItemlistSortByCategory = (category: string): void => {
           <RouterLink :to="'/itemDetail/' + item.id">
             <img class="food" :src="item.imagePath" />
           </RouterLink>
-          <RouterLink :to="'/itemDetail/' + item.id">
-            <div class="name">{{ item.name }}</div>
+          <RouterLink :to="'/itemDetail/' + item.id" class="link">
+            <div class="name">
+              <el-link type="danger">{{ item.name }}</el-link>
+            </div>
           </RouterLink>
           <div class="size-wrapper">
             <div class="size">
@@ -316,6 +325,10 @@ img:hover {
 .size-icon {
   width: 25px;
   height: 25px;
+}
+.link {
+  text-decoration: none;
+  margin-top: 10px;
 }
 .size-wrapper {
   display: flex;
