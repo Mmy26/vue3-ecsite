@@ -55,8 +55,6 @@ onMounted(() => {
  * ログイン中のユーザー情報を取得する.
  */
 const getUserInfo = () => {
-  console.log("ok");
-
   const userInfo = userStore.currentUser.value;
   userName.value = userInfo.name;
   mailAddress.value = userInfo.email;
@@ -74,12 +72,13 @@ const useCoupon = () => {
     showUseCoupon.value = false;
     couponMessage.value = "クーポンを利用しない";
     orderStore.useCoupon.value = true;
+    console.log(orderStore.useCoupon.value);
   } else {
     showUseCoupon.value = true;
     couponMessage.value = "クーポンを利用する";
     orderStore.useCoupon.value = false;
+    console.log(orderStore.useCoupon.value);
   }
-  console.log("ok");
 };
 
 /**

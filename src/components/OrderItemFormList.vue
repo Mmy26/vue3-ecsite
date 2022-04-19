@@ -3,7 +3,7 @@ import { CartListKey } from "@/providers/useCartProvider";
 import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { Delete } from "@element-plus/icons-vue";
 const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
@@ -83,6 +83,11 @@ const calculation = () => {
 };
 
 const pass = ref(location.pathname);
+
+watch(orderStore.useCoupon, () => {
+  orderStore.useCoupon.value;
+});
+
 </script>
 
 <template>
@@ -171,11 +176,14 @@ const pass = ref(location.pathname);
           <el-col :span="6"></el-col>
         </el-row>
 
-        <el-row :gutter="0" v-show="showCoupon">
+        <el-row :gutter="0">
           <el-col :span="6"></el-col>
           <el-col :span="6" class="left coupon"> クーポン使用：</el-col>
           <el-col :span="6" class="right coupon">
-            <div>-{{ orderStore.coupon.value.price }}円</div>
+            <div v-if="orderStore.useCoupon.value === true">
+              -{{ orderStore.coupon.value.price }}円
+            </div>
+            <div v-else>-0円</div>
           </el-col>
           <el-col :span="6"></el-col>
         </el-row>
@@ -184,7 +192,9 @@ const pass = ref(location.pathname);
           <el-col :span="6"></el-col>
           <el-col :span="6" class="left"> ご注文金額合計：</el-col>
           <el-col :span="6" class="right">
-            <div v-if="orderStore.useCoupon.value==='true'">{{ calculation() - orderStore.coupon.value.price }}円 (税込)</div>
+            <div v-if="orderStore.useCoupon.value === true">
+              {{ calculation() - orderStore.coupon.value.price }}円 (税込)
+            </div>
             <div v-else>{{ calculation() }}円 (税込)</div>
           </el-col>
           <el-col :span="6"></el-col>
@@ -242,7 +252,7 @@ table td {
 }
 
 .coupon {
-  color: rgb(168, 168, 168);
+  color: rgb(145, 145, 145);
   font-size: 15px;
 }
 </style>
