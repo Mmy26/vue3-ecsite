@@ -25,9 +25,11 @@
         >
       </el-form-item>
       <el-form-item label="件名（必須）">
+        <div class="errorMessages">{{ titleError }}</div>
         <el-input v-model="input" placeholder="件名を入力してください" />
       </el-form-item>
       <el-form-item label="お問い合わせ内容（必須）">
+        <div class="errorMessages">{{ textareaError }}</div>
         <el-input
           v-model="textarea"
           :rows="2"
@@ -40,12 +42,14 @@
         >ログイン情報を反映する</el-button
       >
       <el-form-item label="お名前（必須）">
+        <div class="errorMessages">{{ nameError }}</div>
         <el-input v-model="userName" placeholder="例：山田太郎" />
       </el-form-item>
       <el-form-item label="メールアドレス（必須）">
+        <div class="errorMessages">{{ mailAddressError }}</div>
         <el-input v-model="mailAddress" placeholder="例：taro@gmail.com" />
       </el-form-item>
-      <el-button type="primary" plain @click="sentForm"
+      <el-button type="primary" plain v-on:click="errorCheck"
         >入力内容を送信する</el-button
       >
     </el-form>
@@ -64,6 +68,12 @@ const input = ref("");
 const textarea = ref("");
 const userName = ref("");
 const mailAddress = ref("");
+const errorMessage = ref("");
+const checkError = ref(true);
+const nameError = ref("");
+const mailAddressError = ref("");
+const titleError = ref("");
+const textareaError = ref("");
 const userStore = inject(useUserProviderKey);
 const labelPosition = ref("top");
 const formLabelAlign = reactive({
@@ -75,16 +85,53 @@ const formLabelAlign = reactive({
  * ログイン中のユーザー情報を取得する.
  */
 const getUserInfo = () => {
-  console.log("ok");
-
   const userInfo = userStore?.currentUser.value;
-  userName.value = userInfo.name;
-  mailAddress.value = userInfo.email;
+  userName.value = userInfo?.name as string;
+  mailAddress.value = userInfo?.email as string;
 };
 /**
- * お問い合わせ完了画面に遷移.
+ * エラー処理とフォームの送信.
  */
-const sentForm = () => {
+const errorCheck = () => {
+  // 件名のエラーチェック
+  if (input.value === "") {
+    titleError.value = "件名を入力してください    ";
+  } else {
+    titleError.value = "";
+  }
+  //お問い合わせ内容のエラーチェック
+  if (textarea.value === "") {
+    textareaError.value = "お問い合わせ内容を入力してください";
+  } else {
+    textareaError.value = "";
+  }
+  //名前のエラーチェック
+  if (userName.value === "") {
+    nameError.value = "名前が入力されていません";
+    // checkError.value = false;
+  } else {
+    nameError.value = "";
+    // checkError.value = true;
+  }
+  // ある文字列を含むか
+  const includeOrNot = (str: string): boolean => {
+    return mailAddress.value.includes(str);
+  };
+  //メールアドレスのエラーチェック
+  if (mailAddress.value === "") {
+    mailAddressError.value = "メールアドレスが入力されていません";
+    checkError.value = false;
+  } else if (!includeOrNot("@")) {
+    mailAddressError.value = "メールアドレスの形式が正しくありません";
+    checkError.value = false;
+  } else {
+    mailAddressError.value = "";
+    checkError.value = true;
+  }
+  if (checkError.value === false) {
+    return;
+  }
+  //お問い合わせ完了画面に遷移
   router.push("/inquiryComplete");
 };
 </script>
@@ -94,10 +141,14 @@ const sentForm = () => {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 75px;
 }
 .el-form {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+}
+.errorMessages {
+  color: red;
 }
 </style>
