@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { itemListKey } from "@/providers/useItemListProvider";
-import type { Item } from "@/types/Item";
+import { itemListKey } from "../providers/useItemListProvider";
+import type { Item } from "../types/Item";
 import { inject, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 import { Search } from "@element-plus/icons-vue";
@@ -241,7 +241,7 @@ const getItemlistSortByCategory = (category: string): void => {
             <div class="name">{{ item.name }}</div>
           </RouterLink>
           <div class="size-wrapper">
-            <div class="size">
+            <div class="size" id="size">
               <img class="size-icon" src="/img_noodle/M_icon.png" /><span>{{
                 item.formatPriceM
               }}</span
