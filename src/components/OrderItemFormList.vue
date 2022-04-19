@@ -84,6 +84,7 @@ const calculation = () => {
 
 const pass = ref(location.pathname);
 
+// クーポン利用のボタンが押下される度発火
 watch(orderStore.useCoupon, () => {
   orderStore.useCoupon.value;
 });
