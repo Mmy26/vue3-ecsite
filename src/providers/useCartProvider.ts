@@ -51,7 +51,6 @@ export const useOrderProvider = () => {
     if (latestOrderItem !== undefined) {
       newOrderItemId.value = latestOrderItem.id + 1;
     }
-    console.dir(JSON.stringify(latestOrderItem));
 
     const payloadItem = ref(
       new OrderItem(

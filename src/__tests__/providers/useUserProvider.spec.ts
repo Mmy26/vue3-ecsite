@@ -1,13 +1,27 @@
-import { User } from "../../types/User";
-import { useUserProvider } from "../../providers/useUserProvider";
 export {};
-// describe("providers/useUserProvider.ts",()=>{
-//   describe("setCurrentUserのテスト",()=>{
-//     test("引数のユーザーがstateのcurrentUserにセットされる",()=>{
-//       const expected = new User(0, "鈴木", "", "", "", "", "")
-//       jest.spyOn(useUserProvider,useUserProvider.setCurrentUser(expected))
+import { User } from "../../types/User";
+import {
+  useUserProvider,
+  useUserProviderKey,
+} from "../../providers/useUserProvider";
+import { inject, provide } from "vue";
 
-//       expect(useUserProvider().currentUser).toEqual(expected)
-//     })
-//   })
-// })
+const MockedProvide = jest.fn(provide);
+const MockedInject = jest.fn(inject);
+
+describe("providers/useUserProvider.ts", () => {
+  describe("setCurrentUserメソッドのテスト", () => {
+    beforeEach(() => {
+      MockedProvide(useUserProviderKey, useUserProvider());
+      MockedInject(useUserProviderKey, "", true);
+    });
+
+    test("引数のユーザーがstateのcurrentUserにセットされる", () => {
+      const expected = new User(1, "鈴木", "", "", "", "", "");
+
+      useUserProvider().setCurrentUser(new User(1, "鈴木", "", "", "", "", ""));
+
+      expect(useUserProvider().currentUser.value).toEqual(expected);
+    });
+  });
+});
