@@ -89,6 +89,9 @@ const backToTop = () => {
             <RouterLink to="/orderHistory" class="link"
               ><el-link type="danger">注文履歴</el-link></RouterLink
             >
+            <RouterLink to="/inquiryForm" class="link"
+              ><el-link type="danger">お問い合わせ</el-link></RouterLink
+            >
           </el-space>
         </div></el-col
       >

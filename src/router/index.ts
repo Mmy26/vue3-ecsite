@@ -58,6 +58,14 @@ const router = createRouter({
       path: "/orderFinished",
       component: () => import("../views/OrderFinished.vue"),
     },
+    {
+      path: "/inquiryForm",
+      component: () => import("../views/InquiryForm.vue"),
+    },
+    {
+      path: "/inquiryComplete",
+      component: () => import("../views/InquiryComplete.vue"),
+    },
   ],
 });
 
