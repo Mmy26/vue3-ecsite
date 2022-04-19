@@ -4,7 +4,7 @@ import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
-import { Delete } from "@element-plus/icons-vue";
+import { Delete, Edit } from "@element-plus/icons-vue";
 const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
 
@@ -134,6 +134,7 @@ const pass = ref(location.pathname);
             </div>
           </td>
           <td>
+            <el-button type="success" plain :icon="Edit">編集</el-button>
             <el-button
               type="primary"
               plain
