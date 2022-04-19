@@ -366,21 +366,26 @@ const getAddress = async () => {
           <div class="row">
             <div class="input-field">
               <div>クーポンの利用</div>
-              <div v-if="showUseCoupon" class="use-msg">使わない</div>
-              <div v-else class="use-msg">
-                使う：{{ orderStore.coupon.value.name }}クーポン
+              <div class="display-change">
+                <div v-if="showUseCoupon" class="use-msg">使わない</div>
+                <div v-else class="use-msg">
+                  使う：{{ orderStore.coupon.value.name }}クーポン
+                </div>
+                <div class="ex" v-if="isCoupon">
+                  ご利用可能：{{ orderStore.coupon.value.name }}クーポン
+                </div>
+                <div class="ex" v-else>ご利用可能：クーポンなし</div>
               </div>
-              <div class="ex" v-if="isCoupon">
-                ご利用可能：{{ orderStore.coupon.value.name }}クーポン
-              </div>
-              <div class="ex" v-else>ご利用可能：クーポンなし</div>
-              <button
-                type="button"
+              <el-button
+                class="btn coupon"
+                type="danger"
+                plain
+                size="small"
                 @click="useCoupon"
                 v-bind:disabled="canUseCoupon"
               >
-                {{ couponMessage }}
-              </button>
+                {{ couponMessage }}</el-button
+              >
             </div>
             <div class="errorMessages">{{ couponError }}</div>
           </div>
@@ -426,6 +431,16 @@ const getAddress = async () => {
 .container {
   display: flex;
   justify-content: center;
+}
+
+.coupon {
+  margin-top: 8px;
+}
+
+.display-change{
+  background-color: white;
+  border-radius: 2px;
+  padding:8px;
 }
 
 .order-confirm-btn {

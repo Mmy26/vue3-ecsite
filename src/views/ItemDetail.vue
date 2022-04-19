@@ -221,10 +221,21 @@ const addItem = () => {
       >
       <el-col :span="5"></el-col>
     </el-row>
+    <el-row :gutter="20">
+      <el-col :span="5"></el-col>
+      <el-col :span="14"
+        ><el-button
+          type="danger"
+          plain
+          @click="getCoupon"
+          v-bind:disabled="canClickCoupon"
+          >200OFFクーポンを取得する</el-button
+        ></el-col
+      >
+      <el-col :span="5"></el-col>
+    </el-row>
     <div>
-      <button type="button" @click="getCoupon" v-bind:disabled="canClickCoupon">
-        200OFFクーポンを取得する
-      </button>
+      <img src="../../public/img_noodle/coupon.png" />
     </div>
     <div>{{ couponMessage }}</div>
 
@@ -276,5 +287,9 @@ const addItem = () => {
 }
 .checkbox {
   margin-right: 10px;
+}
+
+img {
+  width: 200px;
 }
 </style>
