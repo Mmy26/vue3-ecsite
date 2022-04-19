@@ -23,7 +23,7 @@ watch(route, (currentPage) => {
 </script>
 
 <template>
-  <el-footer v-show="canShow">
+  <el-footer v-show="canShow" class="footer-area">
     <el-row class="row-bg">
       <el-col :span="24" class="img-area"
         ><img src="/img_noodle/header_logo.png"
