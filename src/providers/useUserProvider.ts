@@ -1,4 +1,4 @@
-import { User } from "@/types/User";
+import { User } from "../types/User";
 import { reactive, toRefs, type InjectionKey } from "vue";
 
 //userのstateの型
@@ -22,8 +22,7 @@ export const useUserProvider = () => {
    */
   const setCurrentUser = (user: User) => {
     userState.currentUser = user;
-  }
-
+  };
 
   return { ...toRefs(userState), setCurrentUser };
 };
