@@ -43,9 +43,9 @@ onMounted(() => {
   console.log(currentOrderList.value);
 });
 /**
- * 合計金額が8000円以下の場合は送料を表示する.
+ * 合計金額が3000円以下の場合は送料を表示する.
  */
-const num = ref(8000);
+const num = ref(3000);
 const message1 = ref("");
 const message2 = ref("");
 const message3 = ref("");
