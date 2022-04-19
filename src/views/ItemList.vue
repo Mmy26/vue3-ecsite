@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ElNotification } from "element-plus";
 import { itemListKey } from "@/providers/useItemListProvider";
 import type { Item } from "@/types/Item";
 import { inject, onMounted, ref } from "vue";
@@ -46,6 +47,12 @@ onMounted(() => {
     currentItemList.value = store.itemList.value;
     searchItemList.value = store.itemList.value;
   }
+  ElNotification({
+    title: "人気No.1メニュー !",
+    dangerouslyUseHTMLString: true,
+    message:
+      '<img src="/img_noodle/17.jpg" style="width: 200px; text-align:center;" /><br /><h3 style="text-align:center;">台湾まぜそば</h3>',
+  });
 });
 const searchItems = (searchItemName: string) => {
   currentItemList.value = store.searchItemList(searchItemName);
