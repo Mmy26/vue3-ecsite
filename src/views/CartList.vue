@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h1>ショッピングカート</h1>
+    <h1>
+      ショッピングカート <img class="cart" src="/img_noodle/shoppingCart.png" />
+    </h1>
+
     <OrderItemFormList></OrderItemFormList>
     <div class="btn">
       <el-button
@@ -51,6 +54,7 @@ const orderConfirm = (): void => {
  */
 const backToItemList = (): void => {
   router.push("/itemList");
+  console.log("");
 };
 </script>
 
@@ -60,5 +64,11 @@ h1 {
 }
 .btn {
   text-align: center;
+}
+.cart {
+  height: 100px;
+  width: 100px;
+  margin-bottom: -35px;
+  margin-left: -20px;
 }
 </style>
