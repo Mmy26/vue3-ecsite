@@ -4,7 +4,8 @@ import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
-import { Delete } from "@element-plus/icons-vue";
+import { Delete, Edit } from "@element-plus/icons-vue";
+import router from "@/router";
 const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
 
@@ -79,6 +80,14 @@ const calculation = () => {
     return currentOrder.value.calcTotalPrice;
   }
 };
+/**
+ * 商品の内容を編集する.
+ * @param 添字
+ */
+const changeItem = (index: number) => {
+  router.push(`/itemDetail2/${currentOrderList.value[index].itemId}`);
+  orderStore.deleteItem(index);
+};
 
 const pass = ref(location.pathname);
 </script>
@@ -134,6 +143,13 @@ const pass = ref(location.pathname);
             </div>
           </td>
           <td>
+            <el-button
+              type="success"
+              plain
+              :icon="Edit"
+              @click="changeItem(index)"
+              >編集</el-button
+            >
             <el-button
               type="primary"
               plain

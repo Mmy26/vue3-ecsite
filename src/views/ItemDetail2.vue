@@ -107,17 +107,17 @@ const calcSubTotal = computed(() => {
   }
 });
 
-// 注文メソッド
-const addItem = () => {
-  console.log("トッピングが入っているかどうか",selectToppingList)
-  //payload
+/**
+ * 商品の内容を編集する.
+ */
+const changeItem = () => {
   store.addOrderItem({
     selectItemSize: selectItemSize.value,
     selectOrderToppingList: selectToppingList.value,
     selectQuantity: selectItemQuantity.value,
     selectItem: selectedItem.value as Item,
   });
-  router.push("/cartlist");
+  router.push(`/cartlist`);
 };
 </script>
 
@@ -200,8 +200,8 @@ const addItem = () => {
     <el-row :gutter="20">
       <el-col :span="5"></el-col>
       <el-col :span="14"
-        ><el-button type="primary" plain @click="addItem"
-          >カートに追加</el-button
+        ><el-button type="success" plain @click="changeItem"
+          >内容を変更する</el-button
         ></el-col
       >
       <el-col :span="5"></el-col>
