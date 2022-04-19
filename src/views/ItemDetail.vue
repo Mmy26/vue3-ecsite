@@ -217,27 +217,28 @@ const addItem = () => {
       <el-col :span="14"
         ><el-button type="primary" plain @click="addItem"
           >カートに追加</el-button
-        ></el-col
-      >
+        >
+        <el-popover
+          placement="top-start"
+          title="200円OFFクーポン"
+          :width="200"
+          trigger="hover"
+          content="ボタンを押すとクーポンを取得できます"
+        >
+          <template #reference>
+            <el-button
+              type="danger"
+              plain
+              @click="getCoupon"
+              v-bind:disabled="canClickCoupon"
+              >クーポンGet!</el-button
+            >
+          </template>
+        </el-popover>
+        <span class="coupon-msg">{{ couponMessage }}</span>
+      </el-col>
       <el-col :span="5"></el-col>
     </el-row>
-    <el-row :gutter="20">
-      <el-col :span="5"></el-col>
-      <el-col :span="14"
-        ><el-button
-          type="danger"
-          plain
-          @click="getCoupon"
-          v-bind:disabled="canClickCoupon"
-          >200OFFクーポンを取得する</el-button
-        ></el-col
-      >
-      <el-col :span="5"></el-col>
-    </el-row>
-    <div>
-      <img src="../../public/img_noodle/coupon.png" />
-    </div>
-    <div>{{ couponMessage }}</div>
 
     <!-- おすすめトッピングの部分 -->
     <ToppingImg />
@@ -289,7 +290,9 @@ const addItem = () => {
   margin-right: 10px;
 }
 
-img {
-  width: 200px;
+.coupon-msg{
+  font-size: 13px;
+  margin-left: 5px;
+  color: rgb(139, 139, 139);
 }
 </style>

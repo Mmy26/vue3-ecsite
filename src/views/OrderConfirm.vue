@@ -73,9 +73,11 @@ const useCoupon = () => {
     // クーポン利用の表示切り替え
     showUseCoupon.value = false;
     couponMessage.value = "クーポンを利用しない";
+    orderStore.useCoupon.value = true;
   } else {
     showUseCoupon.value = true;
     couponMessage.value = "クーポンを利用する";
+    orderStore.useCoupon.value = false;
   }
   console.log("ok");
 };
@@ -437,10 +439,10 @@ const getAddress = async () => {
   margin-top: 8px;
 }
 
-.display-change{
+.display-change {
   background-color: white;
   border-radius: 2px;
-  padding:8px;
+  padding: 8px;
 }
 
 .order-confirm-btn {
