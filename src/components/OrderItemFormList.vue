@@ -5,6 +5,7 @@ import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
 import { inject, onMounted, ref } from "vue";
 import { Delete, Edit } from "@element-plus/icons-vue";
+import router from "@/router";
 const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
 
@@ -39,6 +40,7 @@ onMounted(() => {
   if (currentOrderList.value.length === 0) {
     showOrderItem.value = false;
   }
+  console.log(currentOrderList.value);
 });
 /**
  * 合計金額が8000円以下の場合は送料を表示する.
@@ -78,6 +80,10 @@ const calculation = () => {
   } else {
     return currentOrder.value.calcTotalPrice;
   }
+};
+const changeItem = (index: number) => {
+  router.push(`/itemDetail2/${currentOrderList.value[index].itemId}`);
+  orderStore.deleteItem(index);
 };
 
 const pass = ref(location.pathname);
@@ -134,7 +140,13 @@ const pass = ref(location.pathname);
             </div>
           </td>
           <td>
-            <el-button type="success" plain :icon="Edit">編集</el-button>
+            <el-button
+              type="success"
+              plain
+              :icon="Edit"
+              @click="changeItem(index)"
+              >編集</el-button
+            >
             <el-button
               type="primary"
               plain
