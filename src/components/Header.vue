@@ -26,6 +26,7 @@ if(!userStore){
 
 // watch((変更を検知したい変数) , ( 検知した変数が引数として入れられる ) => { 処理 } )
 watch(route, (currentPage) => {
+  canShow.value = true;
   if (
     currentPage.path === "/login" ||
     currentPage.path === "/registerUser" ||
@@ -50,7 +51,7 @@ const backToTop = () => {
 </script>
 
 <template>
-  <el-header class="headerArea">
+  <el-header class="headerArea" v-show="canShow">
     <el-row class="row-bg">
       <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
         ><div class="logo">
