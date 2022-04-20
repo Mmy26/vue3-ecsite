@@ -168,6 +168,7 @@ const test = () => {
   address.value = "東京都";
   telephone.value = "00011112222";
 };
+
 </script>
 
 <template>
