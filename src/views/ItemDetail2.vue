@@ -81,9 +81,8 @@ const getToppingData = async (): Promise<void> => {
   const response = await axios.get(
     `http://153.127.48.168:8080/ecsite-api/item/${itemId}`
   );
-  console.dir(JSON.stringify(response.data));
+  
   selectedItem.value = response.data.item;
-  console.dir(JSON.stringify(selectedItem.value));
 };
 
 // 非同期で上記のメソッドを実行

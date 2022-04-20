@@ -1,4 +1,6 @@
 export {};
+<<<<<<< HEAD
+=======
 import { User } from "../../types/User";
 import {
   useUserProvider,
@@ -25,3 +27,4 @@ describe("providers/useUserProvider.ts", () => {
     });
   });
 });
+>>>>>>> develop

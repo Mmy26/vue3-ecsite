@@ -217,7 +217,6 @@ const orderConfirm = async () => {
     }
   );
 
-  console.log(JSON.stringify(response));
 
   let {
     distinationName,
@@ -241,7 +240,6 @@ const orderConfirm = async () => {
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
-  console.log("注文されました");
 };
 
 /**

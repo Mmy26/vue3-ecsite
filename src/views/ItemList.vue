@@ -268,6 +268,23 @@ const getItemlistSortByCategory = (category: string): void => {
       </el-space>
     </el-col>
   </el-row>
+  <el-backtop :bottom="100">
+    <div
+      style="
+        height: 100%;
+        width: 100%;
+        background-color: var(--el-bg-color-overlay);
+        box-shadow: var(--el-box-shadow-lighter);
+        text-align: center;
+        line-height: 45px;
+        color: lightcoral;
+        font-weight: bold;
+        border-radius: 1000px;
+      "
+    >
+      ^
+    </div>
+  </el-backtop>
 </template>
 
 <style scoped>
