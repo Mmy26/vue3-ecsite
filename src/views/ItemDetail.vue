@@ -95,6 +95,15 @@ const getToppingData = async (): Promise<void> => {
 // 非同期で上記のメソッドを実行
 onMounted(getToppingData);
 
+onMounted(() => {
+  if (store.coupon.value.id === 0) {
+    canClickCoupon.value = false;
+  } else {
+    canClickCoupon.value = true;
+    couponMessage.value = "クーポンは取得済です";
+  }
+});
+
 /**
  * クーポンを取得する.
  */
@@ -124,7 +133,7 @@ const calcSubTotal = computed(() => {
 
 // 注文メソッド
 const addItem = () => {
-  console.log("トッピングが入っているかどうか",selectToppingList)
+  console.log("トッピングが入っているかどうか", selectToppingList);
   //payload
   store.addOrderItem({
     selectItemSize: selectItemSize.value,
@@ -291,7 +300,7 @@ const addItem = () => {
   margin-right: 10px;
 }
 
-.coupon-msg{
+.coupon-msg {
   font-size: 13px;
   margin-left: 5px;
   color: rgb(139, 139, 139);
