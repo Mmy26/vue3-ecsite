@@ -16,7 +16,6 @@ const userStore = inject(useUserProviderKey);
 if (!userStore) {
   throw new Error("Error");
 }
-console.log(userStore.currentUser.value.email);
 
 // ログインしていなければ、ログイン画面に遷移
 if (userStore.currentUser.value.email === "") {
@@ -27,14 +26,12 @@ if (userStore.currentUser.value.email === "") {
   });
   router.push("/login");
 }
-console.log(userStore.currentUser.value.id);
 
 // APIから情報取得
 const getOrderData = async (): Promise<void> => {
   const response = await axios.get(
     `http://153.127.48.168:8080/ecsite-api/order/orders/noodle/${userStore.currentUser.value.id}`
   );
-  console.dir(JSON.stringify(response.data));
 
   const orders = response.data.orders;
 

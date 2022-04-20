@@ -77,7 +77,6 @@ export const useOrderProvider = () => {
         )
       )
     );
-    console.log("addItem", payloadItem.value);
 
     orderState.userOrderInfo.orderItemList.push(payloadItem.value);
   };
@@ -103,7 +102,6 @@ export const useOrderProvider = () => {
       if (!topping) {
         const orderedTopping = new OrderTopping(++i, toppingId, 0, topping);
         selectOrderToppingList.push(orderedTopping);
-        console.log("for文の中", orderedTopping);
         //トッピングを選択した場合
       } else {
         const orderedTopping = new OrderTopping(
@@ -115,7 +113,6 @@ export const useOrderProvider = () => {
         selectOrderToppingList.push(orderedTopping);
       }
     }
-    console.log("checkedToppingList", selectOrderToppingList);
 
     return selectOrderToppingList;
   };
@@ -134,5 +131,3 @@ export const useOrderProvider = () => {
 };
 type UserOrderProviderType = ReturnType<typeof useOrderProvider>;
 export const CartListKey: InjectionKey<UserOrderProviderType> = Symbol("order");
-
-console.log("");

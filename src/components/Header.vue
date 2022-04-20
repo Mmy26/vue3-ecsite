@@ -25,16 +25,8 @@ if(!userStore){
 }
 
 // watch((変更を検知したい変数) , ( 検知した変数が引数として入れられる ) => { 処理 } )
-watch(route, (currentPage) => {
-  canShow.value = true;
-  if (
-    currentPage.path === "/login" ||
-    currentPage.path === "/registerUser" ||
-    currentPage.path === "/"
-  ) {
-    canShow.value = false;
-  }
-
+watch(route, () => {
+  isLogin.value = false;
   if( userStore.currentUser.value.id !== 0){
     isLogin.value = true;
   };
@@ -65,12 +57,12 @@ const backToTop = () => {
 
       <el-col :xs="20" :sm="18" :md="14" :lg="13" :xl="13" class="listArea"
         ><div class="grid-content bg-purple">
-          <el-space :size="20">
+          
             <RouterLink to="/itemList" class="link"
-              ><el-link type="danger">商品一覧</el-link></RouterLink
+              ><el-link type="danger">&nbsp;&nbsp;商品一覧&nbsp;&nbsp;</el-link></RouterLink
             >
-            <RouterLink to="/cartList" class="link"
-              ><el-link type="danger"> カート </el-link>
+            <RouterLink to="/cartList" class="link" v-show="isLogin"
+              ><el-link type="danger">&nbsp;&nbsp;カート&nbsp;&nbsp;</el-link>
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                   <el-icon class="el-icon--right"><caret-bottom /></el-icon>
@@ -92,18 +84,18 @@ const backToTop = () => {
             </RouterLink>
 
             <RouterLink to="/registerUser" class="link"
-              ><el-link type="danger">ユーザー登録</el-link></RouterLink
+              ><el-link type="danger">&nbsp;&nbsp;ユーザー登録&nbsp;&nbsp;</el-link></RouterLink
             >
             <RouterLink to="/login" class="link" v-show="!isLogin"
-              ><el-link type="danger">ログイン</el-link></RouterLink
+              ><el-link type="danger">&nbsp;&nbsp;ログイン&nbsp;&nbsp;</el-link></RouterLink
             >
             <RouterLink to="/logout" class="link" v-show="isLogin"
-              ><el-link type="danger">ログアウト</el-link></RouterLink
+              ><el-link type="danger">&nbsp;&nbsp;ログアウト&nbsp;&nbsp;</el-link></RouterLink
             >
-            <RouterLink to="/orderHistory" class="link"
-              ><el-link type="danger">注文履歴</el-link></RouterLink
+            <RouterLink to="/orderHistory" class="link" v-show="isLogin"
+              ><el-link type="danger">&nbsp;&nbsp;注文履歴&nbsp;&nbsp;</el-link></RouterLink
             >
-          </el-space>
+          
         </div></el-col
       >
     </el-row>
@@ -121,6 +113,7 @@ const backToTop = () => {
 }
 .listArea {
   text-align: right;
+  margin-top: 10px;
 }
 
 .el-dropdown {

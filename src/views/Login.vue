@@ -105,7 +105,7 @@ const loginUser = async (): Promise<void> => {
 </script>
 
 <template>
-  <h1 class="title" id="title">ログイン</h1>
+  <h1 class="title">ログイン</h1>
   <el-row :gutter="20">
     <el-col :span="24" class="center">
       <el-form label-width="120px" class="loginUser-area">

@@ -43,7 +43,6 @@ if (!orderStore) {
  * ログイン中のユーザー情報を取得する.
  */
 const getUserInfo = () => {
-  console.log("ok");
 
   const userInfo = userStore.currentUser.value;
   userName.value = userInfo.name;
@@ -189,7 +188,6 @@ const orderConfirm = async () => {
     }
   );
 
-  console.log(JSON.stringify(response));
 
   let {
     distinationName,
@@ -213,7 +211,6 @@ const orderConfirm = async () => {
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
-  console.log("注文されました");
 };
 
 /**
