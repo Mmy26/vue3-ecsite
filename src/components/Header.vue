@@ -25,8 +25,10 @@ if (!userStore) {
 }
 
 // watch((変更を検知したい変数) , ( 検知した変数が引数として入れられる ) => { 処理 } )
+
 watch(route, () => {
   isLogin.value = false;
+
   if (userStore.currentUser.value.id !== 0) {
     isLogin.value = true;
   }

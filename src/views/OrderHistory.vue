@@ -74,17 +74,19 @@ onMounted(getOrderData);
         ><div class="grid-content bg-purple">商品画像</div></el-col
       >
       <el-col :span="3"
-        ><div class="grid-content bg-purple">商品名</div></el-col
+        ><div class="grid-content bg-purple">商品情報</div></el-col
       >
       <el-col :span="3"
-        ><div class="grid-content bg-purple">サイズ</div></el-col
+        ><div class="grid-content bg-purple">トッピング</div></el-col
       >
-      <el-col :span="3"><div class="grid-content bg-purple">数量</div></el-col>
+      <el-col :span="3"
+        ><div class="grid-content bg-purple">配達住所</div></el-col
+      >
       <el-col :span="3"
         ><div class="grid-content bg-purple">注文日時</div></el-col
       >
       <el-col :span="3"
-        ><div class="grid-content bg-purple">配達日時</div></el-col
+        ><div class="grid-content bg-purple">配達予定日時</div></el-col
       >
       <el-col :span="2"
         ><div class="grid-content bg-purple">支払方法</div></el-col
@@ -101,19 +103,30 @@ onMounted(getOrderData);
             ><RouterLink :to="'/itemDetail/' + orderItem.itemId">
               <img class="food" :src="orderItem.item.imagePath" /> </RouterLink
           ></el-col>
-          <el-col :span="3">{{ orderItem.item.name }}</el-col>
-          <el-col :span="3">{{ orderItem.size + "サイズ" }}</el-col>
-          <el-col :span="3">{{ orderItem.quantity + "個" }}</el-col>
+          <el-col :span="3"
+            >{{ orderItem.item.name }}<br />{{ orderItem.size + "サイズ "
+            }}{{ orderItem.quantity + "点" }}</el-col
+          >
+          <el-col :span="3">
+            <div v-for="orderTopping of orderItem.orderToppingList">
+              {{ orderTopping.topping.name }}
+            </div>
+          </el-col>
+          <el-col :span="3">{{
+            currentUserData.distinationAddress.length > 7
+              ? currentUserData.distinationAddress.slice(0, 7) + "…"
+              : currentUserData.distinationAddress
+          }}</el-col>
           <el-col :span="3">{{
             new Date(currentUserData.orderDate).toLocaleDateString()
           }}</el-col>
           <el-col :span="3">{{
-            new Date(currentUserData.deliveryTime).toLocaleString()
+            new Date(currentUserData.deliveryTime).toLocaleDateString()
           }}</el-col>
           <el-col :span="2" v-if="currentUserData.paymentMethod === 1">{{
             "現金支払"
           }}</el-col>
-          <el-col :span="2" v-else>{{ "クレジット支払" }}</el-col>
+          <el-col :span="2" v-else>{{ "クレジットカード支払" }}</el-col>
           <el-col :span="1"><!-- ここは余白--></el-col>
         </el-row>
         <hr class="listBorder" />
