@@ -422,7 +422,7 @@ const getAddress = async () => {
           >この内容で注文する</el-button
         >
       </div>
-      <div class="errorMessages">{{ errorMessage }}</div>
+      <div class="error-msg errorMessages">{{ errorMessage }}</div>
     </div>
   </div>
   <!-- end container -->
@@ -452,7 +452,7 @@ const getAddress = async () => {
 .order-confirm-btn {
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 .order-confirm-delivery-info {
   padding: 40px;
@@ -471,5 +471,10 @@ const getAddress = async () => {
 
 .use-msg {
   font-size: 13px;
+}
+
+.error-msg{
+  text-align: center;
+  margin-bottom: 40px;
 }
 </style>
