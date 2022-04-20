@@ -3,11 +3,12 @@ import { CartListKey } from "@/providers/useCartProvider";
 import { Order } from "@/types/Order";
 import type { OrderItem } from "@/types/OrderItem";
 import { User } from "@/types/User";
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import router from "@/router";
 const fits = ["fill", "contain", "cover", "none", "scale-down"];
 const orderStore = inject(CartListKey);
+const showCoupon = ref(false);
 
 if (!orderStore) {
   throw new Error("");
@@ -35,11 +36,31 @@ let currentOrder = ref<Order>(
 const showOrderItem = ref(true);
 
 onMounted(() => {
+  // スクロールトップボタン
+  scrollTop(1); // 遅すぎるとガクガクになるので注意
+  function scrollTop(duration: number) {
+    let currentY = window.pageYOffset; // 現在のスクロール位置を取得
+    let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
+    let timeStep = (duration / currentY) * step; // スクロール時間
+    let intervalId = setInterval(scrollUp, timeStep);
+    // timeStepの間隔でscrollUpを繰り返す。
+    // clearItervalのために返り値intervalIdを定義する。
+    function scrollUp() {
+      currentY = window.pageYOffset;
+      if (currentY === 0) {
+        clearInterval(intervalId); // ページ最上部に来たら終了
+      } else {
+        scrollBy(0, -step); // step分上へスクロール
+      }
+    }
+  }
+
   currentOrderList.value = orderStore.userOrderInfo.value.orderItemList;
   currentOrder.value = orderStore.userOrderInfo.value;
   if (currentOrderList.value.length === 0) {
     showOrderItem.value = false;
   }
+  const currentCoupon = orderStore.coupon.value;
 });
 /**
  * 合計金額が3000円以下の場合は送料を表示する.
@@ -90,6 +111,11 @@ const changeItem = (index: number) => {
 };
 
 const pass = ref(location.pathname);
+
+// クーポン利用のボタンが押下される度発火
+watch(orderStore.useCoupon, () => {
+  orderStore.useCoupon.value;
+});
 </script>
 
 <template>
@@ -185,11 +211,26 @@ const pass = ref(location.pathname);
           <el-col :span="6"></el-col>
         </el-row>
 
+        <el-row :gutter="0">
+          <el-col :span="6"></el-col>
+          <el-col :span="6" class="left coupon"> クーポン使用：</el-col>
+          <el-col :span="6" class="right coupon">
+            <div v-if="orderStore.useCoupon.value === true">
+              -{{ orderStore.coupon.value.price }}円
+            </div>
+            <div v-else>-0円</div>
+          </el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+
         <el-row :gutter="0" class="total-price">
           <el-col :span="6"></el-col>
           <el-col :span="6" class="left"> ご注文金額合計：</el-col>
           <el-col :span="6" class="right">
-            <div>{{ calculation() }}円 (税込)</div>
+            <div v-if="orderStore.useCoupon.value === true">
+              {{ calculation() - orderStore.coupon.value.price }}円 (税込)
+            </div>
+            <div v-else>{{ calculation() }}円 (税込)</div>
           </el-col>
           <el-col :span="6"></el-col>
         </el-row>
@@ -243,5 +284,10 @@ table td {
 }
 .tax {
   margin-top: 20px;
+}
+
+.coupon {
+  color: rgb(145, 145, 145);
+  font-size: 15px;
 }
 </style>
