@@ -20,8 +20,8 @@ const isLogin = ref(false);
 const route = useRoute();
 
 const userStore = inject(useUserProviderKey);
-if(!userStore){
-  throw new Error("")
+if (!userStore) {
+  throw new Error("");
 }
 
 // watch((変更を検知したい変数) , ( 検知した変数が引数として入れられる ) => { 処理 } )
@@ -35,9 +35,9 @@ watch(route, (currentPage) => {
     canShow.value = false;
   }
 
-  if( userStore.currentUser.value.id !== 0){
+  if (userStore.currentUser.value.id !== 0) {
     isLogin.value = true;
-  };
+  }
 });
 
 const router = useRouter();
