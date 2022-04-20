@@ -79,7 +79,9 @@ onMounted(getOrderData);
       <el-col :span="3"
         ><div class="grid-content bg-purple">商品情報</div></el-col
       >
-      <el-col :span="3"><div class="grid-content bg-purple">金額</div></el-col>
+      <el-col :span="3"
+        ><div class="grid-content bg-purple">トッピング</div></el-col
+      >
       <el-col :span="3"
         ><div class="grid-content bg-purple">配達住所</div></el-col
       >
@@ -108,9 +110,11 @@ onMounted(getOrderData);
             >{{ orderItem.item.name }}<br />{{ orderItem.size + "サイズ "
             }}{{ orderItem.quantity + "点" }}</el-col
           >
-          <el-col :span="3">{{
-            currentUserData.totalPrice + "円(税込)"
-          }}</el-col>
+          <el-col :span="3">
+            <div v-for="orderTopping of orderItem.orderToppingList">
+              {{ orderTopping.topping.name }}
+            </div>
+          </el-col>
           <el-col :span="3">{{
             currentUserData.distinationAddress.length > 7
               ? currentUserData.distinationAddress.slice(0, 7) + "…"

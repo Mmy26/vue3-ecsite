@@ -53,11 +53,20 @@ export class Order {
    */
   public get makeOrderFormList(): any {
     const newArray = [];
+    const toppingIdList = [];
+    // トッピングID情報の追加
+    for (let orderItem of this.orderItemList) {
+      for (const orderTopping of orderItem.orderToppingList) {
+        toppingIdList.push({ toppingId: orderTopping.toppingId });
+      }
+    }
+
     for (const orderItem of this.orderItemList) {
       newArray.push({
         itemId: orderItem.itemId,
         quantity: orderItem.quantity,
         size: orderItem.size,
+        orderToppingFormList: toppingIdList,
       });
     }
     return newArray;

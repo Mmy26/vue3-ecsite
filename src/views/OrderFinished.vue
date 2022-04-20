@@ -52,7 +52,7 @@ img {
   text-align: center;
 }
 
-.img-position{
+.img-position {
   text-align: center;
 }
 

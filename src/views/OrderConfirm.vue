@@ -216,6 +216,9 @@ const orderConfirm = async () => {
       orderItemFormList: currentOrder.makeOrderFormList,
     }
   );
+  console.log(
+    "makeOrderFormList" + JSON.stringify(currentOrder.makeOrderFormList)
+  );
 
   console.log(JSON.stringify(response));
 
