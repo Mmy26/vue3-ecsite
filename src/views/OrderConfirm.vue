@@ -85,6 +85,11 @@ const useCoupon = () => {
  * 注文する.
  */
 const orderConfirm = async () => {
+  if (orderStore.userOrderInfo.value.orderItemList.length === 0) {
+    errorMessage.value = "注文できませんでした";
+    return;
+  }
+
   // エラー処理
   if (userName.value === "") {
     nameError.value = "名前が入力されていません";
