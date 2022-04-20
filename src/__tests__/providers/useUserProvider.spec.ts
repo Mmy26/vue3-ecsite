@@ -1,16 +1,21 @@
 export {};
+<<<<<<< HEAD
+=======
 import { User } from "../../types/User";
-import { useUserProvider, useUserProviderKey } from "../../providers/useUserProvider";
+import {
+  useUserProvider,
+  useUserProviderKey,
+} from "../../providers/useUserProvider";
 import { inject, provide } from "vue";
 
 const MockedProvide = jest.fn(provide);
-const MockedInject = jest.fn(inject)
+const MockedInject = jest.fn(inject);
 
 describe("providers/useUserProvider.ts", () => {
   describe("setCurrentUserメソッドのテスト", () => {
     beforeEach(() => {
       MockedProvide(useUserProviderKey, useUserProvider());
-      MockedInject(useUserProviderKey, "",true);
+      MockedInject(useUserProviderKey, "", true);
     });
 
     test("引数のユーザーがstateのcurrentUserにセットされる", () => {
@@ -22,3 +27,4 @@ describe("providers/useUserProvider.ts", () => {
     });
   });
 });
+>>>>>>> develop

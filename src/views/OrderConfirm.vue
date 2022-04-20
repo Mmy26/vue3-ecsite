@@ -222,7 +222,6 @@ const orderConfirm = async () => {
     }
   );
 
-  console.log(JSON.stringify(response));
 
   let {
     distinationName,
@@ -246,7 +245,6 @@ const orderConfirm = async () => {
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
-  console.log("注文されました");
 
   // ショッピングカートを空にする
   orderStore.userOrderInfo.value.orderItemList.splice(
@@ -254,6 +252,7 @@ const orderConfirm = async () => {
     orderStore.userOrderInfo.value.orderItemList.length
   );
   console.log(orderStore.userOrderInfo.value.orderItemList);
+
 };
 
 /**

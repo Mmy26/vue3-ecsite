@@ -1,23 +1,45 @@
 <script setup lang="ts">
 import "element-plus/theme-chalk/display.css";
 import { getYear } from "date-fns";
-import { ref, watch } from "vue";
+import { inject, ref, watch } from "vue";
 import { RouterLink, useRoute } from "vue-router";
+import { useUserProviderKey } from "@/providers/useUserProvider";
 
 const displayYear = ref(getYear(new Date()));
 //フッターページを表示するかどうかを表すフラグ
 const canShow = ref(true);
 //routeに関するオブジェクト
 const route = useRoute();
+//ログインしているかどうかを表すフラグ
+const isLogin = ref(false);
+
+const isLoginPage = ref(false);
+
+const userStore = inject(useUserProviderKey);
+if (!userStore) {
+  throw new Error("");
+}
 
 watch(route, (currentPage) => {
   canShow.value = true;
+  isLogin.value = false;
+  isLoginPage.value = false;
+
   if (
-    currentPage.path === "/login" ||
     currentPage.path === "/registerUser" ||
-    currentPage.path === "/"
+    currentPage.path === "/login" ||
+    currentPage.path === "/cartList" ||
+    currentPage.path === "/orderHistory" || 
+    currentPage.path === "/inquiryForm" 
   ) {
     canShow.value = false;
+  }
+
+  if (currentPage.path === "/login") {
+    isLoginPage.value = true;
+  }
+  if (userStore.currentUser.value.id !== 0) {
+    isLogin.value = true;
   }
 });
 </script>
@@ -35,12 +57,12 @@ watch(route, (currentPage) => {
               ><el-link type="danger">商品一覧</el-link></RouterLink
             >
           </li>
-          <li>
+          <li v-show="isLogin">
             <RouterLink to="/cartList" class="link"
               ><el-link type="danger">カート</el-link></RouterLink
             >
           </li>
-          <li>
+          <li v-show="isLogin">
             <RouterLink to="/orderHistory" class="link"
               ><el-link type="danger">注文履歴</el-link></RouterLink
             >
@@ -90,5 +112,8 @@ watch(route, (currentPage) => {
 }
 .link {
   text-decoration: none;
+}
+.footer-area {
+  margin-top: 40px;
 }
 </style>

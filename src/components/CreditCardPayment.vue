@@ -70,7 +70,6 @@ const checkCredit = async () => {
     let str = String(num);
     orderNum += str;
   }
-  console.log(orderNum);
 
   const response2 = await axios.post(
     "http://153.127.48.168:8080/sample-credit-card-web-api/credit-card/payment",
@@ -85,7 +84,6 @@ const checkCredit = async () => {
       card_cvv: card_cvv.value,
     }
   );
-  console.log(JSON.stringify(response2));
 
   if (typeof card_num.value !== "number") {
     errorMessageOfCreditCardNumber2.value =

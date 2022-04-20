@@ -168,11 +168,12 @@ const test = () => {
   address.value = "東京都";
   telephone.value = "00011112222";
 };
+
 </script>
 
 <template>
   <h1 class="title">ユーザー登録</h1>
-  <el-row :gutter="20">
+  <el-row :gutter="20" class="register-area">
     <el-col :span="4"></el-col>
     <el-col :span="20" class="center">
       <el-form label-width="120px" class="registerUser-area">
@@ -255,4 +256,5 @@ const test = () => {
   text-align: center;
   margin-top: 10vh;
 }
+
 </style>
