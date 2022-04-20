@@ -7,7 +7,6 @@ import { computed } from "@vue/reactivity";
 import { useRoute, useRouter } from "vue-router";
 import { CartListKey } from "@/providers/useCartProvider";
 import ToppingImg from "../components/ToppingImg.vue";
-import { Coupon } from "@/types/Coupon";
 
 const store = inject(CartListKey);
 if (!store) {
@@ -28,11 +27,6 @@ const selectItemQuantity = ref<number>(1);
 const selectedItem = ref(
   new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
 );
-// クーポン取得メッセージ
-const couponMessage = ref("");
-//
-const canClickCoupon = ref(false);
-
 const options = [
   {
     value: "1",
@@ -96,15 +90,6 @@ const getToppingData = async (): Promise<void> => {
 onMounted(getToppingData);
 
 /**
- * クーポンを取得する.
- */
-const getCoupon = () => {
-  canClickCoupon.value = true;
-  couponMessage.value = "クーポンを取得しました";
-  store.coupon.value = new Coupon(1, "200円OFF", 200);
-};
-
-/**
  小計金額の計算（変更され都度反映される）.
  * @returns - 小計金額
  */
@@ -122,22 +107,21 @@ const calcSubTotal = computed(() => {
   }
 });
 
-// 注文メソッド
-const addItem = () => {
-  console.log("トッピングが入っているかどうか",selectToppingList)
-  //payload
+/**
+ * 商品の内容を編集する.
+ */
+const changeItem = () => {
   store.addOrderItem({
     selectItemSize: selectItemSize.value,
     selectOrderToppingList: selectToppingList.value,
     selectQuantity: selectItemQuantity.value,
     selectItem: selectedItem.value as Item,
   });
-  router.push("/cartlist");
+  router.push(`/cartlist`);
 };
 </script>
 
 <template>
-  <!-- 今だけ境界線がわかるようにborderをつけました。 -->
   <div class="wrapper">
     <el-row :gutter="20">
       <el-col :span="5"></el-col>
@@ -216,28 +200,10 @@ const addItem = () => {
     <el-row :gutter="20">
       <el-col :span="5"></el-col>
       <el-col :span="14"
-        ><el-button type="primary" plain @click="addItem"
-          >カートに追加</el-button
-        >
-        <el-popover
-          placement="top-start"
-          title="200円OFFクーポン"
-          :width="200"
-          trigger="hover"
-          content="ボタンを押すとクーポンを取得できます"
-        >
-          <template #reference>
-            <el-button
-              type="danger"
-              plain
-              @click="getCoupon"
-              v-bind:disabled="canClickCoupon"
-              >クーポンGet!</el-button
-            >
-          </template>
-        </el-popover>
-        <span class="coupon-msg">{{ couponMessage }}</span>
-      </el-col>
+        ><el-button type="success" plain @click="changeItem"
+          >内容を変更する</el-button
+        ></el-col
+      >
       <el-col :span="5"></el-col>
     </el-row>
 
@@ -289,11 +255,5 @@ const addItem = () => {
 }
 .checkbox {
   margin-right: 10px;
-}
-
-.coupon-msg{
-  font-size: 13px;
-  margin-left: 5px;
-  color: rgb(139, 139, 139);
 }
 </style>

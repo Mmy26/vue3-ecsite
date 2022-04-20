@@ -1,4 +1,4 @@
-import { User } from "@/types/User";
+import { User } from "../types/User";
 import { reactive, toRefs, type InjectionKey } from "vue";
 
 //userのstateの型

@@ -228,10 +228,10 @@ const test = () => {
           </span>
         </el-form-item>
         <el-form-item>
-          <el-button plain type="danger" v-on:click="registerUser"
+          <el-button type="danger" v-on:click="registerUser"
             >Sign Up</el-button
           >
-          <el-button v-on:click="resetButton">Reset</el-button>
+          <el-button v-on:click="resetButton" plain type="danger">Reset</el-button>
           <el-button v-on:click="test"
             >テスト(メールアドレスは変更してください。)</el-button
           >
