@@ -247,6 +247,13 @@ const orderConfirm = async () => {
   // 注文完了ページに遷移
   router.push("/orderFinished");
   console.log("注文されました");
+
+  // ショッピングカートを空にする
+  orderStore.userOrderInfo.value.orderItemList.splice(
+    0,
+    orderStore.userOrderInfo.value.orderItemList.length
+  );
+  console.log(orderStore.userOrderInfo.value.orderItemList);
 };
 
 /**
@@ -473,7 +480,7 @@ const getAddress = async () => {
   font-size: 13px;
 }
 
-.error-msg{
+.error-msg {
   text-align: center;
   margin-bottom: 40px;
 }
