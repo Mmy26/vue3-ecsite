@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { itemListKey } from "../providers/useItemListProvider";
+import type { Item } from "../types/Item";
 import { ElNotification } from "element-plus";
-import { itemListKey } from "@/providers/useItemListProvider";
-import type { Item } from "@/types/Item";
 import { inject, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 import { Search } from "@element-plus/icons-vue";
@@ -250,7 +250,7 @@ const getItemlistSortByCategory = (category: string): void => {
             </div>
           </RouterLink>
           <div class="size-wrapper">
-            <div class="size">
+            <div class="size" id="size">
               <img class="size-icon" src="/img_noodle/M_icon.png" /><span>{{
                 item.formatPriceM
               }}</span
@@ -268,6 +268,23 @@ const getItemlistSortByCategory = (category: string): void => {
       </el-space>
     </el-col>
   </el-row>
+  <el-backtop :bottom="100">
+    <div
+      style="
+        height: 100%;
+        width: 100%;
+        background-color: var(--el-bg-color-overlay);
+        box-shadow: var(--el-box-shadow-lighter);
+        text-align: center;
+        line-height: 45px;
+        color: lightcoral;
+        font-weight: bold;
+        border-radius: 1000px;
+      "
+    >
+      ^
+    </div>
+  </el-backtop>
 </template>
 
 <style scoped>

@@ -36,6 +36,25 @@ let currentOrder = ref<Order>(
 const showOrderItem = ref(true);
 
 onMounted(() => {
+  // スクロールトップボタン
+  scrollTop(1); // 遅すぎるとガクガクになるので注意
+  function scrollTop(duration: number) {
+    let currentY = window.pageYOffset; // 現在のスクロール位置を取得
+    let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
+    let timeStep = (duration / currentY) * step; // スクロール時間
+    let intervalId = setInterval(scrollUp, timeStep);
+    // timeStepの間隔でscrollUpを繰り返す。
+    // clearItervalのために返り値intervalIdを定義する。
+    function scrollUp() {
+      currentY = window.pageYOffset;
+      if (currentY === 0) {
+        clearInterval(intervalId); // ページ最上部に来たら終了
+      } else {
+        scrollBy(0, -step); // step分上へスクロール
+      }
+    }
+  }
+
   currentOrderList.value = orderStore.userOrderInfo.value.orderItemList;
   currentOrder.value = orderStore.userOrderInfo.value;
   if (currentOrderList.value.length === 0) {
@@ -96,6 +115,14 @@ const pass = ref(location.pathname);
 // クーポン利用のボタンが押下される度発火
 watch(orderStore.useCoupon, () => {
   orderStore.useCoupon.value;
+});
+
+// 注文商品の内容が変わる度に発火
+watch(orderStore.userOrderInfo.value.orderItemList, () => {
+  orderStore.userOrderInfo.value.orderItemList;
+  if (orderStore.userOrderInfo.value.orderItemList.length === 0) {
+    showOrderItem.value = false;
+  }
 });
 </script>
 

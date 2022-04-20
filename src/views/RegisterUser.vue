@@ -156,23 +156,11 @@ const resetButton = () => {
   address.value = "";
   telephone.value = "";
 };
-/**
- * (後から消すメソッド.)
- */
-const test = () => {
-  lastName.value = "鈴木";
-  firstName.value = "太朗";
-  email.value = "ex111@example.com";
-  password.value = "password";
-  zipcode.value = "1112222";
-  address.value = "東京都";
-  telephone.value = "00011112222";
-};
 </script>
 
 <template>
   <h1 class="title">ユーザー登録</h1>
-  <el-row :gutter="20">
+  <el-row :gutter="20" class="register-area">
     <el-col :span="4"></el-col>
     <el-col :span="20" class="center">
       <el-form label-width="120px" class="registerUser-area">
@@ -201,7 +189,11 @@ const test = () => {
           </span>
         </el-form-item>
         <el-form-item label="パスワード">
-          <el-input type="password" v-model="password" />
+          <el-input
+            type="password"
+            v-model="password"
+            placeholder="パスワードは8文字以上16文字以内で設定してください"
+          />
           <span class="error">
             {{ passwordError }}
           </span>
@@ -210,7 +202,11 @@ const test = () => {
       <el-input />
     </el-form-item> -->
         <el-form-item label="郵便番号">
-          <el-input type="text" v-model.number="zipcode" />
+          <el-input
+            type="text"
+            v-model.number="zipcode"
+            placeholder="-(ハイフン)無しで入力してください"
+          />
           <span class="error">
             {{ zipcodeError }}
           </span>
@@ -222,18 +218,19 @@ const test = () => {
           </span>
         </el-form-item>
         <el-form-item label="電話番号">
-          <el-input type="text" v-model="telephone" />
+          <el-input
+            type="text"
+            v-model="telephone"
+            placeholder="-(ハイフン)無しで入力してください"
+          />
           <span class="error">
             {{ telephoneError }}
           </span>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" v-on:click="registerUser"
-            >Sign Up</el-button
-          >
-          <el-button v-on:click="resetButton" plain type="danger">Reset</el-button>
-          <el-button v-on:click="test"
-            >テスト(メールアドレスは変更してください。)</el-button
+          <el-button type="danger" v-on:click="registerUser">Sign Up</el-button>
+          <el-button v-on:click="resetButton" plain type="danger"
+            >Reset</el-button
           >
         </el-form-item>
       </el-form>

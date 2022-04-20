@@ -82,7 +82,7 @@ onMounted(() => {
       <div class="toppingArea">
         <h2 class="toppingTitle">{{ toppingData.name }}</h2>
         <el-image
-          style="width: 200px; height: 200px"
+          style="width: 50%; height: 50%"
           :src="toppingData.imgPath"
           fit="contain"
           class="center toppingImg"
