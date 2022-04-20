@@ -85,6 +85,11 @@ const useCoupon = () => {
  * 注文する.
  */
 const orderConfirm = async () => {
+  if (orderStore.userOrderInfo.value.orderItemList.length === 0) {
+    errorMessage.value = "注文できませんでした";
+    return;
+  }
+
   // エラー処理
   if (userName.value === "") {
     nameError.value = "名前が入力されていません";
@@ -240,6 +245,14 @@ const orderConfirm = async () => {
 
   // 注文完了ページに遷移
   router.push("/orderFinished");
+
+  // ショッピングカートを空にする
+  orderStore.userOrderInfo.value.orderItemList.splice(
+    0,
+    orderStore.userOrderInfo.value.orderItemList.length
+  );
+  console.log(orderStore.userOrderInfo.value.orderItemList);
+
 };
 
 /**
@@ -415,7 +428,7 @@ const getAddress = async () => {
           >この内容で注文する</el-button
         >
       </div>
-      <div class="errorMessages">{{ errorMessage }}</div>
+      <div class="error-msg errorMessages">{{ errorMessage }}</div>
     </div>
   </div>
   <!-- end container -->
@@ -445,7 +458,7 @@ const getAddress = async () => {
 .order-confirm-btn {
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 .order-confirm-delivery-info {
   padding: 40px;
@@ -464,5 +477,10 @@ const getAddress = async () => {
 
 .use-msg {
   font-size: 13px;
+}
+
+.error-msg {
+  text-align: center;
+  margin-bottom: 40px;
 }
 </style>
