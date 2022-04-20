@@ -4,11 +4,14 @@ import type { Topping } from "../types/Topping";
 import { OrderTopping } from "../types/OrderTopping";
 import { OrderItem } from "../types/OrderItem";
 import { reactive, ref, toRefs, type InjectionKey } from "vue";
-import { Order } from "../types/Order";
+import { Order } from "@/types/Order";
+import { Coupon } from "@/types/Coupon";
 
 //stateの型を定義
 type OrderStateType = {
   userOrderInfo: Order;
+  coupon: Coupon;
+  useCoupon: boolean;
 };
 //payloadの型を定義
 type AddCartPayloadType = {
@@ -37,6 +40,9 @@ export const useOrderProvider = () => {
       new User(0, "", "", "", "", "", ""),
       Array<OrderItem>()
     ),
+    coupon: new Coupon(0, "", 0),
+    // クーポンを使用するかのflag
+    useCoupon: false,
   });
   /**
    *カートに商品を追加する.

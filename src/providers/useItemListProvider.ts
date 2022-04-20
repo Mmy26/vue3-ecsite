@@ -1,4 +1,4 @@
-import { Item } from "@/types/Item";
+import { Item } from "../types/Item";
 import axios from "axios";
 import { reactive, toRefs, type InjectionKey } from "vue";
 

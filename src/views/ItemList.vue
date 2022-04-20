@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { itemListKey } from "@/providers/useItemListProvider";
-import type { Item } from "@/types/Item";
+import { itemListKey } from "../providers/useItemListProvider";
+import type { Item } from "../types/Item";
+import { ElNotification } from "element-plus";
 import { inject, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 import { Search } from "@element-plus/icons-vue";
@@ -46,6 +47,12 @@ onMounted(() => {
     currentItemList.value = store.itemList.value;
     searchItemList.value = store.itemList.value;
   }
+  ElNotification({
+    title: "人気No.1メニュー !",
+    dangerouslyUseHTMLString: true,
+    message:
+      '<img src="/img_noodle/17.jpg" style="width: 200px; text-align:center;" /><br /><h3 style="text-align:center;">台湾まぜそば</h3>',
+  });
 });
 const searchItems = (searchItemName: string) => {
   currentItemList.value = store.searchItemList(searchItemName);
@@ -243,7 +250,7 @@ const getItemlistSortByCategory = (category: string): void => {
             </div>
           </RouterLink>
           <div class="size-wrapper">
-            <div class="size">
+            <div class="size" id="size">
               <img class="size-icon" src="/img_noodle/M_icon.png" /><span>{{
                 item.formatPriceM
               }}</span

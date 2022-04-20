@@ -7,7 +7,6 @@ import axios from "axios";
 import { CartListKey } from "@/providers/useCartProvider";
 import OrderItemFormList from "@/components/OrderItemFormList.vue";
 import CreditCardPayment from "@/components/CreditCardPayment.vue";
-import type { constants } from "fs";
 
 const userName = ref("");
 const mailAddress = ref("");
@@ -26,6 +25,11 @@ const addressError = ref("");
 const telephoneError = ref("");
 const deliveryDateError = ref("");
 const checkError = ref(true);
+const showUseCoupon = ref(true);
+const couponMessage = ref("クーポンを使用する");
+const couponError = ref("");
+const canUseCoupon = ref(false);
+const isCoupon = ref(true);
 
 const router = useRouter();
 const orderStore = inject(CartListKey);
@@ -39,17 +43,42 @@ if (!orderStore) {
   throw new Error("");
 }
 
+onMounted(() => {
+  if (orderStore.coupon.value.id === 0) {
+    canUseCoupon.value = true;
+    isCoupon.value = false;
+    return;
+  }
+});
+
 /**
  * ログイン中のユーザー情報を取得する.
  */
 const getUserInfo = () => {
-
   const userInfo = userStore.currentUser.value;
   userName.value = userInfo.name;
   mailAddress.value = userInfo.email;
   zipCode.value = userInfo.zipcode;
   address.value = userInfo.address;
   telephone.value = userInfo.telephone;
+};
+
+/**
+ * クーポンを使う.
+ */
+const useCoupon = () => {
+  if (showUseCoupon.value === true) {
+    // クーポン利用の表示切り替え
+    showUseCoupon.value = false;
+    couponMessage.value = "クーポンを利用しない";
+    orderStore.useCoupon.value = true;
+    console.log(orderStore.useCoupon.value);
+  } else {
+    showUseCoupon.value = true;
+    couponMessage.value = "クーポンを利用する";
+    orderStore.useCoupon.value = false;
+    console.log(orderStore.useCoupon.value);
+  }
 };
 
 /**
@@ -333,6 +362,32 @@ const getAddress = async () => {
             <div class="ex">例：2022年/01月/01日 13時</div>
             <div class="errorMessages">{{ deliveryDateError }}</div>
           </div>
+          <div class="row">
+            <div class="input-field">
+              <div>クーポンの利用</div>
+              <div class="display-change">
+                <div v-if="showUseCoupon" class="use-msg">使わない</div>
+                <div v-else class="use-msg">
+                  使う：{{ orderStore.coupon.value.name }}クーポン
+                </div>
+                <div class="ex" v-if="isCoupon">
+                  ご利用可能：{{ orderStore.coupon.value.name }}クーポン
+                </div>
+                <div class="ex" v-else>ご利用可能：クーポンなし</div>
+              </div>
+              <el-button
+                class="btn coupon"
+                type="danger"
+                plain
+                size="small"
+                @click="useCoupon"
+                v-bind:disabled="canUseCoupon"
+              >
+                {{ couponMessage }}</el-button
+              >
+            </div>
+            <div class="errorMessages">{{ couponError }}</div>
+          </div>
         </div>
       </div>
 
@@ -347,7 +402,6 @@ const getAddress = async () => {
               >クレジットカード</el-radio
             >
           </div>
-
           <div>
             <div v-if="paymentMethod === '2'">
               <CreditCardPayment></CreditCardPayment>
@@ -378,6 +432,16 @@ const getAddress = async () => {
   justify-content: center;
 }
 
+.coupon {
+  margin-top: 8px;
+}
+
+.display-change {
+  background-color: white;
+  border-radius: 2px;
+  padding: 8px;
+}
+
 .order-confirm-btn {
   text-align: center;
   margin-top: 10px;
@@ -396,5 +460,9 @@ const getAddress = async () => {
 
 .radio {
   margin-bottom: 8px;
+}
+
+.use-msg {
+  font-size: 13px;
 }
 </style>

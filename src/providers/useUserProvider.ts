@@ -22,8 +22,7 @@ export const useUserProvider = () => {
    */
   const setCurrentUser = (user: User) => {
     userState.currentUser = user;
-  }
-
+  };
 
   return { ...toRefs(userState), setCurrentUser };
 };

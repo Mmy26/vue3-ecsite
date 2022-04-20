@@ -7,6 +7,7 @@ import { computed } from "@vue/reactivity";
 import { useRoute, useRouter } from "vue-router";
 import { CartListKey } from "@/providers/useCartProvider";
 import ToppingImg from "../components/ToppingImg.vue";
+import { Coupon } from "@/types/Coupon";
 
 const store = inject(CartListKey);
 if (!store) {
@@ -27,6 +28,11 @@ const selectItemQuantity = ref<number>(1);
 const selectedItem = ref(
   new Item(0, "", "", "", 0, 0, "", false, new Array<Topping>())
 );
+// クーポン取得メッセージ
+const couponMessage = ref("");
+//
+const canClickCoupon = ref(false);
+
 const options = [
   {
     value: "1",
@@ -85,7 +91,36 @@ const getToppingData = async (): Promise<void> => {
 };
 
 // 非同期で上記のメソッドを実行
-onMounted(getToppingData);
+onMounted(() => {
+  getToppingData();
+  // スクロールトップボタン
+  scrollTop(1); // 遅すぎるとガクガクになるので注意
+  function scrollTop(duration: number) {
+    let currentY = window.pageYOffset; // 現在のスクロール位置を取得
+    let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
+    let timeStep = (duration / currentY) * step; // スクロール時間
+    let intervalId = setInterval(scrollUp, timeStep);
+    // timeStepの間隔でscrollUpを繰り返す。
+    // clearItervalのために返り値intervalIdを定義する。
+    function scrollUp() {
+      currentY = window.pageYOffset;
+      if (currentY === 0) {
+        clearInterval(intervalId); // ページ最上部に来たら終了
+      } else {
+        scrollBy(0, -step); // step分上へスクロール
+      }
+    }
+  }
+});
+
+/**
+ * クーポンを取得する.
+ */
+const getCoupon = () => {
+  canClickCoupon.value = true;
+  couponMessage.value = "クーポンを取得しました";
+  store.coupon.value = new Coupon(1, "200円OFF", 200);
+};
 
 /**
  小計金額の計算（変更され都度反映される）.
@@ -119,6 +154,7 @@ const addItem = () => {
 </script>
 
 <template>
+  <!-- 今だけ境界線がわかるようにborderをつけました。 -->
   <div class="wrapper">
     <el-row :gutter="20">
       <el-col :span="5"></el-col>
@@ -199,8 +235,26 @@ const addItem = () => {
       <el-col :span="14"
         ><el-button type="primary" plain @click="addItem"
           >カートに追加</el-button
-        ></el-col
-      >
+        >
+        <el-popover
+          placement="top-start"
+          title="200円OFFクーポン"
+          :width="200"
+          trigger="hover"
+          content="ボタンを押すとクーポンを取得できます"
+        >
+          <template #reference>
+            <el-button
+              type="danger"
+              plain
+              @click="getCoupon"
+              v-bind:disabled="canClickCoupon"
+              >クーポンGet!</el-button
+            >
+          </template>
+        </el-popover>
+        <span class="coupon-msg">{{ couponMessage }}</span>
+      </el-col>
       <el-col :span="5"></el-col>
     </el-row>
 
@@ -252,5 +306,11 @@ const addItem = () => {
 }
 .checkbox {
   margin-right: 10px;
+}
+
+.coupon-msg {
+  font-size: 13px;
+  margin-left: 5px;
+  color: rgb(139, 139, 139);
 }
 </style>

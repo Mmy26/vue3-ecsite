@@ -29,7 +29,8 @@ watch(route, (currentPage) => {
     currentPage.path === "/registerUser" ||
     currentPage.path === "/login" ||
     currentPage.path === "/cartList" ||
-    currentPage.path === "/orderHistory"
+    currentPage.path === "/orderHistory" || 
+    currentPage.path === "/inquiryForm" 
   ) {
     canShow.value = false;
   }
@@ -44,11 +45,7 @@ watch(route, (currentPage) => {
 </script>
 
 <template>
-  <el-footer
-    v-show="canShow"
-    class="footer-area"
-    :class="{ loginPage: isLoginPage }"
-  >
+  <el-footer v-show="canShow" class="footer-area">
     <el-row class="row-bg">
       <el-col :span="24" class="img-area"
         ><img src="/img_noodle/header_logo.png"
@@ -118,9 +115,5 @@ watch(route, (currentPage) => {
 }
 .footer-area {
   margin-top: 40px;
-}
-.loginPage {
-  position: absolute;
-  bottom: 0;
 }
 </style>
