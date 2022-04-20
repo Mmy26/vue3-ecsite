@@ -4,9 +4,9 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import { RouterLink } from "vue-router";
-import { useUserProviderKey } from "@/providers/useUserProvider";
-import { User } from "@/types/User";
-import { CartListKey } from "@/providers/useCartProvider";
+import { useUserProviderKey } from "../providers/useUserProvider";
+import { User } from "../types/User";
+import { CartListKey } from "../providers/useCartProvider";
 
 //email
 const email = ref("");
@@ -23,13 +23,13 @@ const userStore = inject(useUserProviderKey);
 // userCartProviderに関するオブジェクト
 const cartStore = inject(CartListKey);
 
-if (!userStore) {
-  throw new Error("");
-}
+// if (!userStore) {
+//   throw new Error("");
+// }
 
-if (!cartStore) {
-  throw new Error("");
-}
+// if (!cartStore) {
+//   throw new Error("");
+// }
 
 /**
  * ログインをするメソッド.
@@ -75,7 +75,7 @@ const loginUser = async (): Promise<void> => {
         message: "ログイン成功！",
         type: "success",
       });
-      userStore.setCurrentUser(
+      userStore?.setCurrentUser(
         new User(
           response.data.responseMap.user.id,
           response.data.responseMap.user.name,
@@ -86,7 +86,7 @@ const loginUser = async (): Promise<void> => {
           response.data.responseMap.user.telephone
         )
       );
-      if (cartStore.userOrderInfo.value.orderItemList.length !== 0) {
+      if (cartStore?.userOrderInfo.value.orderItemList.length !== 0) {
         router.push("/orderConfirm");
         return;
       }
@@ -105,15 +105,12 @@ const loginUser = async (): Promise<void> => {
 </script>
 
 <template>
-  <h1 class="title">ログイン</h1>
+  <h1 class="title" id="title">ログイン</h1>
   <el-row :gutter="20">
     <el-col :span="24" class="center">
       <el-form label-width="120px" class="loginUser-area">
         <el-form-item label="E-mail">
-          <el-input
-            type="email"
-            v-model="email"
-          />
+          <el-input type="email" id="email" v-model="email" />
           <span class="error">
             {{ emailError }}
           </span>
@@ -125,8 +122,7 @@ const loginUser = async (): Promise<void> => {
           </span>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" v-on:click="loginUser"
-            >Sign In</el-button
+          <el-button type="danger" v-on:click="loginUser">Sign In</el-button
           >&nbsp;&nbsp;
           <RouterLink to="/registerUser" class="link"
             ><el-link type="danger">ユーザー登録に戻る</el-link></RouterLink

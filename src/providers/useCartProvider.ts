@@ -1,10 +1,10 @@
-import { User } from "@/types/User";
-import { Item } from "@/types/Item";
-import type { Topping } from "@/types/Topping";
-import { OrderTopping } from "@/types/OrderTopping";
-import { OrderItem } from "@/types/OrderItem";
+import { User } from "../types/User";
+import { Item } from "../types/Item";
+import type { Topping } from "../types/Topping";
+import { OrderTopping } from "../types/OrderTopping";
+import { OrderItem } from "../types/OrderItem";
 import { reactive, ref, toRefs, type InjectionKey } from "vue";
-import { Order } from "@/types/Order";
+import { Order } from "../types/Order";
 
 //stateの型を定義
 type OrderStateType = {
