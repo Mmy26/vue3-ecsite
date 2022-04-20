@@ -116,6 +116,14 @@ const pass = ref(location.pathname);
 watch(orderStore.useCoupon, () => {
   orderStore.useCoupon.value;
 });
+
+// 注文商品の内容が変わる度に発火
+watch(orderStore.userOrderInfo.value.orderItemList, () => {
+  orderStore.userOrderInfo.value.orderItemList;
+  if (orderStore.userOrderInfo.value.orderItemList.length === 0) {
+    showOrderItem.value = false;
+  }
+});
 </script>
 
 <template>

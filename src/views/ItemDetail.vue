@@ -113,6 +113,15 @@ onMounted(() => {
   }
 });
 
+onMounted(() => {
+  if (store.coupon.value.id === 0) {
+    canClickCoupon.value = false;
+  } else {
+    canClickCoupon.value = true;
+    couponMessage.value = "クーポンは取得済です";
+  }
+});
+
 /**
  * クーポンを取得する.
  */
@@ -142,6 +151,8 @@ const calcSubTotal = computed(() => {
 
 // 注文メソッド
 const addItem = () => {
+  console.log("トッピングが入っているかどうか", selectToppingList);
+  
   //payload
   store.addOrderItem({
     selectItemSize: selectItemSize.value,
